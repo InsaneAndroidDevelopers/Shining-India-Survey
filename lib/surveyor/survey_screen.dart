@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shining_india_survey/surveyor/survey_result_screen.dart';
 import 'package:shining_india_survey/surveyor/surveyor_home_screen.dart';
 import 'package:shining_india_survey/surveyor/widgets/question_widget.dart';
-import '../models/Question.dart';
+import '../models/question.dart';
 
 class SurveyScreen extends StatefulWidget {
   const SurveyScreen({super.key});

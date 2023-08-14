@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shining_india_survey/surveyor/details_screen.dart';
 import 'package:shining_india_survey/surveyor/survey_screen.dart';
 
 class SurveyorHomeScreen extends StatefulWidget {
@@ -32,7 +33,7 @@ class _SurveyorHomeScreenState extends State<SurveyorHomeScreen> {
                   minimumSize: Size.fromHeight(50)
                 ),
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyScreen()));
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreen()));
                 },
                 child: Text(
                   'Take a Survey'

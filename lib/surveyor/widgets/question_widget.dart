@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shining_india_survey/models/Question.dart';
+import 'package:shining_india_survey/models/question.dart';
 import 'package:shining_india_survey/surveyor/widgets/option_widget.dart';
 
 class QuestionWidget extends StatefulWidget {
@@ -29,7 +29,8 @@ class _QuestionWidgetState extends State<QuestionWidget> {
               widget.question.questionText,
               style: TextStyle(
                 fontSize: 20,
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.bold,
+                color: Colors.black
               ),
             ),
           ),
@@ -38,6 +39,8 @@ class _QuestionWidgetState extends State<QuestionWidget> {
             child: OptionWidget(
               options: widget.question.options,
               isMultiCorrect: widget.question.isMultiCorrect,
+              isFixed: widget.question.isFixed,
+              isSlider: widget.question.isSlider
             )
           ),
         ],

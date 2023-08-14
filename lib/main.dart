@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shining_india_survey/login_screen.dart';
 import 'package:shining_india_survey/splash_screen.dart';
 import 'package:shining_india_survey/surveyor/survey_screen.dart';
 import 'package:shining_india_survey/surveyor/surveyor_home_screen.dart';
@@ -14,6 +15,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Shining India Survey',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true
+      ),
       debugShowCheckedModeBanner: false,
       home: SurveyorHomeScreen()
     );
