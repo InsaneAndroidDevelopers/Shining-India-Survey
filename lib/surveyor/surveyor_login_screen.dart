@@ -12,6 +12,7 @@ class SurveyorLoginScreen extends StatefulWidget {
 class _SurveyorLoginScreenState extends State<SurveyorLoginScreen> {
 
   final _formKey = GlobalKey<FormState>();
+
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final tokenController = TextEditingController();

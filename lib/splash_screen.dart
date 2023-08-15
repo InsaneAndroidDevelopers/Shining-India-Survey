@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shining_india_survey/login_screen.dart';
+import 'package:shining_india_survey/surveyor/surveyor_home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -18,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   _navigateToHome() async {
     await Future.delayed(Duration(milliseconds: 2000), () {});
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyorHomeScreen()));
   }
 
   @override
