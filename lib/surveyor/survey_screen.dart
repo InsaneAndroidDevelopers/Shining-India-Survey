@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/surveyor/additional_details_screen.dart';
 import 'package:shining_india_survey/surveyor/survey_result_screen.dart';
 import 'package:shining_india_survey/surveyor/surveyor_home_screen.dart';
@@ -19,6 +21,8 @@ class _SurveyScreenState extends State<SurveyScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: Handle the back button
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -63,7 +67,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                 ),
                 onPressed: (){
                   _activePage == ques.length-1
-                    ? Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AdditionalDetailsScreen()))
+                    ? context.go(RouteNames.additionalDetailsScreen)
                     : _pageController.nextPage(duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
                 },
                 child: Text(

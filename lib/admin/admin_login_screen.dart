@@ -1,5 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/surveyor/surveyor_login_screen.dart';
 
 class AdminLoginScreen extends StatefulWidget {
@@ -98,10 +100,11 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                           minimumSize: Size.fromHeight(50)
                       ),
                       onPressed: (){
-                        if(_formKey.currentState!.validate()){
-                          debugPrint(emailController.text);
-                          debugPrint(passwordController.text);
-                        }
+                        // if(_formKey.currentState!.validate()){
+                        //   debugPrint(emailController.text);
+                        //   debugPrint(passwordController.text);
+                        // }
+                        context.go(RouteNames.adminHomeScreen);
                       },
                       child: Text(
                         'Login',
@@ -111,7 +114,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                     SizedBox(height: 10,),
                     GestureDetector(
                       onTap: (){
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SurveyorLoginScreen()));
+                        context.go(RouteNames.surveyorLoginScreen);
                       },
                       child: Text(
                         'Sign In as surveyor',

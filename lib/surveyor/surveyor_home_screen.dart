@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/surveyor/details_screen.dart';
 import 'package:shining_india_survey/surveyor/survey_screen.dart';
 
@@ -33,7 +35,7 @@ class _SurveyorHomeScreenState extends State<SurveyorHomeScreen> {
                   minimumSize: Size.fromHeight(50)
                 ),
                 onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => DetailsScreen()));
+                  context.push(RouteNames.detailsScreen);
                 },
                 child: Text(
                   'Take a Survey'

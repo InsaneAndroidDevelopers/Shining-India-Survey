@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/admin/admin_login_screen.dart';
+import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/surveyor/surveyor_login_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -25,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     minimumSize: Size.fromHeight(50)
                   ),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => AdminLoginScreen()));
+                    context.push(RouteNames.adminLoginScreen);
                   },
                   child: Text(
                     'Login As Admin',
@@ -38,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       minimumSize: Size.fromHeight(50)
                   ),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyorLoginScreen()));
+                    context.push(RouteNames.surveyorLoginScreen);
                   },
                   child: Text(
                     'Login As Surveyor',

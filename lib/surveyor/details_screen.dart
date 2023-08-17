@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/surveyor/survey_screen.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -302,7 +304,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       minimumSize: Size.fromHeight(50)
                   ),
                   onPressed: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyScreen()));
+                    context.push(RouteNames.surveyScreen);
                   },
                   child: Text(
                       'Start Survey'

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/surveyor/survey_result_screen.dart';
 
 class AdditionalDetailsScreen extends StatefulWidget {
@@ -36,6 +38,8 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //TODO: Handle the back button
+
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -145,7 +149,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                             minimumSize: Size.fromHeight(50)
                         ),
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => SurveyResultScreen()));
+                          context.go(RouteNames.surveyResultScreen);
                         },
                         child: Text(
                             'Submit'
