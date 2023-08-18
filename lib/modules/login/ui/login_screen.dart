@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shining_india_survey/admin/admin_login_screen.dart';
+import 'package:shining_india_survey/modules/login/core/bloc/login_bloc.dart';
+import 'package:shining_india_survey/modules/login/ui/admin_login_screen.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/surveyor/surveyor_login_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -24,9 +25,9 @@ class _LoginScreenState extends State<LoginScreen> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    minimumSize: Size.fromHeight(50)
+                      minimumSize: Size.fromHeight(50)
                   ),
-                  onPressed: (){
+                  onPressed: () {
                     context.push(RouteNames.adminLoginScreen);
                   },
                   child: Text(
@@ -39,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: ElevatedButton.styleFrom(
                       minimumSize: Size.fromHeight(50)
                   ),
-                  onPressed: (){
+                  onPressed: () {
                     context.push(RouteNames.surveyorLoginScreen);
                   },
                   child: Text(

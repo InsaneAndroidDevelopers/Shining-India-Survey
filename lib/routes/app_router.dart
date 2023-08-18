@@ -1,15 +1,15 @@
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/admin/admin_home_screen.dart';
-import 'package:shining_india_survey/admin/admin_login_screen.dart';
-import 'package:shining_india_survey/login_screen.dart';
+import 'package:shining_india_survey/modules/login/ui/admin_login_screen.dart';
+import 'package:shining_india_survey/modules/login/ui/login_screen.dart';
+import 'package:shining_india_survey/modules/login/ui/surveyor_login_screen.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/splash_screen.dart';
+import 'package:shining_india_survey/modules/splash/ui/splash_screen.dart';
 import 'package:shining_india_survey/surveyor/additional_details_screen.dart';
 import 'package:shining_india_survey/surveyor/details_screen.dart';
 import 'package:shining_india_survey/surveyor/survey_result_screen.dart';
 import 'package:shining_india_survey/surveyor/survey_screen.dart';
 import 'package:shining_india_survey/surveyor/surveyor_home_screen.dart';
-import 'package:shining_india_survey/surveyor/surveyor_login_screen.dart';
 
 class AppRouter {
   static final GoRouter goRouter = GoRouter(
