@@ -37,5 +37,6 @@ class ArrayResources {
     'Uttarakhand',
     'West Bengal'
   ];
-
+  static const List<String> castes = ['General', 'OBC', 'EWS', 'SC', 'ST',];
+  static const List<String> religions = ['Hindu', 'Muslim', 'Sikh', 'Christian', 'Jain', 'Buddhist'];
 }

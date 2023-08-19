@@ -72,70 +72,69 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                 child: CircularProgressIndicator(),
               );
             }
-            return Center(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextFormField(
-                            controller: emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                hintText: 'you@example.com',
-                                labelText: 'E-mail',
-                                prefixIcon: Icon(Icons.email_rounded)
-                            ),
-                            validator: _validateEmail
-                        ),
-                        SizedBox(height: 10,),
-                        TextFormField(
-                            controller: passwordController,
-                            keyboardType: TextInputType.text,
-                            obscureText: !isPasswordVisible,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Password',
-                                prefixIcon: Icon(Icons.key_rounded),
-                                suffixIcon: IconButton(
-                                  icon: Icon(isPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off),
-                                  onPressed: () {
-                                    setState(() {
-                                      isPasswordVisible =
-                                      !isPasswordVisible;
-                                    });
-                                  },
-                                )
-                            ),
-                            validator: _validatePassword
-                        ),
-                        SizedBox(height: 10,),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              minimumSize: Size.fromHeight(50)
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                          controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: 'you@example.com',
+                              labelText: 'E-mail',
+                              prefixIcon: Icon(Icons.email_rounded)
                           ),
-                          onPressed: () {
-                            // if(_formKey.currentState!.validate()){
-                            //   debugPrint(emailController.text);
-                            //   debugPrint(passwordController.text);
-                            // }
-                            context.read<LoginBloc>().add(
-                                AdminLoginEvent());
-                          },
-                          child: Text(
-                            'Login',
-                            textAlign: TextAlign.center,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: _validateEmail
+                      ),
+                      SizedBox(height: 10,),
+                      TextFormField(
+                          controller: passwordController,
+                          keyboardType: TextInputType.text,
+                          obscureText: !isPasswordVisible,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Password',
+                              prefixIcon: Icon(Icons.key_rounded),
+                              suffixIcon: IconButton(
+                                icon: Icon(isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off),
+                                onPressed: () {
+                                  setState(() {
+                                    isPasswordVisible =
+                                    !isPasswordVisible;
+                                  });
+                                },
+                              )
                           ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: _validatePassword
+                      ),
+                      SizedBox(height: 10,),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: Size.fromHeight(50)
                         ),
-                        SizedBox(height: 10,),
-                      ],
-                    ),
+                        onPressed: () {
+                          // if(_formKey.currentState!.validate()){
+                          //   debugPrint(emailController.text);
+                          //   debugPrint(passwordController.text);
+                          // }
+                          context.read<LoginBloc>().add(AdminLoginEvent());
+                        },
+                        child: Text(
+                          'Login',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(height: 10,),
+                    ],
                   ),
                 ),
               ),

@@ -98,6 +98,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    nameController.dispose();
+    villageController.dispose();
+    districtController.dispose();
+    pinController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -113,167 +122,193 @@ class _DetailsScreenState extends State<DetailsScreen> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Basic',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500
+                    ),
+                  ),
+                  SizedBox(height: 10,),
+                  TextFormField(
+                    controller: nameController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Name',
+                        prefixIcon: Icon(Icons.person)
+                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (name) {
+                      if(name == null || name.isEmpty) {
+                        return 'Please enter name';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 10,),
+                  Row(
+                    children: [
+                      Expanded(
+                          child: DropdownButtonFormField(
+                            decoration: InputDecoration(
+                                labelText: 'Gender',
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.person)
+                            ),
+                            value: _dropDownGenderValue,
+                            items: ArrayResources.genders.map<DropdownMenuItem<String>>((String item) {
+                              return DropdownMenuItem<String>(
+                                  child: Text(item),
+                                  value: item
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _dropDownGenderValue = value ?? '';
+                                print(value);
+                              });
+                            },
+                          )
+                      ),
+                      SizedBox(width: 10,),
+                      Expanded(
+                          child: DropdownButtonFormField(
+                            decoration: InputDecoration(
+                                labelText: 'Age',
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.person)
+                            ),
+                            value: _dropDownAgeValue,
+                            items: List.generate(120, (i) => i+1)
+                                .map<DropdownMenuItem<int>>((int val) {
+                              return DropdownMenuItem<int>(
+                                value: val,
+                                child: Text(val.toString()),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _dropDownAgeValue = value ?? 0;
+                                print(value);
+                              });
+                            },
+                          )
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Basic',
+                        'Address',
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w500
                         ),
                       ),
-                      SizedBox(height: 10,),
-                      TextFormField(
-                        controller: nameController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Name',
-                            prefixIcon: Icon(Icons.person)
-                        ),
-                      ),
-                      SizedBox(height: 10,),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                labelText: 'Gender',
-                                border: OutlineInputBorder(),
-                                prefixIcon: Icon(Icons.person)
-                              ),
-                              value: _dropDownGenderValue,
-                              items: ArrayResources.genders.map<DropdownMenuItem<String>>((String item) {
-                                return DropdownMenuItem<String>(
-                                  child: Text(item),
-                                  value: item
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  _dropDownGenderValue = value ?? '';
-                                  print(value);
-                                });
-                              },
-                            )
-                          ),
-                          SizedBox(width: 10,),
-                          Expanded(
-                            child: DropdownButtonFormField(
-                              decoration: InputDecoration(
-                                  labelText: 'Age',
-                                  border: OutlineInputBorder(),
-                                  prefixIcon: Icon(Icons.person)
-                              ),
-                              value: _dropDownAgeValue,
-                              items: List.generate(120, (i) => i+1)
-                                .map<DropdownMenuItem<int>>((int val) {
-                                  return DropdownMenuItem<int>(
-                                    value: val,
-                                    child: Text(val.toString()),
-                                  );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  _dropDownAgeValue = value ?? 0;
-                                  print(value);
-                                });
-                              },
-                            )
-                          ),
-                        ],
+                      ElevatedButton(
+                        onPressed: _getCurrentPosition,
+                        child: const Text("Get Current Location"),
                       )
                     ],
                   ),
-                ),
-                SizedBox(height: 20,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Address',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500
-                      ),
+                  SizedBox(height: 10,),
+                  TextFormField(
+                    controller: villageController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Village',
+                        prefixIcon: Icon(Icons.holiday_village_rounded)
                     ),
-                    ElevatedButton(
-                      onPressed: _getCurrentPosition,
-                      child: const Text("Get Current Location"),
-                    )
-                  ],
-                ),
-                SizedBox(height: 10,),
-                TextFormField(
-                  controller: villageController,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Village',
-                      prefixIcon: Icon(Icons.holiday_village_rounded)
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (village) {
+                      if(village == null || village.isEmpty) {
+                        return 'Please enter village';
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                SizedBox(height: 10,),
-                TextFormField(
-                  controller: districtController,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'District',
-                      prefixIcon: Icon(Icons.share_location_rounded)
+                  SizedBox(height: 10,),
+                  TextFormField(
+                    controller: districtController,
+                    keyboardType: TextInputType.text,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'District',
+                        prefixIcon: Icon(Icons.share_location_rounded)
+                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (district) {
+                      if(district == null || district.isEmpty) {
+                        return 'Please enter district';
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                SizedBox(height: 10,),
-                DropdownButtonFormField(
-                  isExpanded: true,
-                  decoration: InputDecoration(
-                      labelText: 'State',
-                      border: OutlineInputBorder(),
-                      prefixIcon: Icon(Icons.location_city)
+                  SizedBox(height: 10,),
+                  DropdownButtonFormField(
+                    isExpanded: true,
+                    decoration: InputDecoration(
+                        labelText: 'State',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.location_city)
+                    ),
+                    value: _dropDownStateValue,
+                    items: ArrayResources.states.map<DropdownMenuItem<String>>((String item) {
+                      return DropdownMenuItem<String>(
+                          child: Text(item),
+                          value: item
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _dropDownStateValue = value ?? '';
+                        print(value);
+                      });
+                    },
                   ),
-                  value: _dropDownStateValue,
-                  items: ArrayResources.states.map<DropdownMenuItem<String>>((String item) {
-                    return DropdownMenuItem<String>(
-                        child: Text(item),
-                        value: item
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _dropDownStateValue = value ?? '';
-                      print(value);
-                    });
-                  },
-                ),
-                SizedBox(height: 10,),
-                TextFormField(
-                  controller: pinController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'PIN Code',
-                      prefixIcon: Icon(Icons.power_input_outlined)
+                  SizedBox(height: 10,),
+                  TextFormField(
+                    controller: pinController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'PIN Code',
+                        prefixIcon: Icon(Icons.power_input_outlined)
+                    ),
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (pinCode) {
+                      if(pinCode == null || pinCode.isEmpty) {
+                        return 'Please enter PIN code';
+                      }
+                      return null;
+                    },
                   ),
-                ),
-                SizedBox(height: 10,),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      minimumSize: Size.fromHeight(50)
+                  SizedBox(height: 10,),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        minimumSize: Size.fromHeight(50)
+                    ),
+                    onPressed: (){
+                      if(!_formKey.currentState!.validate()){
+                        return;
+                      }
+                      context.go(RouteNames.surveyScreen);
+                    },
+                    child: Text(
+                        'Start Survey'
+                    ),
                   ),
-                  onPressed: (){
-                    context.go(RouteNames.surveyScreen);
-                  },
-                  child: Text(
-                      'Start Survey'
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

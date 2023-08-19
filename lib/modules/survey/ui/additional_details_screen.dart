@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/survey/ui/survey_result_screen.dart';
 import 'package:shining_india_survey/routes/routes.dart';
+import 'package:shining_india_survey/utils/array_res.dart';
 
 class AdditionalDetailsScreen extends StatefulWidget {
   const AdditionalDetailsScreen({super.key});
@@ -17,24 +18,15 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
   final phoneController = TextEditingController();
   final addressController = TextEditingController();
 
-  String _dropDownReligionValue = 'Hindu';
-  List<String> religions = [
-    'Hindu',
-    'Muslim',
-    'Sikh',
-    'Christian',
-    'Jain',
-    'Buddhist'
-  ];
+  String _dropDownReligionValue = ArrayResources.religions[0];
+  String _dropDownCasteValue = ArrayResources.castes[0];
 
-  String _dropDownCasteValue = 'General';
-  List<String> castes = [
-    'General',
-    'OBC',
-    'EWS',
-    'SC',
-    'ST',
-  ];
+  @override
+  void dispose() {
+    super.dispose();
+    phoneController.dispose();
+    addressController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +77,15 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: 'Phone',
-                              prefixIcon: Icon(Icons.phone)),
+                              prefixIcon: Icon(Icons.phone)
+                          ),
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (phone) {
+                            if (phone != null && phone.isNotEmpty && phone.length != 10) {
+                              return 'Please enter correct phone number';
+                            }
+                            return null;
+                          },
                         ),
                         SizedBox(
                           height: 10,
@@ -96,7 +96,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                               border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.person)),
                           value: _dropDownReligionValue,
-                          items: religions
+                          items: ArrayResources.religions
                               .map<DropdownMenuItem<String>>((String item) {
                             return DropdownMenuItem<String>(
                                 child: Text(item), value: item);
@@ -117,7 +117,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                               border: OutlineInputBorder(),
                               prefixIcon: Icon(Icons.person)),
                           value: _dropDownCasteValue,
-                          items: castes
+                          items: ArrayResources.castes
                               .map<DropdownMenuItem<String>>((String item) {
                             return DropdownMenuItem<String>(
                                 child: Text(item), value: item);
@@ -139,7 +139,8 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: 'Address',
-                              prefixIcon: Icon(Icons.maps_home_work_rounded)),
+                              prefixIcon: Icon(Icons.maps_home_work_rounded)
+                          ),
                         ),
                       ],
                     ),
@@ -169,6 +170,9 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                           style: ElevatedButton.styleFrom(
                               minimumSize: Size.fromHeight(50)),
                           onPressed: () {
+                            if(!_formKey.currentState!.validate()){
+                              return;
+                            }
                             context.go(RouteNames.surveyResultScreen);
                           },
                           child: Text('Submit'),
