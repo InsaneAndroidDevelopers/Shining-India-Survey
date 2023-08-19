@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shining_india_survey/models/question.dart';
-import 'package:shining_india_survey/surveyor/widgets/option_widget.dart';
+import 'package:shining_india_survey/modules/survey/ui/widgets/option_widget.dart';
 
 class QuestionWidget extends StatefulWidget {
   final Question question;

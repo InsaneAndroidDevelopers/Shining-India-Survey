@@ -3,7 +3,8 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/surveyor/survey_screen.dart';
+import 'package:shining_india_survey/modules/survey/ui/survey_screen.dart';
+import 'package:shining_india_survey/utils/array_res.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key});
@@ -20,47 +21,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   final pinController = TextEditingController();
 
   int _dropDownAgeValue = 50;
-
-  String _dropDownGenderValue = 'Male';
-  List<String> items = ['Male', 'Female', 'Others'];
-
-  String _dropDownStateValue = 'Delhi';
-  List<String> states = [
-    'Andaman and Nicobar Islands',
-    'Andhra Pradesh',
-    'Arunachal Pradesh',
-    'Assam',
-    'Bihar',
-    'Chhattisgarh',
-    'Dadra and Nagar Haveli and Daman and Diu',
-    'Delhi',
-    'Goa',
-    'Gujarat',
-    'Haryana',
-    'Himachal Pradesh',
-    'Jharkhand',
-    'Karnataka',
-    'Kerala',
-    'Ladakh',
-    'Lakshadweep',
-    'Madhya Pradesh',
-    'Maharashtra',
-    'Manipur',
-    'Meghalaya',
-    'Mizoram',
-    'Nagaland',
-    'Odisha',
-    'Puducherry',
-    'Punjab',
-    'Rajasthan',
-    'Sikkim',
-    'Tamil Nadu',
-    'Telangana',
-    'Tripura',
-    'Uttar Pradesh',
-    'Uttarakhand',
-    'West Bengal'
-  ];
+  String _dropDownGenderValue = ArrayResources.genders[0];
+  String _dropDownStateValue = ArrayResources.states[0];
 
   final _formKey = GlobalKey<FormState>();
 
@@ -138,6 +100,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Details',
+          style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold
+          ),
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -145,14 +116,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Details',
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold
-                  ),
-                ),
-                SizedBox(height: 10,),
                 Form(
                   key: _formKey,
                   child: Column(
@@ -186,7 +149,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 prefixIcon: Icon(Icons.person)
                               ),
                               value: _dropDownGenderValue,
-                              items: items.map<DropdownMenuItem<String>>((String item) {
+                              items: ArrayResources.genders.map<DropdownMenuItem<String>>((String item) {
                                 return DropdownMenuItem<String>(
                                   child: Text(item),
                                   value: item
@@ -275,7 +238,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       prefixIcon: Icon(Icons.location_city)
                   ),
                   value: _dropDownStateValue,
-                  items: states.map<DropdownMenuItem<String>>((String item) {
+                  items: ArrayResources.states.map<DropdownMenuItem<String>>((String item) {
                     return DropdownMenuItem<String>(
                         child: Text(item),
                         value: item
@@ -304,7 +267,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       minimumSize: Size.fromHeight(50)
                   ),
                   onPressed: (){
-                    context.push(RouteNames.surveyScreen);
+                    context.go(RouteNames.surveyScreen);
                   },
                   child: Text(
                       'Start Survey'

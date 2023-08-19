@@ -52,26 +52,27 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocConsumer<LoginBloc, LoginState>(
-        listener: (context, state) {
-          if (state is ErrorState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text('Error occurred')
-                )
-            );
-          } else if (state is AdminLoginSuccessState) {
-            context.go(RouteNames.adminHomeScreen);
-          }
-        },
-        builder: (context, state) {
-          if (state is LoadingState) {
+      appBar: AppBar(),
+      body: SafeArea(
+        child: BlocConsumer<LoginBloc, LoginState>(
+          listener: (context, state) {
+            if (state is ErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                      content: Text('Error occurred')
+                  )
+              );
+            } else if (state is AdminLoginSuccessState) {
+              context.go(RouteNames.adminHomeScreen);
+            }
+          },
+          builder: (context, state) {
+            if (state is LoadingState) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
             return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          return SafeArea(
-            child: Center(
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -133,27 +134,14 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                           ),
                         ),
                         SizedBox(height: 10,),
-                        GestureDetector(
-                          onTap: () {
-                            context.go(RouteNames.surveyorLoginScreen);
-                          },
-                          child: Text(
-                            'Sign In as surveyor',
-                            style: TextStyle(
-                                color: Colors.deepPurple,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14
-                            ),
-                          ),
-                        )
                       ],
                     ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

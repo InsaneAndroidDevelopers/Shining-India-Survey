@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shining_india_survey/surveyor/widgets/build_option.dart';
+import 'package:shining_india_survey/modules/survey/ui/widgets/build_option.dart';
 
 class OptionWidget extends StatefulWidget {
   final List<String> options;

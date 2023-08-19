@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/surveyor/details_screen.dart';
-import 'package:shining_india_survey/surveyor/survey_screen.dart';
+import 'package:shining_india_survey/modules/survey/ui/details_screen.dart';
+import 'package:shining_india_survey/modules/survey/ui/survey_screen.dart';
 
 class SurveyorHomeScreen extends StatefulWidget {
   const SurveyorHomeScreen({super.key});

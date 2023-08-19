@@ -56,6 +56,7 @@ class _SurveyorLoginScreenState extends State<SurveyorLoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
@@ -137,19 +138,6 @@ class _SurveyorLoginScreenState extends State<SurveyorLoginScreen> {
                           ),
                         ),
                         SizedBox(height: 10,),
-                        GestureDetector(
-                          onTap: () {
-                            context.go(RouteNames.adminLoginScreen);
-                          },
-                          child: Text(
-                            'Sign In as admin',
-                            style: TextStyle(
-                                color: Colors.deepPurple,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14
-                            ),
-                          ),
-                        )
                       ],
                     ),
                   ),
