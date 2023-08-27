@@ -21,11 +21,6 @@ class SurveyDataLoadedState extends SurveyState {
   List<Object?> get props => [questions];
 }
 
-class SurveyCheckCurrentResponseState extends SurveyState {
-  @override
-  List<Object?> get props => [];
-}
-
 class SurveyMoveNextQuestionState extends SurveyState {
   final int index;
   SurveyMoveNextQuestionState({required this.index});
@@ -40,15 +35,6 @@ class SurveyErrorState extends SurveyState {
 }
 
 class SurveyDataFetchedState extends SurveyState {
-  @override
-  List<Object?> get props => [];
-}
-
-class SurveyCurrentQuestionState extends SurveyState {
-  final Question ques;
-  final int currentPage;
-  SurveyCurrentQuestionState({required this.ques, required this.currentPage});
-
   @override
   List<Object?> get props => [];
 }

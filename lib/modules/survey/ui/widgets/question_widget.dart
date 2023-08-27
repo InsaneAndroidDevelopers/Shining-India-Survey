@@ -37,10 +37,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
           SizedBox(height: 18,),
           Expanded(
             child: OptionWidget(
-              options: widget.question.options,
-              isMultiCorrect: widget.question.isMultiCorrect,
-              isFixed: widget.question.isFixed,
-              isSlider: widget.question.isSlider
+              question: widget.question,
             )
           ),
         ],

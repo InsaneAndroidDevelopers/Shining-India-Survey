@@ -39,4 +39,5 @@ class ArrayResources {
   ];
   static const List<String> castes = ['General', 'OBC', 'EWS', 'SC', 'ST',];
   static const List<String> religions = ['Hindu', 'Muslim', 'Sikh', 'Christian', 'Jain', 'Buddhist'];
+  static const List<String> emojis = ['😠', '😟','🤨', '🙂','😃'];
 }

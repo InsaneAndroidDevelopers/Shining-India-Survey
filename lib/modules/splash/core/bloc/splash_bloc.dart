@@ -18,9 +18,9 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
         return;
       }
       String userRole = await SharedPreferencesHelper.getUserRole();
-      if(userRole == Strings.USER_ADMIN) {
+      if(userRole == StringsConstants.USER_ADMIN) {
         emit(NavigateToAdminHomeScreen());
-      }else if(userRole == Strings.USER_SURVEYOR) {
+      }else if(userRole == StringsConstants.USER_SURVEYOR) {
         emit(NavigateToSurveyorHomeScreen());
       }
     });

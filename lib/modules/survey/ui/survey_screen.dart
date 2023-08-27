@@ -4,9 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
 import 'package:shining_india_survey/modules/survey/ui/widgets/question_widget.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/modules/survey/ui/additional_details_screen.dart';
-import 'package:shining_india_survey/surveyor/surveyor_home_screen.dart';
-import '../../../models/question.dart';
 
 class SurveyScreen extends StatefulWidget {
   const SurveyScreen({super.key});
@@ -18,14 +15,12 @@ class SurveyScreen extends StatefulWidget {
 class _SurveyScreenState extends State<SurveyScreen> {
 
   final _pageController = PageController(initialPage: 0);
-  int quesLength = 0;
+  final pageNotifier = ValueNotifier<int>(0);
 
   @override
   void initState() {
     super.initState();
-    quesLength = context.read<SurveyBloc>().quesList.length;
     context.read<SurveyBloc>().add(LoadFetchedDataEvent());
-    print(quesLength);
   }
 
   @override
@@ -48,11 +43,9 @@ class _SurveyScreenState extends State<SurveyScreen> {
           );
         } else if(state is SurveyFinishState) {
           context.go(RouteNames.additionalDetailsScreen);
-            context.read<SurveyBloc>().quesList.forEach((element) {
-              debugPrint(element.answer);
-            });
         } else if(state is SurveyMoveNextQuestionState) {
           _pageController.nextPage(duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
+          pageNotifier.value++;
         }
       },
       buildWhen: (previous, current) {
@@ -99,23 +92,33 @@ class _SurveyScreenState extends State<SurveyScreen> {
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       alignment: Alignment.centerRight,
-                      child: Text(
-                        '${context.watch<SurveyBloc>().activeIndex+1} / ${quesLength}',
-                        style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600
-                        ),
+                      child: ValueListenableBuilder(
+                        valueListenable: pageNotifier,
+                        builder: (context, value, child) {
+                          return Text(
+                            '${pageNotifier.value + 1} / ${state.questions.length}',
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600
+                            ),
+                          );
+                        },
                       ),
                     ),
-                    LinearProgressIndicator(
-                      minHeight: 6,
-                      value: (context.watch<SurveyBloc>().activeIndex+1) / (quesLength),
+                    ValueListenableBuilder(
+                      valueListenable: pageNotifier,
+                      builder: (context, value, child) {
+                        return LinearProgressIndicator(
+                          minHeight: 6,
+                          value: (pageNotifier.value + 1) / (state.questions.length),
+                        );
+                      },
                     ),
                     Expanded(
                       child: PageView.builder(
                         controller: _pageController,
                         physics: NeverScrollableScrollPhysics(),
-                        itemCount: quesLength,
+                        itemCount: state.questions.length,
                         itemBuilder: (context, index) {
                           return QuestionWidget(
                             question: state.questions[index],
@@ -124,20 +127,27 @@ class _SurveyScreenState extends State<SurveyScreen> {
                       ),
                     ),
                     SizedBox(height: 10,),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            minimumSize: Size.fromHeight(50)
-                        ),
-                        onPressed: () {
-                          context.read<SurveyBloc>().add(CheckQuestionResponseEvent(index: context.read<SurveyBloc>().activeIndex));
-                        },
-                        child: Text(
-                          context.read<SurveyBloc>().activeIndex == quesLength - 1 ? 'Finish' : 'Next',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
+                    AnimatedBuilder(
+                      animation: _pageController,
+                      builder: (context, child) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                minimumSize: Size.fromHeight(50)
+                            ),
+                            onPressed: () {
+                              context.read<SurveyBloc>().add(CheckQuestionResponseEvent(index: (_pageController.page ?? 0).toInt(),
+                                  question: state.questions[(_pageController.page ?? 0).toInt()])
+                              );
+                            },
+                            child: Text(
+                              (_pageController.page ?? 0).toInt() == state.questions.length - 1 ? 'Finish' : 'Next',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

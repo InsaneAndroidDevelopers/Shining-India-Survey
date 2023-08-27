@@ -5,12 +5,12 @@ class SharedPreferencesHelper {
 
   static Future<bool> setUserToken(String userToken) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString(Strings.USER_TOKEN, userToken);
+    return prefs.setString(StringsConstants.USER_TOKEN, userToken);
   }
 
   static Future<String> getUserToken() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(Strings.USER_TOKEN) ?? '';
+    return prefs.getString(StringsConstants.USER_TOKEN) ?? '';
   }
 
   static Future<void> clearAll() async {
@@ -20,11 +20,11 @@ class SharedPreferencesHelper {
 
   static Future<bool> setUserLevel(String userRole) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString(Strings.USER_ROLE, userRole);
+    return prefs.setString(StringsConstants.USER_ROLE, userRole);
   }
 
   static Future<String> getUserRole() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString(Strings.USER_ROLE) ?? '';
+    return prefs.getString(StringsConstants.USER_ROLE) ?? '';
   }
 }

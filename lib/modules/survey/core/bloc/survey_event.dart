@@ -15,23 +15,10 @@ class LoadFetchedDataEvent extends SurveyEvent {
 }
 
 class CheckQuestionResponseEvent extends SurveyEvent {
+  final Question question;
   final int index;
 
-  CheckQuestionResponseEvent({required this.index});
-  @override
-  List<Object?> get props => [];
-}
-
-class GetSelectedOptionsDetailsEvent extends SurveyEvent {
-  final int? selectedIndex;
-  final List<int>? selectedOptionsIndex;
-  final String? othersText;
-
-  GetSelectedOptionsDetailsEvent({
-    this.selectedIndex,
-    this.selectedOptionsIndex,
-    this.othersText
-  });
+  CheckQuestionResponseEvent({required this.index, required this.question});
   @override
   List<Object?> get props => [];
 }

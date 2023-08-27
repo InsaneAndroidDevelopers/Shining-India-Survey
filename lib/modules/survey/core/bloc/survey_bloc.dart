@@ -5,19 +5,16 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:shining_india_survey/models/question.dart';
+import 'package:shining_india_survey/utils/string_constants.dart';
 
 part 'survey_event.dart';
 part 'survey_state.dart';
 
 class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
 
-  int activeIndex = 0;
-  List<Question> quesList = [];
-  String othersText = "";
-  List<int> selectedOptionsList = [];
-  int selectedOptionIndex = -1;
-
   SurveyBloc() : super(SurveyInitial()) {
+
+    List<Question> quesList = [];
 
     on<SubmitDetailsAndStartSurveyEvent>((event, emit) {
       emit(SurveyLoadingState());
@@ -31,27 +28,38 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
       emit(SurveyDataLoadedState(questions: ques));
     });
 
-
-
-    on<GetSelectedOptionsDetailsEvent>((event, emit) async {
-      othersText = event.othersText ?? "";
-      selectedOptionsList = event.selectedOptionsIndex ?? [];
-      selectedOptionIndex = event.selectedIndex ?? -1;
-
-    });
-
     on<CheckQuestionResponseEvent>((event, emit) async {
-      emit(SurveyCheckCurrentResponseState());
-      await Future.delayed(Duration(seconds: 2));
-      if(quesList[activeIndex].answer.isEmpty){
-        emit(SurveyErrorState());
-      } else {
-        if(activeIndex == quesList.length - 1){
-          activeIndex = 0;
+      Question question = event.question;
+      int currentIndex = event.index;
+      print("Index - ${event.index}");
+      print(question.selectedOptions.toString());
+      print(question.selectedIndex);
+      //emit(SurveyCheckCurrentResponseState());
+      if(question.type == StringsConstants.QUES_TYPE_MULTI) {
+        if(question.selectedOptions.contains(1) || question.otherText.isNotEmpty) {
+          if(currentIndex == quesList.length - 1) {
+            emit(SurveyFinishState());
+          } else {
+            emit(SurveyMoveNextQuestionState(index: currentIndex++));
+          }
+        } else {
+          emit(SurveyErrorState());
+        }
+      } else if(question.type == StringsConstants.QUES_TYPE_SINGLE) {
+        if(question.selectedIndex != -1) {
+          if(currentIndex == quesList.length - 1) {
+            emit(SurveyFinishState());
+          } else {
+            emit(SurveyMoveNextQuestionState(index: currentIndex++));
+          }
+        } else {
+          emit(SurveyErrorState());
+        }
+      } else if(question.type == StringsConstants.QUES_TYPE_SLIDER) {
+        if(currentIndex == quesList.length - 1) {
           emit(SurveyFinishState());
         } else {
-          activeIndex++;
-          emit(SurveyMoveNextQuestionState(index: activeIndex));
+          emit(SurveyMoveNextQuestionState(index: currentIndex++));
         }
       }
     });
@@ -67,59 +75,5 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
       //send the response to the API
       emit(SurveySuccessState());
     });
-  }
-
-  Future updateDetails(int selectedIndex, List<int> selectedOptionsIndex, String others) async {
-
-    selectedOptionIndex = selectedIndex;
-    selectedOptionsList = selectedOptionsIndex;
-    othersText = others;
-  }
-
-  Future updateAnswerList(List<int> ansList, String others) async{
-    String answer = "";
-    for(int i=0; i<ansList.length; i++) {
-      if(ansList[i] == 1) {
-        answer += quesList[activeIndex].options[i];
-        answer += ",";
-      }
-    }
-    if(answer.isNotEmpty && others.isEmpty) {
-      answer = answer.substring(0, answer.length-1);
-    } else {
-       answer += others;
-    }
-    quesList[activeIndex].answer = answer;
-  }
-
-  Future updateAnswer(int index) async {
-    quesList[activeIndex].answer = quesList[activeIndex].options[index];
-  }
-
-  Future updateAnswerFunc({
-    required bool isMultiCorrect,
-    List<int>? selectedOptionsList,
-    int? selectedOptionIndex,
-    String? othersOptionText
-  }) async {
-    if(isMultiCorrect) {
-      String finalAnswer = "";
-      int length = selectedOptionsList?.length ?? 0;
-      for(int i=0; i<length; i++) {
-        if(selectedOptionsList?[i] == 1) {
-          finalAnswer += quesList[activeIndex].options[i];
-          finalAnswer += ",";
-        }
-      }
-      if(finalAnswer.isNotEmpty && othersOptionText == null) {
-        finalAnswer = finalAnswer.substring(0, finalAnswer.length-1);
-      } else {
-        finalAnswer += othersOptionText ?? "";
-      }
-      quesList[activeIndex].answer = finalAnswer;
-    } else {
-      int ind = selectedOptionIndex ?? 0;
-      quesList[activeIndex].answer = quesList[activeIndex].options[ind];
-    }
   }
 }

@@ -1,23 +1,26 @@
+import 'package:shining_india_survey/utils/string_constants.dart';
+
 class Question {
   final String id;
   final String questionText;
   final List<String> options;
-  final bool isMultiCorrect;
-  final bool isFixed;
-  final bool isSlider;
+  final String type;
 
   String answer = "";
   List<int> selectedOptions = [];
   int selectedIndex = -1;
+  String otherText = "";
 
   Question({
     required this.id,
     required this.questionText,
     required this.options,
-    required this.isMultiCorrect,
-    required this.isFixed,
-    required this.isSlider,
-  });
+    required this.type,
+  }) {
+    if(type == StringsConstants.QUES_TYPE_MULTI) {
+      selectedOptions = List.generate(options.length, (index) => 0);
+    }
+  }
 }
 
 List<Question> ques = [
@@ -31,97 +34,73 @@ List<Question> ques = [
       "Electricity",
       "Law and order",
     ],
-    isMultiCorrect: true,
-    isFixed: false,
-    isSlider: false,
+    type: StringsConstants.QUES_TYPE_MULTI,
   ),
   Question(
     id: '002',
     questionText: 'Are you getting benefits of Government Welfare Scheme facilities?',
     options: ["Yes", "No", "Can't say"],
-    isMultiCorrect: false,
-    isFixed: true,
-    isSlider: false,
+    type: StringsConstants.QUES_TYPE_SINGLE,
   ),
   Question(
     id: '003',
     questionText: 'Does your MLA come to visit the area, does he meet the common people easily?',
     options: ["Yes", "No", "Can't say"],
-    isMultiCorrect: false,
-    isFixed: true,
-    isSlider: false,
+    type: StringsConstants.QUES_TYPE_SINGLE,
   ),
   Question(
     id: '004',
     questionText: 'How is the performance of your area MLA?',
-    options: ["Excellent", "Good", "Average", "Bad", "Worst"],
-    isMultiCorrect: false,
-    isFixed: true,
-    isSlider: true,
+    options: ["Worst", "Bad", "Average", "Good", "Excellent"],
+    type: StringsConstants.QUES_TYPE_SLIDER,
   ),
   Question(
     id: '005',
     questionText: 'How is the performance of your ward area Corporator?',
-    options: ["Excellent", "Good", "Average", "Bad", "Worst"],
-    isMultiCorrect: false,
-    isFixed: true,
-    isSlider: true,
+    options: ["Worst", "Bad", "Average", "Good", "Excellent"],
+    type: StringsConstants.QUES_TYPE_SLIDER,
   ),
   Question(
     id: '006',
     questionText: 'Are you satisfied with the overall performance of your Lok Sabha MP?',
-    options: ["Excellent", "Good", "Average", "Bad", "Worst"],
-    isMultiCorrect: false,
-    isFixed: true,
-    isSlider: true,
+    options: ["Worst", "Bad", "Average", "Good", "Excellent"],
+    type: StringsConstants.QUES_TYPE_SLIDER,
   ),
   Question(
     id: '006',
     questionText: 'Are you satisfied with the overall performance of your Lok Sabha MP?',
-    options: ["Excellent", "Good", "Average", "Bad", "Worst"],
-    isMultiCorrect: false,
-    isFixed: true,
-    isSlider: true,
+    options: ["Worst", "Bad", "Average", "Good", "Excellent"],
+    type: StringsConstants.QUES_TYPE_SLIDER,
   ),
   Question(
     id: '007',
     questionText: 'Which candidate would you like to support in your area from your Assembly Constituency?',
     options: ["Mr X", "Mr Y", "Mrs Z", "OTH"],
-    isMultiCorrect: false,
-    isFixed: true,
-    isSlider: false
+    type: StringsConstants.QUES_TYPE_SINGLE,
   ),
   Question(
       id: '008',
       questionText: 'Which candidate would you like to support in your area from your Assembly Constituency?',
       options: ["Mr X", "Mr Y", "Mrs Z", "OTH"],
-      isMultiCorrect: false,
-      isFixed: true,
-      isSlider: false
+    type: StringsConstants.QUES_TYPE_SINGLE,
   ),
   Question(
       id: '009',
       questionText: 'Which leader do you want to see as the next Chief Minister of the state?',
       options: ["Mr X", "Mr Y", "Mrs Z", "OTH"],
-      isMultiCorrect: false,
-      isFixed: true,
-      isSlider: false
+    type: StringsConstants.QUES_TYPE_SINGLE,
   ),
   Question(
       id: '010',
       questionText: "Which party do you want to see the next government in the state?",
       options: ["BJP", "INC", "BRS", "AAP", "OTH", "ND"],
-      isMultiCorrect: false,
-      isFixed: true,
-      isSlider: false
+    type: StringsConstants.QUES_TYPE_SINGLE,
   ),
   Question(
       id: '011',
       questionText: "Which party would you like to support in the upcoming assembly elections?",
       options: ["BJP", "INC", "BRS", "AAP", "OTH", "ND"],
-      isMultiCorrect: false,
-      isFixed: true,
-      isSlider: false
+    type: StringsConstants.QUES_TYPE_SINGLE,
   ),
   Question(
       id: '012',
@@ -133,16 +112,12 @@ List<Question> ques = [
         "Road", "Drainage", "Transportation", "Courruption",
         "Low and older", "Car Parking", "Garbage", "Others"
       ],
-      isMultiCorrect: true,
-      isFixed: false,
-      isSlider: false
+    type: StringsConstants.QUES_TYPE_MULTI,
   ),
   Question(
       id: '013',
       questionText: "Which Party do you want to see next Government of India?",
       options:  ["BJP", "INC", "BRS", "AAP", "OTH", "ND"],
-      isMultiCorrect: false,
-      isFixed: true,
-      isSlider: false
+      type: StringsConstants.QUES_TYPE_SINGLE,
   ),
 ];
