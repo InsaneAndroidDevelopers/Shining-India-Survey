@@ -23,7 +23,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
   @override
   void initState() {
     super.initState();
-    quesLength = context.read<SurveyBloc>().quesLength;
+    quesLength = context.read<SurveyBloc>().quesList.length;
     context.read<SurveyBloc>().add(LoadFetchedDataEvent());
     print(quesLength);
   }
@@ -48,6 +48,9 @@ class _SurveyScreenState extends State<SurveyScreen> {
           );
         } else if(state is SurveyFinishState) {
           context.go(RouteNames.additionalDetailsScreen);
+            context.read<SurveyBloc>().quesList.forEach((element) {
+              debugPrint(element.answer);
+            });
         } else if(state is SurveyMoveNextQuestionState) {
           _pageController.nextPage(duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
         }
@@ -61,7 +64,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
         }
       },
       builder: (context, state) {
-        print(state.runtimeType);
+        print("from builder - ${state.runtimeType}");
         if(state is SurveyLoadingState){
           return Center(
             child: CircularProgressIndicator(),
@@ -97,7 +100,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                       padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                       alignment: Alignment.centerRight,
                       child: Text(
-                        '${context.watch<SurveyBloc>().activePage+1} / ${quesLength}',
+                        '${context.watch<SurveyBloc>().activeIndex+1} / ${quesLength}',
                         style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w600
@@ -106,7 +109,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                     ),
                     LinearProgressIndicator(
                       minHeight: 6,
-                      value: (context.watch<SurveyBloc>().activePage+1) / (quesLength),
+                      value: (context.watch<SurveyBloc>().activeIndex+1) / (quesLength),
                     ),
                     Expanded(
                       child: PageView.builder(
@@ -128,10 +131,10 @@ class _SurveyScreenState extends State<SurveyScreen> {
                             minimumSize: Size.fromHeight(50)
                         ),
                         onPressed: () {
-                          context.read<SurveyBloc>().add(CheckQuestionResponseEvent(index: context.read<SurveyBloc>().activePage));
+                          context.read<SurveyBloc>().add(CheckQuestionResponseEvent(index: context.read<SurveyBloc>().activeIndex));
                         },
                         child: Text(
-                          context.read<SurveyBloc>().activePage == quesLength - 1 ? 'Finish' : 'Next',
+                          context.read<SurveyBloc>().activeIndex == quesLength - 1 ? 'Finish' : 'Next',
                           textAlign: TextAlign.center,
                         ),
                       ),

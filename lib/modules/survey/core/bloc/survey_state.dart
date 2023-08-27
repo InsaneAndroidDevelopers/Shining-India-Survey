@@ -18,6 +18,11 @@ class SurveyDataLoadedState extends SurveyState {
   SurveyDataLoadedState({required this.questions});
 
   @override
+  List<Object?> get props => [questions];
+}
+
+class SurveyCheckCurrentResponseState extends SurveyState {
+  @override
   List<Object?> get props => [];
 }
 

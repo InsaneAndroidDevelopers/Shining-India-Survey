@@ -38,6 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                Image.asset('assets/logo.jpeg', height: 200, width: 200,),
                 Text(
                   'Shining India Survey',
                   style: TextStyle(

@@ -22,6 +22,20 @@ class CheckQuestionResponseEvent extends SurveyEvent {
   List<Object?> get props => [];
 }
 
+class GetSelectedOptionsDetailsEvent extends SurveyEvent {
+  final int? selectedIndex;
+  final List<int>? selectedOptionsIndex;
+  final String? othersText;
+
+  GetSelectedOptionsDetailsEvent({
+    this.selectedIndex,
+    this.selectedOptionsIndex,
+    this.othersText
+  });
+  @override
+  List<Object?> get props => [];
+}
+
 class SubmitAdditionalDetailsAndFinishEvent extends SurveyEvent {
   @override
   List<Object?> get props => [];
