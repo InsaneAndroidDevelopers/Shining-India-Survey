@@ -5,6 +5,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:shining_india_survey/models/question.dart';
+import 'package:shining_india_survey/modules/survey/core/models/location_model.dart';
+import 'package:shining_india_survey/modules/survey/core/repository/survey_repository.dart';
 import 'package:shining_india_survey/utils/string_constants.dart';
 
 part 'survey_event.dart';
@@ -14,7 +16,24 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
 
   SurveyBloc() : super(SurveyInitial()) {
 
+    final SurveyRepository surveyRepository = SurveyRepository();
     List<Question> quesList = [];
+
+    on<FetchLocationFromLatLngEvent>((event, emit) async {
+      emit(SurveyLoadingState());
+      try {
+        final LocationModel locationModel = await surveyRepository.getAddressFromLatLng(event.latitude, event.longitude);
+        emit(SurveyLocationFetchedState(
+            pinCode: locationModel.postcode ?? '',
+            village: locationModel.village ?? '',
+            district: locationModel.stateDistrict ?? '',
+            state: locationModel.state ?? ''
+          )
+        );
+      } catch(e) {
+        emit(SurveyErrorState());
+      }
+    });
 
     on<SubmitDetailsAndStartSurveyEvent>((event, emit) {
       emit(SurveyLoadingState());

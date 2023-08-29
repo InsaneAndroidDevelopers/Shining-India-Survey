@@ -3,6 +3,16 @@ part of 'survey_bloc.dart';
 @immutable
 abstract class SurveyEvent extends Equatable{}
 
+class FetchLocationFromLatLngEvent extends SurveyEvent {
+  final double latitude;
+  final double longitude;
+
+  FetchLocationFromLatLngEvent({required this.latitude, required this.longitude});
+
+  @override
+  List<Object?> get props => [];
+}
+
 class SubmitDetailsAndStartSurveyEvent extends SurveyEvent {
   @override
   List<Object?> get props => [];

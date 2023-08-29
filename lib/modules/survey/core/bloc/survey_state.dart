@@ -13,6 +13,18 @@ class SurveyLoadingState extends SurveyState {
   List<Object?> get props => [];
 }
 
+class SurveyLocationFetchedState extends SurveyState {
+  final String pinCode;
+  final String village;
+  final String district;
+  final String state;
+
+  SurveyLocationFetchedState({required this.pinCode, required this.village, required this.district, required this.state});
+
+  @override
+  List<Object?> get props => [];
+}
+
 class SurveyDataLoadedState extends SurveyState {
   final List<Question> questions;
   SurveyDataLoadedState({required this.questions});

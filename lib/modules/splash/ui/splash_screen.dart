@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/splash/core/bloc/splash_bloc.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/surveyor/surveyor_home_screen.dart';
+import 'package:shining_india_survey/modules/surveyor_home/ui/surveyor_home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

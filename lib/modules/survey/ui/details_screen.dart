@@ -69,7 +69,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
     await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
         .then((Position position) {
       setState(() => _currentPosition = position);
-      _getAddressFromLatLng(_currentPosition!);
+
+      context.read<SurveyBloc>().add(FetchLocationFromLatLngEvent(latitude: position.latitude, longitude: position.longitude));
+      //_getAddressFromLatLng(_currentPosition!);
+
     }).catchError((e) {
       debugPrint(e);
     });
@@ -122,9 +125,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
           );
         } else if(state is SurveyDataFetchedState){
           context.go(RouteNames.surveyScreen);
+        } else if(state is SurveyLocationFetchedState) {
+          pinController.text = state.pinCode;
+          districtController.text = state.district;
+          villageController.text = state.village;
+          _dropDownStateValue = state.state ?? '';
         }
       },
       builder: (context, state) {
+        print(state.runtimeType);
         if(state is SurveyLoadingState) {
           return Center(
             child: CircularProgressIndicator(),
@@ -249,7 +258,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         keyboardType: TextInputType.text,
                         decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            labelText: 'Village',
+                            labelText: 'City / Village',
                             prefixIcon: Icon(Icons.holiday_village_rounded)
                         ),
                         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -323,9 +332,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             minimumSize: Size.fromHeight(50)
                         ),
                         onPressed: () {
-                          // if(!_formKey.currentState!.validate()){
-                          //   return;
-                          // }
+                          if(!_formKey.currentState!.validate()){
+                            return ;
+                          }
                           context.read<SurveyBloc>().add(SubmitDetailsAndStartSurveyEvent());
                         },
                         child: Text(

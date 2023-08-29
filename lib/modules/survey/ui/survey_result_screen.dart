@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/surveyor/surveyor_home_screen.dart';
 import 'package:shining_india_survey/modules/survey/ui/widgets/animated_prompt.dart';
 
 class SurveyResultScreen extends StatefulWidget {
