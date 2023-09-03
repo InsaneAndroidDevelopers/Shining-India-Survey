@@ -28,9 +28,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  String? _currentAddress;
-  Position? _currentPosition;
-
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -66,37 +63,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Future<void> _getCurrentPosition() async {
     final hasPermission = await _handleLocationPermission();
     if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
-        .then((Position position) {
-      setState(() => _currentPosition = position);
-
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best).then((Position position) {
       context.read<SurveyBloc>().add(FetchLocationFromLatLngEvent(latitude: position.latitude, longitude: position.longitude));
-      //_getAddressFromLatLng(_currentPosition!);
-
-    }).catchError((e) {
-      debugPrint(e);
-    });
-  }
-
-  Future<void> _getAddressFromLatLng(Position position) async {
-    await placemarkFromCoordinates(
-        28.503451, 77.417321, localeIdentifier: 'en_IN')
-        .then((List<Placemark> placemarks) {
-      Placemark place = placemarks[0];
-      print(placemarks.length);
-      setState(() {
-        _currentAddress =
-        'Name = ${place.name}\n'
-            'Sublocality = ${place.subLocality}\n'
-            'subAdministrative Area = ${place.subAdministrativeArea}\n'
-            'Postal Code = ${place.postalCode}\n'
-            'Administrative Area = ${place.administrativeArea}\n'
-            'Street = ${place.street}\n'
-            'isoCountryCode = ${place.isoCountryCode}\n'
-            'Locality = ${place.locality}\n'
-            'subThroughfare = ${place.subThoroughfare}\n'
-            'throughfare = ${place.thoroughfare}\n';
-      });
     }).catchError((e) {
       debugPrint(e);
     });
@@ -125,11 +93,6 @@ class _DetailsScreenState extends State<DetailsScreen> {
           );
         } else if(state is SurveyDataFetchedState){
           context.go(RouteNames.surveyScreen);
-        } else if(state is SurveyLocationFetchedState) {
-          pinController.text = state.pinCode;
-          districtController.text = state.district;
-          villageController.text = state.village;
-          _dropDownStateValue = state.state ?? '';
         }
       },
       builder: (context, state) {
@@ -138,6 +101,11 @@ class _DetailsScreenState extends State<DetailsScreen> {
           return Center(
             child: CircularProgressIndicator(),
           );
+        } else if(state is SurveyLocationFetchedState) {
+          pinController.text = state.pinCode;
+          districtController.text = state.district;
+          villageController.text = state.village;
+          _dropDownStateValue = state.state ?? '';
         }
         return Scaffold(
           appBar: AppBar(
