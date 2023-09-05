@@ -6,7 +6,6 @@ class Question {
   final List<String> options;
   final String type;
 
-  String answer = "";
   List<int> selectedOptions = [];
   int selectedIndex = -1;
   String otherText = "";

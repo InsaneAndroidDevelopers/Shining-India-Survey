@@ -7,6 +7,9 @@ import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/modules/survey/ui/survey_screen.dart';
 import 'package:shining_india_survey/utils/array_res.dart';
+import 'package:shining_india_survey/utils/loading_indicator.dart';
+
+import '../core/models/location_model.dart';
 
 class DetailsScreen extends StatefulWidget {
   const DetailsScreen({super.key});
@@ -16,7 +19,6 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-
   final nameController = TextEditingController();
   final villageController = TextEditingController();
   final districtController = TextEditingController();
@@ -25,6 +27,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
   int _dropDownAgeValue = 50;
   String _dropDownGenderValue = ArrayResources.genders[0];
   String _dropDownStateValue = ArrayResources.states[0];
+  bool _checkBoxValue = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -36,10 +39,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     if (!serviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
-              'Location services are disabled. Please enable the services'
-          )
-      )
-      );
+              'Location services are disabled. Please enable the services')));
       return false;
     }
     permission = await Geolocator.checkPermission();
@@ -63,11 +63,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
   Future<void> _getCurrentPosition() async {
     final hasPermission = await _handleLocationPermission();
     if (!hasPermission) return;
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best).then((Position position) {
-      context.read<SurveyBloc>().add(FetchLocationFromLatLngEvent(latitude: position.latitude, longitude: position.longitude));
-    }).catchError((e) {
-      debugPrint(e);
-    });
+
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    context.read<SurveyBloc>().add(FetchLocationFromLatLngEvent(latitude: position.latitude, longitude: position.longitude));
+
   }
 
   @override
@@ -81,47 +80,33 @@ class _DetailsScreenState extends State<DetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<SurveyBloc, SurveyState>(
-      listener: (context, state) {
-        if(state is SurveyErrorState){
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Error occurred'
-              )
-            )
-          );
-        } else if(state is SurveyDataFetchedState){
-          context.go(RouteNames.surveyScreen);
-        }
-      },
-      builder: (context, state) {
-        print(state.runtimeType);
-        if(state is SurveyLoadingState) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if(state is SurveyLocationFetchedState) {
-          pinController.text = state.pinCode;
-          districtController.text = state.district;
-          villageController.text = state.village;
-          _dropDownStateValue = state.state ?? '';
-        }
-        return Scaffold(
-          appBar: AppBar(
-            title: Text(
-              'Details',
-              style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold
-              ),
-            ),
-          ),
-          body: SafeArea(
-            child: SingleChildScrollView(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Details',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
+      body: SafeArea(
+        child: BlocConsumer<SurveyBloc, SurveyState>(
+          listener: (context, state) {
+            if (state is SurveyErrorState) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Error occurred')));
+            } else if (state is SurveyDataFetchedState) {
+              context.go(RouteNames.surveyScreen);
+            } else if (state is SurveyLocationFetchedState) {
+              pinController.text = state.pinCode;
+              districtController.text = state.district;
+              villageController.text = state.village;
+              _dropDownStateValue = state.state ?? '';
+            }
+          },
+          builder: (context, state) {
+            print(state.runtimeType);
+            return SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 10, vertical: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 14),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -130,145 +115,193 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       Text(
                         'Basic',
                         style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500
-                        ),
+                            fontSize: 20, fontWeight: FontWeight.w500),
                       ),
-                      SizedBox(height: 10,),
-                      TextFormField(
-                        controller: nameController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Name',
-                            prefixIcon: Icon(Icons.person)
-                        ),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (name) {
-                          if (name == null || name.isEmpty) {
-                            return 'Please enter name';
-                          }
-                          return null;
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ValueListenableBuilder(
+                        valueListenable: nameController,
+                        builder: (context, value, child) {
+                          return TextFormField(
+                            controller: nameController,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Name',
+                                prefixIcon: Icon(Icons.person)),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: (name) {
+                              if (name == null || name.isEmpty) {
+                                return 'Please enter name';
+                              }
+                              return null;
+                            },
+                          );
                         },
                       ),
-                      SizedBox(height: 10,),
+                      Row(
+                        children: [
+                          Checkbox(
+                            value: _checkBoxValue,
+                            onChanged: (value) {
+                              if(value != null) {
+                                setState(() {
+                                  _checkBoxValue = value;
+                                });
+                                if(value) {
+                                  nameController.text = 'Anonymous';
+                                } else if(!value){
+                                  nameController.text = '';
+                                }
+                              }
+                            }
+                          ),
+                          Text(
+                            'Filled as anonymous'
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       Row(
                         children: [
                           Expanded(
                               child: DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText: 'Gender',
-                                    border: OutlineInputBorder(),
-                                    prefixIcon: Icon(Icons.person)
-                                ),
-                                value: _dropDownGenderValue,
-                                items: ArrayResources.genders.map<
-                                    DropdownMenuItem<String>>((String item) {
-                                  return DropdownMenuItem<String>(
-                                      child: Text(item),
-                                      value: item
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    _dropDownGenderValue = value ?? '';
-                                    print(value);
-                                  });
-                                },
-                              )
+                            decoration: InputDecoration(
+                                labelText: 'Gender',
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.person)),
+                            value: _dropDownGenderValue,
+                            items: ArrayResources.genders
+                                .map<DropdownMenuItem<String>>((String item) {
+                              return DropdownMenuItem<String>(
+                                  child: Text(item), value: item);
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _dropDownGenderValue = value ?? '';
+                                print(value);
+                              });
+                            },
+                          )),
+                          SizedBox(
+                            width: 10,
                           ),
-                          SizedBox(width: 10,),
                           Expanded(
                               child: DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                    labelText: 'Age',
-                                    border: OutlineInputBorder(),
-                                    prefixIcon: Icon(Icons.person)
-                                ),
-                                value: _dropDownAgeValue,
-                                items: List.generate(120, (i) => i + 1)
-                                    .map<DropdownMenuItem<int>>((int val) {
-                                  return DropdownMenuItem<int>(
-                                    value: val,
-                                    child: Text(val.toString()),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    _dropDownAgeValue = value ?? 0;
-                                    print(value);
-                                  });
-                                },
-                              )
-                          ),
+                            decoration: InputDecoration(
+                                labelText: 'Age',
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Icons.person)),
+                            value: _dropDownAgeValue,
+                            items: List.generate(120, (i) => i + 1)
+                                .map<DropdownMenuItem<int>>((int val) {
+                              return DropdownMenuItem<int>(
+                                value: val,
+                                child: Text(val.toString()),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _dropDownAgeValue = value ?? 0;
+                                print(value);
+                              });
+                            },
+                          )),
                         ],
                       ),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Address',
                             style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w500
-                            ),
+                                fontSize: 20, fontWeight: FontWeight.w500),
                           ),
                           ElevatedButton(
-                            onPressed: _getCurrentPosition,
-                            child: const Text("Get Current Location"),
+                            onPressed: () {
+                              if(state is SurveyLoadingState) {
+                                null;
+                              } else {
+                                _getCurrentPosition();
+                              }
+                            },
+                            child: state is SurveyLoadingState
+                              ? Container(
+                                  height: 24,
+                                  width: 24,
+                                  alignment: Alignment.center,
+                                  child: CircularProgressIndicator(),
+                              )
+                              : Icon(Icons.location_on_outlined)
                           )
                         ],
                       ),
-                      SizedBox(height: 10,),
-                      TextFormField(
-                        controller: villageController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'City / Village',
-                            prefixIcon: Icon(Icons.holiday_village_rounded)
-                        ),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (village) {
-                          if (village == null || village.isEmpty) {
-                            return 'Please enter village';
-                          }
-                          return null;
+                      SizedBox(
+                        height: 10,
+                      ),
+                      ValueListenableBuilder(
+                        valueListenable: villageController,
+                        builder: (context, value, child) {
+                          return TextFormField(
+                            controller: villageController,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'City / Village',
+                                prefixIcon: Icon(Icons.holiday_village_rounded)),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: (village) {
+                              if (village == null || village.isEmpty) {
+                                return 'Please enter village';
+                              }
+                              return null;
+                            },
+                          );
                         },
                       ),
-                      SizedBox(height: 10,),
-                      TextFormField(
-                        controller: districtController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'District',
-                            prefixIcon: Icon(Icons.share_location_rounded)
-                        ),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (district) {
-                          if (district == null || district.isEmpty) {
-                            return 'Please enter district';
-                          }
-                          return null;
-                        },
+                      SizedBox(
+                        height: 10,
                       ),
-                      SizedBox(height: 10,),
+                      ValueListenableBuilder(
+                        valueListenable: districtController,
+                        builder: (context, value, child) {
+                          return TextFormField(
+                            controller: districtController,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'District',
+                                prefixIcon: Icon(Icons.share_location_rounded)),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: (district) {
+                              if (district == null || district.isEmpty) {
+                                return 'Please enter district';
+                              }
+                              return null;
+                            },
+                          );
+                        }
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       DropdownButtonFormField(
                         isExpanded: true,
                         decoration: InputDecoration(
                             labelText: 'State',
                             border: OutlineInputBorder(),
-                            prefixIcon: Icon(Icons.location_city)
-                        ),
+                            prefixIcon: Icon(Icons.location_city)),
                         value: _dropDownStateValue,
-                        items: ArrayResources.states.map<
-                            DropdownMenuItem<String>>((String item) {
+                        items: ArrayResources.states
+                            .map<DropdownMenuItem<String>>((String item) {
                           return DropdownMenuItem<String>(
-                              child: Text(item),
-                              value: item
-                          );
+                              child: Text(item), value: item);
                         }).toList(),
                         onChanged: (value) {
                           setState(() {
@@ -277,46 +310,63 @@ class _DetailsScreenState extends State<DetailsScreen> {
                           });
                         },
                       ),
-                      SizedBox(height: 10,),
-                      TextFormField(
-                        controller: pinController,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'PIN Code',
-                            prefixIcon: Icon(Icons.power_input_outlined)
-                        ),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (pinCode) {
-                          if (pinCode == null || pinCode.isEmpty) {
-                            return 'Please enter PIN code';
-                          }
-                          return null;
-                        },
+                      SizedBox(
+                        height: 10,
                       ),
-                      SizedBox(height: 10,),
+                      ValueListenableBuilder(
+                        valueListenable: pinController,
+                        builder: (context, value, child) {
+                          return TextFormField(
+                            controller: pinController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'PIN Code',
+                                prefixIcon: Icon(Icons.power_input_outlined)),
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            validator: (pinCode) {
+                              if (pinCode == null || pinCode.isEmpty) {
+                                return 'Please enter PIN code';
+                              }
+                              return null;
+                            },
+                          );
+                        }
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            minimumSize: Size.fromHeight(50)
-                        ),
+                            minimumSize: Size.fromHeight(50)),
                         onPressed: () {
-                          if(!_formKey.currentState!.validate()){
-                            return ;
+                          if (!_formKey.currentState!.validate()) {
+                            return;
                           }
-                          context.read<SurveyBloc>().add(SubmitDetailsAndStartSurveyEvent());
+                          context.read<SurveyBloc>().add(SubmitDetailsAndStartSurveyEvent(
+                            locationModel: LocationModel(
+                              village: villageController.text.trim(),
+                              stateDistrict: districtController.text.trim(),
+                              state: _dropDownStateValue.trim(),
+                              postcode: pinController.text.trim()
+                            ),
+                            name: nameController.text.trim(),
+                            age: _dropDownAgeValue,
+                            gender: _dropDownGenderValue.trim(),
+                            latitude: 0.0000,
+                            longitude: 0.0000
+                          ));
                         },
-                        child: Text(
-                            'Start Survey'
-                        ),
+                        child: Text('Start Survey'),
                       ),
                     ],
                   ),
                 ),
               ),
-            ),
-          ),
-        );
-      },
+            );
+          },
+        ),
+      ),
     );
   }
 }

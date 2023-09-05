@@ -14,6 +14,22 @@ class FetchLocationFromLatLngEvent extends SurveyEvent {
 }
 
 class SubmitDetailsAndStartSurveyEvent extends SurveyEvent {
+  final String name;
+  final String gender;
+  final int age;
+  final double latitude;
+  final double longitude;
+  final LocationModel locationModel;
+
+  SubmitDetailsAndStartSurveyEvent({
+    required this.locationModel,
+    required this.longitude,
+    required this.latitude,
+    required this.gender,
+    required this.name,
+    required this.age
+  });
+
   @override
   List<Object?> get props => [];
 
@@ -34,6 +50,18 @@ class CheckQuestionResponseEvent extends SurveyEvent {
 }
 
 class SubmitAdditionalDetailsAndFinishEvent extends SurveyEvent {
+  final String phone;
+  final String religion;
+  final String caste;
+  final String address;
+
+  SubmitAdditionalDetailsAndFinishEvent({
+    required this.phone,
+    required this.religion,
+    required this.caste,
+    required this.address
+  });
+
   @override
   List<Object?> get props => [];
 }

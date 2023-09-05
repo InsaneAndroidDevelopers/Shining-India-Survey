@@ -27,14 +27,14 @@ class LocationModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['village'] = this.village;
-    data['county'] = this.county;
-    data['state_district'] = this.stateDistrict;
-    data['state'] = this.state;
-    data['postcode'] = this.postcode;
-    data['country'] = this.country;
-    data['country_code'] = this.countryCode;
+    final Map<String, dynamic> data = {};
+    data['village'] = village;
+    data['county'] = county;
+    data['state_district'] = stateDistrict;
+    data['state'] = state;
+    data['postcode'] = postcode;
+    data['country'] = country;
+    data['country_code'] = countryCode;
     return data;
   }
 }
