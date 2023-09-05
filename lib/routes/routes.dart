@@ -12,5 +12,6 @@ class RouteNames {
   static const String adminLoginScreen = '/admin_login_screen';
   static const String adminHomeScreen = '/admin_home_screen';
   static const String adminTeamsScreen = '/admin_teams_screen';
-  static const String adminSurveyorScreen = '/admin_surveyors_screen';
+  static const String adminSurveyorsScreen = '/admin_surveyors_screen';
+  static const String adminCreateUpdateSurveyorScreen = '/admin_create_update_surveyor_screen';
 }

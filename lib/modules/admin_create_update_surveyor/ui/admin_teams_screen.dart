@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shining_india_survey/routes/routes.dart';
 
 class AdminTeamsScreen extends StatefulWidget {
   const AdminTeamsScreen({super.key});
@@ -27,7 +28,7 @@ class _AdminTeamsScreenState extends State<AdminTeamsScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          openDialog();
+          context.push(RouteNames.adminSurveyorsScreen);
         },
         icon: Icon(Icons.add),
         label: Text('Create team'),
