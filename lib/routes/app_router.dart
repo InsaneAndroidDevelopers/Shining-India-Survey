@@ -1,5 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/admin_home/ui/admin_home_screen.dart';
+import 'package:shining_india_survey/modules/admin_home/ui/admin_surveyors_screen.dart';
+import 'package:shining_india_survey/modules/admin_home/ui/admin_teams_screen.dart';
 import 'package:shining_india_survey/modules/login/ui/admin_login_screen.dart';
 import 'package:shining_india_survey/modules/login/ui/login_screen.dart';
 import 'package:shining_india_survey/modules/login/ui/surveyor_login_screen.dart';
@@ -84,6 +86,20 @@ class AppRouter {
           return AdminHomeScreen();
         },
       ),
+      GoRoute(
+        name: RouteNames.adminTeamsScreen,
+        path: RouteNames.adminTeamsScreen,
+        builder: (context, state) {
+          return AdminTeamsScreen();
+        },
+      ),
+      GoRoute(
+        name: RouteNames.adminSurveyorScreen,
+        path: RouteNames.adminSurveyorScreen,
+        builder: (context, state) {
+          return AdminSurveyorScreen();
+        },
+      )
     ]
   );
 }
