@@ -8,6 +8,7 @@ import 'package:shining_india_survey/modules/login/ui/login_screen.dart';
 import 'package:shining_india_survey/modules/login/ui/surveyor_login_screen.dart';
 import 'package:shining_india_survey/modules/survey/ui/details_screen.dart';
 import 'package:shining_india_survey/modules/survey/ui/survey_result_screen.dart';
+import 'package:shining_india_survey/modules/survey_analysis/ui/admin_survey_analysis_screen.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/modules/splash/ui/splash_screen.dart';
 import 'package:shining_india_survey/modules/survey/ui/additional_details_screen.dart';
@@ -110,7 +111,14 @@ class AppRouter {
             name: state.uri.queryParameters['name'] as String,
           );
         },
-      )
+      ),
+      GoRoute(
+        name: RouteNames.adminSurveyAnalysisScreen,
+        path: RouteNames.adminSurveyAnalysisScreen,
+        builder: (context, state) {
+          return AdminSurveyAnalysisScreen();
+        },
+      ),
     ]
   );
 }

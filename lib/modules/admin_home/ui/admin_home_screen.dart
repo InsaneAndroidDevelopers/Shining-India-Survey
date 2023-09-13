@@ -20,7 +20,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
             icon: Icon(Icons.people_alt_rounded),
             tooltip: 'Create team',
             onPressed: () {
-              context.push(RouteNames.adminTeamsScreen);
+              context.push(RouteNames.adminSurveyAnalysisScreen);
             },
           )
         ],
