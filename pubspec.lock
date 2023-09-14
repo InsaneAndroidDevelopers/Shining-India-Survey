@@ -561,7 +561,7 @@ packages:
     source: hosted
     version: "2.1.0"
   share_plus:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: share_plus
       sha256: "6cec740fa0943a826951223e76218df002804adb588235a8910dc3d6b0654e11"

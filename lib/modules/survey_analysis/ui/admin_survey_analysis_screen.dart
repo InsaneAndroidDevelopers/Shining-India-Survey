@@ -1,8 +1,6 @@
-import 'dart:math';
 import 'dart:typed_data';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:screenshot/screenshot.dart';
+import 'package:screenshot/screenshot.dart'; 
 import 'package:shining_india_survey/services/pdf_service.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -21,43 +19,66 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Analysis'),
+      ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              //Filters
-            ),
-            Expanded(
-              child: ListView.builder(
-                physics: BouncingScrollPhysics(),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Container(
-                    color: Colors.grey,
-                    child: SfCircularChart(
-                      series: <CircularSeries>[
-                        PieSeries(
-                          dataSource: chartData,
-                          xValueMapper: (data, _) => data.x,
-                          yValueMapper: (data, _) => data.y,
-                          dataLabelSettings: DataLabelSettings(isVisible: true),
-                          legendIconType: LegendIconType.rectangle,
-                          animationDuration: 0,
-                          radius: '100'
-                        )
-                      ],
-                      legend: Legend(
-                        toggleSeriesVisibility: false,
-                        isVisible: true,
-                        overflowMode: LegendItemOverflowMode.scroll,
-                        shouldAlwaysShowScrollbar: true,
-                      ),
-                    ),
-                  );
-                },
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 14),
+          child: Column(
+            children: [
+              Container(
+                //Filters
               ),
-            )
-          ],
+              Expanded(
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius: BorderRadius.circular(12)
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                            'Which candidate would you like to support in your area from your Assembly Constituency?',
+                            style: TextStyle(
+                              fontSize: 16
+                            ),
+                          ),
+                          SizedBox(height: 6,),
+                          SfCircularChart(
+                            series: <CircularSeries>[
+                              PieSeries(
+                                dataSource: chartData,
+                                xValueMapper: (data, _) => data.x,
+                                yValueMapper: (data, _) => data.y,
+                                dataLabelSettings: DataLabelSettings(isVisible: true),
+                                legendIconType: LegendIconType.rectangle,
+                                animationDuration: 0,
+                                radius: '80%'
+                              )
+                            ],
+                            legend: Legend(
+                              toggleSeriesVisibility: false,
+                              isVisible: true,
+                              itemPadding: 1,
+                              overflowMode: LegendItemOverflowMode.scroll,
+                              shouldAlwaysShowScrollbar: true,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
         )
       ),
       floatingActionButton: FloatingActionButton(
@@ -112,15 +133,9 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
     ChartData('David', 25),
     ChartData('Steve', 38),
     ChartData('Jack', 34),
-    ChartData('Others', 52),
-    ChartData('Davi', 25),
-    ChartData('Stee', 38),
-    ChartData('Davidbsrh', 25),
-    ChartData('Sterthrve', 38),
-    ChartData('Jahrwtrck', 34),
-    ChartData('Otrhrhers', 52),
-    ChartData('Dawrhtvi', 25),
-    ChartData('Sttrhee', 38),
+    ChartData('Daveryheid', 25),
+    ChartData('Stherheve', 38),
+    ChartData('Jachererk', 34),
   ];
 }
 

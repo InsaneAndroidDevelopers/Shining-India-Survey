@@ -52,6 +52,7 @@ dependencies:
   path_provider: ^2.1.1
   open_document: ^1.0.7
   screenshot: ^2.1.0
+  share_plus: ^7.1.0
 
 dev_dependencies:
   flutter_test:
