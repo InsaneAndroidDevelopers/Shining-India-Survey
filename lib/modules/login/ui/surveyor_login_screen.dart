@@ -5,6 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/login/core/bloc/login_bloc.dart';
 import 'package:shining_india_survey/modules/login/ui/admin_login_screen.dart';
 import 'package:shining_india_survey/routes/routes.dart';
+import 'package:shining_india_survey/utils/app_colors.dart';
+import 'package:shining_india_survey/utils/back_button.dart';
+import 'package:shining_india_survey/utils/custom_button.dart';
 
 class SurveyorLoginScreen extends StatefulWidget {
   const SurveyorLoginScreen({super.key});
@@ -55,10 +58,17 @@ class _SurveyorLoginScreenState extends State<SurveyorLoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: SafeArea(
-        child: BlocConsumer<LoginBloc, LoginState>(
+    final outlineBorder = OutlineInputBorder(
+        borderSide: const BorderSide(
+            color: AppColors.lightBlack
+        ),
+        borderRadius: BorderRadius.circular(16)
+    );
+
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColors.primary,
+        body: BlocConsumer<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is ErrorState) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -72,75 +82,150 @@ class _SurveyorLoginScreenState extends State<SurveyorLoginScreen> {
           },
           builder: (context, state) {
             if (state is LoadingState) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
             return SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextFormField(
-                          controller: emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'E-mail',
-                              prefixIcon: Icon(Icons.email_rounded)
-                          ),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: _validateEmail
-                      ),
-                      SizedBox(height: 10,),
-                      TextFormField(
-                          controller: passwordController,
-                          keyboardType: TextInputType.text,
-                          obscureText: !isPasswordVisible,
-                          decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: 'Password',
-                              prefixIcon: Icon(Icons.key_rounded),
-                              suffixIcon: IconButton(
-                                icon: Icon(isPasswordVisible
-                                    ? Icons.visibility
-                                    : Icons.visibility_off),
-                                onPressed: () {
-                                  setState(() {
-                                    isPasswordVisible =
-                                    !isPasswordVisible;
-                                  });
-                                },
-                              )
-                          ),
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-                          validator: _validatePassword
-                      ),
-                      SizedBox(height: 10,),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            minimumSize: Size.fromHeight(50)
-                        ),
-                        onPressed: () {
-                          // if(_formKey.currentState!.validate()){
-                          //   debugPrint(emailController.text);
-                          //   debugPrint(passwordController.text);
-                          // }
-                          context.read<LoginBloc>().add(
-                              SurveyorLoginEvent());
-                        },
-                        child: Text(
-                          'Login',
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(height: 10,),
-                    ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 14, left: 14),
+                    child: CustomBackButton(
+                      onTap: (){
+                        context.pop();
+                      },
+                    ),
                   ),
-                ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    child: Column(
+                      children: [
+                        Hero(
+                            tag: 'assets/user.png',
+                            child: Image.asset('assets/user.png', height: 220,)
+                        ),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Surveyor',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 26,
+                                color: AppColors.black,
+                                fontWeight: FontWeight.w700
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 4,),
+                        const Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'Login to continue using the app',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 16,
+                                color: AppColors.lightBlack,
+                                fontWeight: FontWeight.w700
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 24,),
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextFormField(
+                                  controller: emailController,
+                                  style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: AppColors.textBlack
+                                  ),
+                                  keyboardType: TextInputType.emailAddress,
+                                  cursorColor: AppColors.lightBlack,
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    labelText: 'E-mail',
+                                    prefixIcon: const Icon(Icons.email_rounded, color: AppColors.textBlack,),
+                                    labelStyle: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        color: AppColors.lightBlack
+                                    ),
+                                    border: outlineBorder,
+                                    disabledBorder: outlineBorder,
+                                    errorBorder: outlineBorder,
+                                    focusedBorder: outlineBorder,
+                                    focusedErrorBorder: outlineBorder,
+                                    enabledBorder: outlineBorder,
+                                  ),
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  validator: _validateEmail
+                              ),
+                              const SizedBox(height: 10,),
+                              TextFormField(
+                                  controller: passwordController,
+                                  keyboardType: TextInputType.text,
+                                  style: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      color: AppColors.textBlack
+                                  ),
+                                  cursorColor: AppColors.lightBlack,
+                                  obscureText: !isPasswordVisible,
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    labelText: 'Password',
+                                    labelStyle: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        color: AppColors.lightBlack
+                                    ),
+                                    prefixIcon: const Icon(Icons.key_rounded, color: AppColors.textBlack,),
+                                    suffixIcon: IconButton(
+                                      icon: Icon(isPasswordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off, color: AppColors.textBlack,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          isPasswordVisible =
+                                          !isPasswordVisible;
+                                        });
+                                      },
+                                    ),
+                                    border: outlineBorder,
+                                    disabledBorder: outlineBorder,
+                                    errorBorder: outlineBorder,
+                                    focusedBorder: outlineBorder,
+                                    focusedErrorBorder: outlineBorder,
+                                    enabledBorder: outlineBorder,
+                                  ),
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  validator: _validatePassword
+                              ),
+                              const SizedBox(height: 20,),
+                              CustomButton(
+                                  onTap: (){
+                                    // if(_formKey.currentState!.validate()){
+                                    //   debugPrint(emailController.text);
+                                    //   debugPrint(passwordController.text);
+                                    // }
+                                    context.read<LoginBloc>().add(SurveyorLoginEvent());
+                                  },
+                                  text: 'Login'
+                              ),
+                              const SizedBox(height: 10,),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             );
           },
@@ -149,3 +234,4 @@ class _SurveyorLoginScreenState extends State<SurveyorLoginScreen> {
     );
   }
 }
+

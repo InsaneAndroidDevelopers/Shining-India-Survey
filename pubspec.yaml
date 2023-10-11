@@ -105,6 +105,15 @@ flutter:
          - asset: assets/fonts/OpenSans-Bold.ttf
          - asset: assets/fonts/OpenSans-Italic.ttf
          - asset: assets/fonts/OpenSans-BoldItalic.ttf
+     - family: Inter
+       fonts:
+         - asset: assets/fonts/Inter-Regular.ttf
+     - family: Nunito
+       fonts:
+         - asset: assets/fonts/Nunito-Regular.ttf
+     - family: Poppins
+       fonts:
+         - asset: assets/fonts/Poppins-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
