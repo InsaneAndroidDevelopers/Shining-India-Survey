@@ -20,8 +20,8 @@ class CustomButton extends StatelessWidget {
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
             colors: [
-              Color(0xFF1c8ca4),
-              Color(0xFF8bd6ed),
+              AppColors.primaryBlue,
+              AppColors.primaryBlueLight,
             ]
           ),
           borderRadius: BorderRadius.circular(12)

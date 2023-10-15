@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shining_india_survey/models/question.dart';
 import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
 import 'package:shining_india_survey/modules/survey/ui/widgets/build_option.dart';
+import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/array_res.dart';
 import 'package:shining_india_survey/utils/string_constants.dart';
 
@@ -33,6 +34,13 @@ class _OptionWidgetState extends State<OptionWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final outlineBorder = OutlineInputBorder(
+        borderSide: const BorderSide(
+            color: AppColors.lightBlack
+        ),
+        borderRadius: BorderRadius.circular(16)
+    );
+
     return BlocListener<SurveyBloc, SurveyState>(
       listener: (context, state) {
 
@@ -42,18 +50,24 @@ class _OptionWidgetState extends State<OptionWidget> {
           widget.question.type == StringsConstants.QUES_TYPE_SLIDER
               ? Column(
             children: [
+              SizedBox(height: 20,),
               Text(
                 '${ArrayResources.emojis[currentValue.toInt()]}\n${widget.question.options[currentValue.toInt()]}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 20
+                  fontWeight: FontWeight.w700,
+                  fontFamily: 'Poppins',
+                  color: AppColors.primary,
+                  fontSize: 24
                 ),
               ),
               SizedBox(height: 10,),
               SliderTheme(
                 data: SliderThemeData(
                   trackHeight: 8,
-
+                  inactiveTrackColor: AppColors.primary,
+                  activeTrackColor: AppColors.primaryBlueLight,
+                  thumbColor: AppColors.primaryBlue
                 ),
                 child: Slider(
                   min: 0,
@@ -101,18 +115,45 @@ class _OptionWidgetState extends State<OptionWidget> {
           SizedBox(height: 20,),
           if (widget.question.type == StringsConstants.QUES_TYPE_MULTI)
             TextField(
-              controller: othersController,
-              keyboardType: TextInputType.text,
-              style: TextStyle(
-                fontSize: 12,
-              ),
-              decoration: InputDecoration(
-                  border: OutlineInputBorder(),
+                controller: othersController,
+                keyboardType: TextInputType.text,
+                style: const TextStyle(
+                  fontSize: 14,
+                    fontFamily: 'Poppins',
+                    color: AppColors.textBlack
+                ),
+                cursorColor: AppColors.lightBlack,
+                decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(12),
+                  fillColor: AppColors.primary,
+                  filled: true,
                   labelText: 'Others',
-                  contentPadding: EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 4)
-              ),
-            )
+                  labelStyle: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    color: AppColors.lightBlack
+                  ),
+                  border: outlineBorder,
+                  disabledBorder: outlineBorder,
+                  errorBorder: outlineBorder,
+                  focusedBorder: outlineBorder,
+                  focusedErrorBorder: outlineBorder,
+                  enabledBorder: outlineBorder,
+                ),
+            ),
+            // TextField(
+            //   controller: othersController,
+            //   keyboardType: TextInputType.text,
+            //   style: TextStyle(
+            //     fontSize: 12,
+            //   ),
+            //   decoration: InputDecoration(
+            //       border: OutlineInputBorder(),
+            //       labelText: 'Others',
+            //       contentPadding: EdgeInsets.symmetric(
+            //           horizontal: 10, vertical: 4)
+            //   ),
+            // )
         ],
       ),
     );

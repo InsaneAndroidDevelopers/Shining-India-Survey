@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
 import 'package:shining_india_survey/modules/survey/ui/widgets/question_widget.dart';
 import 'package:shining_india_survey/routes/routes.dart';
+import 'package:shining_india_survey/utils/app_colors.dart';
+import 'package:shining_india_survey/utils/custom_button.dart';
 
 class SurveyScreen extends StatefulWidget {
   const SurveyScreen({super.key});
@@ -16,12 +18,6 @@ class _SurveyScreenState extends State<SurveyScreen> {
 
   final _pageController = PageController(initialPage: 0);
   final pageNotifier = ValueNotifier<int>(0);
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<SurveyBloc>().add(LoadFetchedDataEvent());
-  }
 
   @override
   void dispose() {
@@ -57,7 +53,6 @@ class _SurveyScreenState extends State<SurveyScreen> {
         }
       },
       builder: (context, state) {
-        print("from builder - ${state.runtimeType}");
         if(state is SurveyLoadingState){
           return Center(
             child: CircularProgressIndicator(),
@@ -85,69 +80,131 @@ class _SurveyScreenState extends State<SurveyScreen> {
                     ),
               ) ?? false;
             },
-            child: Scaffold(
-              body: SafeArea(
-                child: Column(
+            child: SafeArea(
+              child: Scaffold(
+                backgroundColor: AppColors.primary,
+                body: Column(
                   children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                      alignment: Alignment.centerRight,
-                      child: ValueListenableBuilder(
-                        valueListenable: pageNotifier,
-                        builder: (context, value, child) {
-                          return Text(
-                            '${pageNotifier.value + 1} / ${state.questions.length}',
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    ValueListenableBuilder(
-                      valueListenable: pageNotifier,
-                      builder: (context, value, child) {
-                        return LinearProgressIndicator(
-                          minHeight: 6,
-                          value: (pageNotifier.value + 1) / (state.questions.length),
-                        );
-                      },
-                    ),
-                    Expanded(
-                      child: PageView.builder(
-                        controller: _pageController,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: state.questions.length,
-                        itemBuilder: (context, index) {
-                          return QuestionWidget(
-                            question: state.questions[index],
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 10,),
-                    AnimatedBuilder(
-                      animation: _pageController,
-                      builder: (context, child) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                minimumSize: Size.fromHeight(50)
-                            ),
-                            onPressed: () {
-                              context.read<SurveyBloc>().add(CheckQuestionResponseEvent(index: (_pageController.page ?? 0).toInt(),
-                                  question: state.questions[(_pageController.page ?? 0).toInt()])
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              await showDialog(
+                              context: context,
+                              builder: (context) =>
+                                  AlertDialog(
+                                    title: Text('Are you sure?'),
+                                    content: Text('Do you want to exit the survey'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () => context.pop(false),
+                                        child: Text('No'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () =>
+                                            context.go(RouteNames.surveyorHomeScreen),
+                                        child: Text('Yes'),
+                                      ),
+                                    ],
+                                  ),
                               );
                             },
-                            child: Text(
-                              (_pageController.page ?? 0).toInt() == state.questions.length - 1 ? 'Finish' : 'Next',
-                              textAlign: TextAlign.center,
-                            ),
+                            child: Icon(Icons.cancel_outlined,)
                           ),
-                        );
-                      },
+                          Expanded(
+                            child: Container(
+                              margin: EdgeInsets.only(left: 10),
+                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColors.dividerColor,
+                                ),
+                                borderRadius: BorderRadius.circular(12)
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: ValueListenableBuilder(
+                                      valueListenable: pageNotifier,
+                                      builder: (context, value, child) {
+                                        return ClipRRect(
+                                          borderRadius: BorderRadius.circular(8),
+                                          child: SizedBox(
+                                            height: 8,
+                                            child: LinearProgressIndicator(
+                                              value: (pageNotifier.value + 1) / (state.questions.length),
+                                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryBlue),
+                                              backgroundColor: AppColors.primaryBlueBackground,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ), //
+                                  ),
+                                  SizedBox(width: 8,),
+                                  ValueListenableBuilder(
+                                    valueListenable: pageNotifier,
+                                    builder: (context, value, child) {
+                                      return Text(
+                                        '${((pageNotifier.value + 1) / (state.questions.length) * 100).toInt().toString()}%',
+                                        style: TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 14,
+                                            color: AppColors.primaryBlue,
+                                            fontWeight: FontWeight.w700
+                                        ),
+                                      );
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color(0xff03738c),
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(22), topRight: Radius.circular(22))
+                        ),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: PageView.builder(
+                                controller: _pageController,
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount: state.questions.length,
+                                itemBuilder: (context, index) {
+                                  return QuestionWidget(
+                                    question: state.questions[index],
+                                  );
+                                },
+                              ),
+                            ),
+                            AnimatedBuilder(
+                              animation: _pageController,
+                              builder: (context, child) {
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                                  child: CustomButton(
+                                    onTap: () {
+                                      context.read<SurveyBloc>().add(CheckQuestionResponseEvent(index: (_pageController.page ?? 0).toInt(),
+                                          question: state.questions[(_pageController.page ?? 0).toInt()])
+                                      );
+                                    },
+                                    text: (_pageController.page ?? 0).toInt() == state.questions.length - 1 ? 'Finish' : 'Next',
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(height: 10,)
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),

@@ -55,9 +55,6 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
 
       //save and fetch the data from the API and set the length of the question
 
-      quesList = ques;
-      surveyResponseModel.questionResponses = List.generate(quesList.length, (index) => QuestionResponseModel());
-
       surveyResponseModel.locationModel = event.locationModel;
       surveyResponseModel.age = event.age;
       surveyResponseModel.name = event.name;
@@ -65,11 +62,27 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
       surveyResponseModel.latitude = event.latitude;
       surveyResponseModel.longitude = event.longitude;
 
+      add(LoadFetchedDataEvent());
+
       emit(SurveyDataFetchedState());
     });
 
     on<LoadFetchedDataEvent>((event, emit)  {
       emit(SurveyLoadingState());
+
+      //fetch data from API
+      quesList.clear();
+      for (var element in ques) {
+        quesList.add(
+          Question(
+            id: element.id,
+            questionText: element.questionText,
+            options: element.options,
+            type: element.type
+          )
+        );
+      }
+      surveyResponseModel.questionResponses = List.generate(quesList.length, (index) => QuestionResponseModel());
 
       emit(SurveyDataLoadedState(questions: quesList));
     });

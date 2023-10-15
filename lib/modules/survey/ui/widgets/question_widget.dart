@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shining_india_survey/models/question.dart';
 import 'package:shining_india_survey/modules/survey/ui/widgets/option_widget.dart';
+import 'package:shining_india_survey/utils/app_colors.dart';
 
 class QuestionWidget extends StatefulWidget {
   final Question question;
@@ -15,23 +16,16 @@ class _QuestionWidgetState extends State<QuestionWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.all(16),
       child: Column(
         children: [
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(10)
-            ),
-            child: Text(
-              widget.question.questionText,
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black
-              ),
+          Text(
+            widget.question.questionText,
+            style: TextStyle(
+              fontSize: 22,
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w700,
+              color: AppColors.primary
             ),
           ),
           SizedBox(height: 18,),
