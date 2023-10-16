@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shining_india_survey/utils/app_colors.dart';
+import 'package:shining_india_survey/utils/custom_button.dart';
 
 class AnimatedPrompt extends StatefulWidget {
   final String title;
@@ -76,7 +78,7 @@ class _AnimatedPromptState extends State<AnimatedPrompt>
       borderRadius: BorderRadius.circular(20),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.grey.shade200,
+          color: AppColors.primaryBlueBackground,
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -110,21 +112,19 @@ class _AnimatedPromptState extends State<AnimatedPrompt>
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 30,
+                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: AppColors.textBlack,
                       ),
                     ),
                     const SizedBox(
                       height: 20,
                     ),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          minimumSize: Size.fromHeight(50)
-                      ),
-                      onPressed: widget.onTap,
-                      child: Text(
-                        'Return to home'
-                      ),
+                    CustomButton(
+                      onTap: (){
+                        widget.onTap();
+                      },
+                      text: 'Return to home'
                     ),
                   ],
                 ),

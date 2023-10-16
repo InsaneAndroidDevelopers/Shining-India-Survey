@@ -13,7 +13,7 @@ class CustomCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         clipBehavior: Clip.hardEdge,
-        height: 140,
+        height: 130,
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
