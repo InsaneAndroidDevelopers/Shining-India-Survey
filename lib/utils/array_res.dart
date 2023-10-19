@@ -40,4 +40,7 @@ class ArrayResources {
   static const List<String> castes = ['General', 'OBC', 'EWS', 'SC', 'ST',];
   static const List<String> religions = ['Hindu', 'Muslim', 'Sikh', 'Christian', 'Jain', 'Buddhist'];
   static const List<String> emojis = ['😠', '😟','🤨', '🙂','😃'];
+  static const List<String> dates = ['All', '30 days', '14 days', '7 days', '5 days'];
+  static const List<String> users = ['User 1', 'User 2', 'User 3', 'User 4', 'User 5', 'User 6', 'User 7',];
+  static const List<String> ageGroup = ['18-30', '30-40', '40-50', '50-60', '60-70', '70-80', '80-90', '90-100'];
 }

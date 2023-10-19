@@ -17,6 +17,7 @@ class _AdminSurveyorScreenState extends State<AdminSurveyorScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: AppColors.primary,
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 14),
           child: Column(
