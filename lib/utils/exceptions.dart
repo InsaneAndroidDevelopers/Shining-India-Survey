@@ -1,27 +1,28 @@
 class AppExceptionDio implements Exception {
-  AppExceptionDio();
-}
-
-class FetchDataExceptionDio extends AppExceptionDio {
-  FetchDataExceptionDio();
+  final String message;
+  AppExceptionDio(this.message);
 }
 
 class BadRequestExceptionDio extends AppExceptionDio {
-  BadRequestExceptionDio();
+  BadRequestExceptionDio(super.message);
 }
 
 class InternalServerErrorDio extends AppExceptionDio {
-  InternalServerErrorDio();
+  InternalServerErrorDio(super.message);
 }
 
 class UnauthorisedExceptionDio extends AppExceptionDio {
-  UnauthorisedExceptionDio();
+  UnauthorisedExceptionDio(super.message);
+}
+
+class ConflictExceptionDio extends AppExceptionDio {
+  ConflictExceptionDio(super.message);
 }
 
 class InvalidInputExceptionDio extends AppExceptionDio {
-  InvalidInputExceptionDio();
+  InvalidInputExceptionDio(super.message);
 }
 
 class UnexpectedExceptionDio extends AppExceptionDio {
-  UnexpectedExceptionDio();
+  UnexpectedExceptionDio(super.message);
 }

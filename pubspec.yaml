@@ -53,6 +53,7 @@ dependencies:
   open_document: ^1.0.7
   screenshot: ^2.1.0
   share_plus: ^7.1.0
+  another_flushbar: ^1.12.30
 
 dev_dependencies:
   flutter_test:

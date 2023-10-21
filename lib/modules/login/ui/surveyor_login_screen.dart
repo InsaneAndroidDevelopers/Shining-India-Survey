@@ -8,6 +8,8 @@ import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/back_button.dart';
 import 'package:shining_india_survey/utils/custom_button.dart';
+import 'package:shining_india_survey/utils/custom_flushbar.dart';
+import 'package:shining_india_survey/utils/custom_loader.dart';
 
 class SurveyorLoginScreen extends StatefulWidget {
   const SurveyorLoginScreen({super.key});
@@ -69,23 +71,27 @@ class _SurveyorLoginScreenState extends State<SurveyorLoginScreen> {
       child: Scaffold(
         backgroundColor: AppColors.primary,
         body: BlocConsumer<LoginBloc, LoginState>(
+          listenWhen: (previous, current) {
+            if(previous is LoadingState) {
+              context.pop();
+            }
+            return true;
+          },
           listener: (context, state) {
-            if (state is ErrorState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('Error occurred')
-                  )
-              );
+            if (state is LoadingState) {
+              CustomLoader(context: context).show();
+            } else if (state is ErrorState) {
+              CustomFlushBar(
+                context: context,
+                message: state.message,
+                backgroundColor: Colors.red,
+                icon: Icon(Icons.cancel_outlined, color: Colors.white)
+              ).show();
             } else if (state is SurveyorLoginSuccessState) {
               context.go(RouteNames.surveyorHomeScreen);
             }
           },
           builder: (context, state) {
-            if (state is LoadingState) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,11 +216,12 @@ class _SurveyorLoginScreenState extends State<SurveyorLoginScreen> {
                               const SizedBox(height: 20,),
                               CustomButton(
                                   onTap: (){
-                                    // if(_formKey.currentState!.validate()){
-                                    //   debugPrint(emailController.text);
-                                    //   debugPrint(passwordController.text);
-                                    // }
-                                    context.read<LoginBloc>().add(SurveyorLoginEvent());
+                                    if(_formKey.currentState!.validate()){
+                                      context.read<LoginBloc>().add(SurveyorLoginEvent(
+                                          email: emailController.text.trim(),
+                                          password: passwordController.text.trim()
+                                      ));
+                                    }
                                   },
                                   text: 'Login'
                               ),

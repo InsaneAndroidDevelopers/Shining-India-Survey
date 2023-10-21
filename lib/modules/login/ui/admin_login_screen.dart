@@ -2,11 +2,14 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shining_india_survey/modules/login/core/bloc/login_bloc.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/back_button.dart';
 import 'package:shining_india_survey/utils/custom_button.dart';
+import 'package:shining_india_survey/utils/custom_flushbar.dart';
+import 'package:shining_india_survey/utils/custom_loader.dart';
 
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key});
@@ -65,23 +68,36 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
       child: Scaffold(
         backgroundColor: AppColors.primary,
         body: BlocConsumer<LoginBloc, LoginState>(
+          listenWhen: (previous, current) {
+            if(previous is LoadingState) {
+              context.pop();
+            }
+            return true;
+          },
           listener: (context, state) {
-            if (state is ErrorState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('Error occurred')
-                  )
-              );
+            if (state is LoadingState) {
+              CustomLoader(context: context).show();
+            } else if (state is ErrorState) {
+              CustomFlushBar(
+                context: context,
+                message: state.message,
+                backgroundColor: Colors.red,
+                icon: Icon(Icons.cancel_outlined, color: Colors.white)
+              ).show();
             } else if (state is AdminLoginSuccessState) {
               context.go(RouteNames.adminHomeScreen);
             }
           },
           builder: (context, state) {
-            if (state is LoadingState) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
+            // if(state is LoadingState) {
+            //   return Center(
+            //     child: Lottie.asset(
+            //       'assets/loading.json',
+            //       width: 150,
+            //       height: 150,
+            //     ),
+            //   );
+            // }
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,11 +222,12 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                               const SizedBox(height: 20,),
                               CustomButton(
                                 onTap: (){
-                                  // if(_formKey.currentState!.validate()){
-                                  //   debugPrint(emailController.text);
-                                  //   debugPrint(passwordController.text);
-                                  // }
-                                  context.read<LoginBloc>().add(AdminLoginEvent());
+                                  if(_formKey.currentState!.validate()){
+                                    context.read<LoginBloc>().add(AdminLoginEvent(
+                                        email: emailController.text.trim(),
+                                        password: passwordController.text.trim()
+                                    ));
+                                  }
                                 },
                                 text: 'Login'
                               ),
