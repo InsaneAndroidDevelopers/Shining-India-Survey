@@ -37,4 +37,24 @@ class SharedPreferencesHelper {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString(StringsConstants.USER_ID) ?? '';
   }
+
+  static Future<bool> setUserName(String name) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(StringsConstants.USER_NAME, name);
+  }
+
+  static Future<String> getUserName() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(StringsConstants.USER_NAME) ?? '';
+  }
+
+  static Future<bool> setUserTeamId(String teamId) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.setString(StringsConstants.USER_TEAM_ID, teamId);
+  }
+
+  static Future<String> getUserTeamId() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString(StringsConstants.USER_TEAM_ID) ?? '';
+  }
 }

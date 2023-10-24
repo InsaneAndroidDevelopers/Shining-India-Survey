@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shining_india_survey/modules/filled_surveys/core/bloc/filled_survey_bloc.dart';
 import 'package:shining_india_survey/modules/filled_surveys/widgets/date_chips.dart';
 import 'package:shining_india_survey/modules/filled_surveys/widgets/gender_chips.dart';
+import 'package:shining_india_survey/modules/surveyor_home/core/models/surveyor_home_reponse_model.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/array_res.dart';
 import 'package:shining_india_survey/utils/back_button.dart';
@@ -23,11 +26,8 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
   @override
   Widget build(BuildContext context) {
     final outlineBorder = OutlineInputBorder(
-        borderSide: const BorderSide(
-            color: AppColors.lightBlack
-        ),
-        borderRadius: BorderRadius.circular(16)
-    );
+        borderSide: const BorderSide(color: AppColors.lightBlack),
+        borderRadius: BorderRadius.circular(16));
 
     return SafeArea(
       child: Scaffold(
@@ -44,11 +44,13 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CustomBackButton(
-                      onTap: (){
+                      onTap: () {
                         context.pop();
                       },
                     ),
-                    SizedBox(width: 16,),
+                    SizedBox(
+                      width: 16,
+                    ),
                     Expanded(
                       child: Text(
                         'All Surveys',
@@ -56,8 +58,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                             fontFamily: 'Poppins',
                             fontSize: 28,
                             color: AppColors.black,
-                            fontWeight: FontWeight.w700
-                        ),
+                            fontWeight: FontWeight.w700),
                       ),
                     ),
                   ],
@@ -71,20 +72,20 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                         color: AppColors.textBlack,
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
-                        fontFamily: 'Poppins'
-                    ),
+                        fontFamily: 'Poppins'),
                   ),
                   IconButton(
-                      onPressed: (){
-                        if(isVisible.value == true) {
+                      onPressed: () {
+                        if (isVisible.value == true) {
                           isVisible.value = false;
                         } else {
                           isVisible.value = true;
                         }
                         setState(() {});
                       },
-                      icon: Icon(isVisible.value==true ? Icons.keyboard_arrow_down_rounded : Icons.keyboard_arrow_up_rounded)
-                  )
+                      icon: Icon(isVisible.value == true
+                          ? Icons.keyboard_arrow_down_rounded
+                          : Icons.keyboard_arrow_up_rounded))
                 ],
               ),
               ValueListenableBuilder(
@@ -93,151 +94,171 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                   return Container(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
-                      color: AppColors.dividerColor,
-                      borderRadius: BorderRadius.circular(14)
-                    ),
-                    child: isVisible.value == true ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 8,),
-                          Text(
-                            'User',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 16,
-                                color: AppColors.black,
-                                fontWeight: FontWeight.w500
-                            ),
-                          ),
-                          DropdownButtonFormField(
-                            isExpanded: true,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                              fillColor: Colors.white,
-                              filled: true,
-                              prefixIcon: const Icon(Icons.person_2_rounded, color: AppColors.textBlack,),
-                              border: outlineBorder,
-                              disabledBorder: outlineBorder,
-                              errorBorder: outlineBorder,
-                              focusedBorder: outlineBorder,
-                              focusedErrorBorder: outlineBorder,
-                              enabledBorder: outlineBorder,
-                            ),
-                            value: _dropDownUserValue,
-                            items: ArrayResources.users
-                                .map<DropdownMenuItem<String>>((String item) {
-                              return DropdownMenuItem<String>(
-                                  child: Text(
-                                    item,
-                                    style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 14,
-                                        color: AppColors.textBlack
-                                    ),
-                                  ),
-                                  value: item);
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _dropDownUserValue = value ?? '';
-                                print(value);
-                              });
-                            },
-                          ),
-                          SizedBox(height: 8,),
-                          Text(
-                            'State',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 16,
-                                color: AppColors.black,
-                                fontWeight: FontWeight.w500
-                            ),
-                          ),
-                          DropdownButtonFormField(
-                            isExpanded: true,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                              fillColor: Colors.white,
-                              filled: true,
-                              prefixIcon: const Icon(Icons.location_city_rounded, color: AppColors.textBlack,),
-                              border: outlineBorder,
-                              disabledBorder: outlineBorder,
-                              errorBorder: outlineBorder,
-                              focusedBorder: outlineBorder,
-                              focusedErrorBorder: outlineBorder,
-                              enabledBorder: outlineBorder,
-                            ),
-                            value: _dropDownStateValue,
-                            items: ArrayResources.states
-                                .map<DropdownMenuItem<String>>((String item) {
-                              return DropdownMenuItem<String>(
-                                  child: Text(
-                                    item,
-                                    style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 14,
-                                        color: AppColors.textBlack
-                                    ),
-                                  ),
-                                  value: item);
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _dropDownStateValue = value ?? '';
-                                print(value);
-                              });
-                            },
-                          ),
-                          SizedBox(height: 8,),
-                          Text(
-                            'Days',
-                            style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 16,
-                                color: AppColors.black,
-                                fontWeight: FontWeight.w500
-                            ),
-                          ),
-                          DateChips(),
-                          SizedBox(height: 8,),
-                          GestureDetector(
-                            onTap: (){
-                              isVisible.value = false;
-                              setState(() {});
-                            },
-                            child: Container(
-                              height: 40,
-                              width: double.maxFinite,
-                              alignment: Alignment.center,
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color:  AppColors.primaryBlue,
-                                  borderRadius: BorderRadius.circular(12)
+                        color: AppColors.dividerColor,
+                        borderRadius: BorderRadius.circular(14)),
+                    child: isVisible.value == true
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                height: 8,
                               ),
-                              child: Text(
-                                'Apply',
+                              Text(
+                                'User',
                                 style: TextStyle(
-                                    fontSize: 14,
                                     fontFamily: 'Poppins',
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.w600
+                                    fontSize: 16,
+                                    color: AppColors.black,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              DropdownButtonFormField(
+                                isExpanded: true,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 8),
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  prefixIcon: const Icon(
+                                    Icons.person_2_rounded,
+                                    color: AppColors.textBlack,
+                                  ),
+                                  border: outlineBorder,
+                                  disabledBorder: outlineBorder,
+                                  errorBorder: outlineBorder,
+                                  focusedBorder: outlineBorder,
+                                  focusedErrorBorder: outlineBorder,
+                                  enabledBorder: outlineBorder,
+                                ),
+                                value: _dropDownUserValue,
+                                items: ArrayResources.users
+                                    .map<DropdownMenuItem<String>>(
+                                        (String item) {
+                                  return DropdownMenuItem<String>(
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 14,
+                                            color: AppColors.textBlack),
+                                      ),
+                                      value: item);
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _dropDownUserValue = value ?? '';
+                                    print(value);
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                'State',
+                                style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16,
+                                    color: AppColors.black,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              DropdownButtonFormField(
+                                isExpanded: true,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 8),
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  prefixIcon: const Icon(
+                                    Icons.location_city_rounded,
+                                    color: AppColors.textBlack,
+                                  ),
+                                  border: outlineBorder,
+                                  disabledBorder: outlineBorder,
+                                  errorBorder: outlineBorder,
+                                  focusedBorder: outlineBorder,
+                                  focusedErrorBorder: outlineBorder,
+                                  enabledBorder: outlineBorder,
+                                ),
+                                value: _dropDownStateValue,
+                                items: ArrayResources.states
+                                    .map<DropdownMenuItem<String>>(
+                                        (String item) {
+                                  return DropdownMenuItem<String>(
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                            fontFamily: 'Poppins',
+                                            fontSize: 14,
+                                            color: AppColors.textBlack),
+                                      ),
+                                      value: item);
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    _dropDownStateValue = value ?? '';
+                                    print(value);
+                                  });
+                                },
+                              ),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              Text(
+                                'Days',
+                                style: TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16,
+                                    color: AppColors.black,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              DateChips(),
+                              SizedBox(
+                                height: 8,
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  isVisible.value = false;
+                                  setState(() {});
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: double.maxFinite,
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      color: AppColors.primaryBlue,
+                                      borderRadius: BorderRadius.circular(12)),
+                                  child: Text(
+                                    'Apply',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'Poppins',
+                                        color: AppColors.primary,
+                                        fontWeight: FontWeight.w600),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          SizedBox(height: 10,),
-                        ],
-                      ) : SizedBox.shrink(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          )
+                        : SizedBox.shrink(),
                   );
                 },
               ),
               SizedBox(height: 10,),
-              Expanded(
-                child: ListView.builder(
-                  itemBuilder: (context, index) => RecentSurveyHolder(),
-                  itemCount: 20,
-                ),
+              BlocBuilder<FilledSurveyBloc, FilledSurveyState>(
+                builder: (context, state) {
+                  return Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) => RecentSurveyHolder(
+                          surveyorHomeResponseModel:
+                              SurveyorHomeResponseModel()),
+                      itemCount: 20,
+                    ),
+                  );
+                },
               )
             ],
           ),

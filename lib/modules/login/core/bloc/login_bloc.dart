@@ -27,12 +27,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             password: event.password
         );
         await SharedPreferencesHelper.setUserId(adminResponseModel.id ?? '');
+        await SharedPreferencesHelper.setUserName(adminResponseModel.name ?? '');
+        ////TODO: set user team id
         await SharedPreferencesHelper.setUserLevel(StringsConstants.ADMIN);
         emit(AdminLoginSuccessState());
       } on AppExceptionDio catch(e) {
         emit(ErrorState(message: e.message));
       } on DioException catch(e) {
-        print(e.stackTrace.toString());
         emit(ErrorState(message: e.message ?? 'Please try again'));
       } catch(e) {
         emit(const ErrorState(message: 'Some error occurred'));
@@ -42,21 +43,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<SurveyorLoginEvent>((event, emit) async {
       emit(LoadingState());
       try {
-        print('email -- ${event.email} password -- ${event.password}');
         final SurveyorResponseModel surveyorResponseModel = await loginRepository
             .surveyorLogin(
             email: event.email,
             password: event.password
         );
         await SharedPreferencesHelper.setUserId(surveyorResponseModel.id ?? '');
+        await SharedPreferencesHelper.setUserName(surveyorResponseModel.name ?? '');
+        ////TODO: set user team id
         await SharedPreferencesHelper.setUserLevel(StringsConstants.SURVEYOR);
         emit(SurveyorLoginSuccessState());
       } on AppExceptionDio catch(e) {
         emit(ErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(ErrorState(message: e.message ?? 'Please try again'));
+        emit(ErrorState(message: e.message ?? 'Something went wrong'));
       } catch(e) {
-        emit(const ErrorState(message: 'Some error occurred'));
+        emit(const ErrorState(message: 'Something went wrong'));
       }
     });
   }

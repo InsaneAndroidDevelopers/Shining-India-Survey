@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:shining_india_survey/utils/exceptions.dart';
+import 'package:shining_india_survey/values/app_urls.dart';
 
 class NetworkService {
   late final Dio _dio;
@@ -14,7 +15,7 @@ class NetworkService {
     BaseOptions dioOptions = BaseOptions(
       connectTimeout: const Duration(milliseconds: 10000),
       receiveTimeout: const Duration(milliseconds: 10000),
-      baseUrl: "http://15.207.164.179",
+      baseUrl: AppUrls.baseUrl,
       contentType: Headers.jsonContentType,
       responseType: ResponseType.json,
     );

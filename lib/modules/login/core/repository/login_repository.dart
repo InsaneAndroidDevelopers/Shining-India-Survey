@@ -2,7 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
 import 'package:shining_india_survey/modules/login/core/models/admin_response_model.dart';
 import 'package:shining_india_survey/modules/login/core/models/surveyor_response_model.dart';
-import 'package:shining_india_survey/services/network_requestor.dart';
+import 'package:shining_india_survey/services/network_service.dart';
+import 'package:shining_india_survey/values/app_urls.dart';
 
 class LoginRepository {
   final NetworkService _networkService = NetworkService();
@@ -12,7 +13,7 @@ class LoginRepository {
     required String password
   }) async {
     final Response response = await _networkService.post(
-        path: '/auth/admin',
+        path: AppUrls.adminLogin,
         data: {
           'email': email,
           'password': password
@@ -31,7 +32,7 @@ class LoginRepository {
     required String password
   }) async {
     final Response response = await _networkService.post(
-        path: '/auth/surveyor',
+        path: AppUrls.surveyorLogin,
         data: {
           'email': email,
           'password': password

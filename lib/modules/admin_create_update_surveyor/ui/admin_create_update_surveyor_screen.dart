@@ -1,21 +1,30 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
+import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
+import 'package:shining_india_survey/utils/array_res.dart';
 import 'package:shining_india_survey/utils/back_button.dart';
 import 'package:shining_india_survey/utils/custom_button.dart';
+import 'package:shining_india_survey/utils/custom_flushbar.dart';
+import 'package:shining_india_survey/utils/custom_loader.dart';
 
 class AdminCreateUpdateSurveyorScreen extends StatefulWidget {
   final bool isUpdate;
   final String name;
-  const AdminCreateUpdateSurveyorScreen({super.key, required this.isUpdate, required this.name});
+
+  const AdminCreateUpdateSurveyorScreen(
+      {super.key, required this.isUpdate, required this.name});
 
   @override
-  State<AdminCreateUpdateSurveyorScreen> createState() => _AdminCreateUpdateSurveyorScreenState();
+  State<AdminCreateUpdateSurveyorScreen> createState() =>
+      _AdminCreateUpdateSurveyorScreenState();
 }
 
-class _AdminCreateUpdateSurveyorScreenState extends State<AdminCreateUpdateSurveyorScreen> {
-
+class _AdminCreateUpdateSurveyorScreenState
+    extends State<AdminCreateUpdateSurveyorScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final userNameController = TextEditingController();
@@ -23,6 +32,8 @@ class _AdminCreateUpdateSurveyorScreenState extends State<AdminCreateUpdateSurve
   final passwordController = TextEditingController();
 
   bool isPasswordVisible = false;
+
+  String _dropDownStateValue = ArrayResources.states[0];
 
   String? _validateEmail(String? email) {
     if (email != null) {
@@ -49,75 +60,197 @@ class _AdminCreateUpdateSurveyorScreenState extends State<AdminCreateUpdateSurve
   @override
   Widget build(BuildContext context) {
     final outlineBorder = OutlineInputBorder(
-      borderSide: const BorderSide(
-        color: AppColors.lightBlack
-      ),
-      borderRadius: BorderRadius.circular(16)
-    );
+        borderSide: const BorderSide(color: AppColors.lightBlack),
+        borderRadius: BorderRadius.circular(16));
 
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.primary,
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 14),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CustomBackButton(
-                      onTap: (){
-                        context.pop();
-                      },
+        body: BlocConsumer<CreateUpdateSurveyorBloc, CreateUpdateSurveyorState>(
+          listenWhen: (previous, current) {
+            if(previous is CreateUpdateSurveyorLoading) {
+              context.pop();
+            }
+            return true;
+          },
+          listener: (context, state) {
+            if(state is SurveyorEditedState) {
+              context.go(RouteNames.adminHomeScreen);
+            } else if(state is CreateUpdateSurveyorLoading) {
+              CustomLoader(
+                context: context
+              ).show();
+            } else if(state is CreateUpdateSurveyorError) {
+              CustomFlushBar(
+                message: state.message,
+                backgroundColor: Colors.red,
+                icon: Icon(Icons.cancel_outlined),
+                context: context
+              ).show();
+            }
+          },
+          builder: (context, state) {
+            return Padding(
+              padding: EdgeInsets.symmetric(horizontal: 14),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CustomBackButton(
+                          onTap: () {
+                            context.pop();
+                          },
+                        ),
+                        SizedBox(width: 16,),
+                        Expanded(
+                          child: Text(
+                            widget.isUpdate ? widget.name : 'Create Surveyor',
+                            style: TextStyle(
+                                fontFamily: 'Poppins',
+                                fontSize: 28,
+                                color: AppColors.black,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(width: 16,),
-                    Expanded(
-                      child: Text(
-                        widget.isUpdate
-                          ? widget.name
-                          : 'Create Surveyor',
-                        style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 28,
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w700
+                  ),
+                  widget.isUpdate ? Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              color: AppColors.primaryBlue
+                          ),
+                          borderRadius: BorderRadius.circular(12)
+                      ),
+                      child: GestureDetector(
+                        onTap: (){},
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.cancel, color: AppColors.primaryBlue,),
+                            SizedBox(width: 2,),
+                            Text(
+                              'Remove from team',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Poppins',
+                                  color: AppColors.primaryBlue
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        ValueListenableBuilder(
-                          valueListenable: userNameController,
-                          builder: (context, value, child) {
-                            return TextFormField(
-                              controller: userNameController,
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                  color: AppColors.textBlack
-                              ),
-                              keyboardType: TextInputType.text,
-                              cursorColor: AppColors.lightBlack,
+                  ) : SizedBox.shrink(),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            ValueListenableBuilder(
+                              valueListenable: userNameController,
+                              builder: (context, value, child) {
+                                return TextFormField(
+                                  controller: userNameController,
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                      color: AppColors.textBlack),
+                                  keyboardType: TextInputType.text,
+                                  cursorColor: AppColors.lightBlack,
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    labelText: 'Name',
+                                    prefixIcon: const Icon(
+                                      Icons.person_2_rounded,
+                                      color: AppColors.textBlack,
+                                    ),
+                                    labelStyle: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        color: AppColors.lightBlack),
+                                    border: outlineBorder,
+                                    disabledBorder: outlineBorder,
+                                    errorBorder: outlineBorder,
+                                    focusedBorder: outlineBorder,
+                                    focusedErrorBorder: outlineBorder,
+                                    enabledBorder: outlineBorder,
+                                  ),
+                                  autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                                  validator: (name) {
+                                    if (name == null || name.isEmpty) {
+                                      return 'Please enter user name';
+                                    }
+                                    return null;
+                                  },
+                                );
+                              },
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            ValueListenableBuilder(
+                              valueListenable: emailController,
+                              builder: (context, value, child) {
+                                return TextFormField(
+                                    controller: emailController,
+                                    style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: AppColors.textBlack),
+                                    keyboardType: TextInputType.emailAddress,
+                                    cursorColor: AppColors.lightBlack,
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      labelText: 'E-mail',
+                                      prefixIcon: const Icon(
+                                        Icons.email_rounded,
+                                        color: AppColors.textBlack,
+                                      ),
+                                      labelStyle: const TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 14,
+                                          color: AppColors.lightBlack),
+                                      border: outlineBorder,
+                                      disabledBorder: outlineBorder,
+                                      errorBorder: outlineBorder,
+                                      focusedBorder: outlineBorder,
+                                      focusedErrorBorder: outlineBorder,
+                                      enabledBorder: outlineBorder,
+                                    ),
+                                    autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                    validator: _validateEmail);
+                              },
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            DropdownButtonFormField(
+                              isExpanded: true,
                               decoration: InputDecoration(
                                 fillColor: Colors.white,
                                 filled: true,
-                                labelText: 'Name',
-                                prefixIcon: const Icon(Icons.person_2_rounded, color: AppColors.textBlack,),
+                                labelText: 'Team',
+                                prefixIcon: const Icon(
+                                  Icons.groups_2_rounded,
+                                  color: AppColors.textBlack,
+                                ),
                                 labelStyle: const TextStyle(
                                     fontFamily: 'Poppins',
                                     fontSize: 14,
-                                    color: AppColors.lightBlack
-                                ),
+                                    color: AppColors.lightBlack),
                                 border: outlineBorder,
                                 disabledBorder: outlineBorder,
                                 errorBorder: outlineBorder,
@@ -125,128 +258,96 @@ class _AdminCreateUpdateSurveyorScreenState extends State<AdminCreateUpdateSurve
                                 focusedErrorBorder: outlineBorder,
                                 enabledBorder: outlineBorder,
                               ),
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              validator: (name) {
-                                if (name == null || name.isEmpty) {
-                                  return 'Please enter user name';
-                                }
-                                return null;
-                              },
-                            );
-                            return TextFormField(
-                              controller: userNameController,
-                              keyboardType: TextInputType.text,
-                              decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'User name',
-                                  prefixIcon: Icon(Icons.person)),
-                              autovalidateMode: AutovalidateMode.onUserInteraction,
-                              validator: (name) {
-                                if (name == null || name.isEmpty) {
-                                  return 'Please enter user name';
-                                }
-                                return null;
-                              },
-                            );
-                          },
-                        ),
-                        SizedBox(height: 10,),
-                        ValueListenableBuilder(
-                          valueListenable: emailController,
-                          builder: (context, value, child) {
-                            return TextFormField(
-                                controller: emailController,
-                                style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: AppColors.textBlack
-                                ),
-                                keyboardType: TextInputType.emailAddress,
-                                cursorColor: AppColors.lightBlack,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  labelText: 'E-mail',
-                                  prefixIcon: const Icon(Icons.email_rounded, color: AppColors.textBlack,),
-                                  labelStyle: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 14,
-                                      color: AppColors.lightBlack
-                                  ),
-                                  border: outlineBorder,
-                                  disabledBorder: outlineBorder,
-                                  errorBorder: outlineBorder,
-                                  focusedBorder: outlineBorder,
-                                  focusedErrorBorder: outlineBorder,
-                                  enabledBorder: outlineBorder,
-                                ),
-                                autovalidateMode: AutovalidateMode.onUserInteraction,
-                                validator: _validateEmail
-                            );
-                          },
-                        ),
-                        SizedBox(height: 10,),
-                        ValueListenableBuilder(
-                          valueListenable: passwordController,
-                          builder: (context, value, child) {
-                            return TextFormField(
-                                controller: passwordController,
-                                keyboardType: TextInputType.text,
-                                style: const TextStyle(
-                                    fontFamily: 'Poppins',
-                                    color: AppColors.textBlack
-                                ),
-                                cursorColor: AppColors.lightBlack,
-                                obscureText: !isPasswordVisible,
-                                decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  labelText: 'Password',
-                                  labelStyle: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 14,
-                                      color: AppColors.lightBlack
-                                  ),
-                                  prefixIcon: const Icon(Icons.key_rounded, color: AppColors.textBlack,),
-                                  suffixIcon: IconButton(
-                                    icon: Icon(isPasswordVisible
-                                        ? Icons.visibility
-                                        : Icons.visibility_off, color: AppColors.textBlack,
+                              value: _dropDownStateValue,
+                              items: ArrayResources.states
+                                  .map<DropdownMenuItem<String>>((String item) {
+                                return DropdownMenuItem<String>(
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 14,
+                                          color: AppColors.textBlack),
                                     ),
-                                    onPressed: () {
-                                      setState(() {
-                                        isPasswordVisible =
-                                        !isPasswordVisible;
-                                      });
-                                    },
-                                  ),
-                                  border: outlineBorder,
-                                  disabledBorder: outlineBorder,
-                                  errorBorder: outlineBorder,
-                                  focusedBorder: outlineBorder,
-                                  focusedErrorBorder: outlineBorder,
-                                  enabledBorder: outlineBorder,
-                                ),
-                                autovalidateMode: AutovalidateMode.onUserInteraction,
-                                validator: _validatePassword
-                            );
-                          },
-                        ),
-                        SizedBox(height: 10,),
-                        CustomButton(
-                          onTap: (){
+                                    value: item);
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _dropDownStateValue = value ?? '';
+                                  print(value);
+                                });
+                              },
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            ValueListenableBuilder(
+                              valueListenable: passwordController,
+                              builder: (context, value, child) {
+                                return TextFormField(
+                                    controller: passwordController,
+                                    keyboardType: TextInputType.text,
+                                    style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: AppColors.textBlack),
+                                    cursorColor: AppColors.lightBlack,
+                                    obscureText: !isPasswordVisible,
+                                    decoration: InputDecoration(
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      labelText: 'Password',
+                                      labelStyle: const TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 14,
+                                          color: AppColors.lightBlack),
+                                      prefixIcon: const Icon(
+                                        Icons.key_rounded,
+                                        color: AppColors.textBlack,
+                                      ),
+                                      suffixIcon: IconButton(
+                                        icon: Icon(
+                                          isPasswordVisible
+                                              ? Icons.visibility
+                                              : Icons.visibility_off,
+                                          color: AppColors.textBlack,
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            isPasswordVisible =
+                                            !isPasswordVisible;
+                                          });
+                                        },
+                                      ),
+                                      border: outlineBorder,
+                                      disabledBorder: outlineBorder,
+                                      errorBorder: outlineBorder,
+                                      focusedBorder: outlineBorder,
+                                      focusedErrorBorder: outlineBorder,
+                                      enabledBorder: outlineBorder,
+                                    ),
+                                    autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                    validator: _validatePassword);
+                              },
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            CustomButton(
+                              onTap: () {
 
-                          },
-                          text: widget.isUpdate
-                              ? 'Update'
-                              : 'Create',
+                              },
+                              text: widget.isUpdate ? 'Update' : 'Create',
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shining_india_survey/modules/surveyor_home/core/models/surveyor_home_reponse_model.dart';
 
 import 'app_colors.dart';
 
 class RecentSurveyHolder extends StatelessWidget {
-  const RecentSurveyHolder({super.key});
+  final SurveyorHomeResponseModel surveyorHomeResponseModel;
+  const RecentSurveyHolder({super.key, required this.surveyorHomeResponseModel});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class RecentSurveyHolder extends StatelessWidget {
           SizedBox(width: 4,),
           Expanded(
             child: Text(
-              'username',
+              surveyorHomeResponseModel.personName ?? '-',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
@@ -36,7 +38,7 @@ class RecentSurveyHolder extends StatelessWidget {
           SizedBox(width: 4,),
           Expanded(
             child: Text(
-              'location',
+              '${surveyorHomeResponseModel.address}',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,
@@ -47,7 +49,7 @@ class RecentSurveyHolder extends StatelessWidget {
           SizedBox(width: 4,),
           Expanded(
             child: Text(
-              'date time',
+              surveyorHomeResponseModel.surveyDateTime ?? '-',
               style: TextStyle(
                 fontFamily: 'Poppins',
                 fontSize: 16,

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:shining_india_survey/modules/survey/core/models/location_model.dart';
-import 'package:shining_india_survey/services/network_requestor.dart';
+import 'package:shining_india_survey/services/network_service.dart';
 
 class SurveyRepository {
   final NetworkService _networkRequester = NetworkService();

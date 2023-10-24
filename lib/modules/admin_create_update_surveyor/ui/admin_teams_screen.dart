@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
+import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/widgets/admin_team_widget.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 
@@ -33,7 +36,7 @@ class _AdminTeamsScreenState extends State<AdminTeamsScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CustomBackButton(
-                      onTap: (){
+                      onTap: () {
                         context.pop();
                       },
                     ),
@@ -42,10 +45,10 @@ class _AdminTeamsScreenState extends State<AdminTeamsScreen> {
                       child: Text(
                         'Your teams',
                         style: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontSize: 28,
-                          color: AppColors.black,
-                          fontWeight: FontWeight.w700
+                            fontFamily: 'Poppins',
+                            fontSize: 28,
+                            color: AppColors.black,
+                            fontWeight: FontWeight.w700
                         ),
                       ),
                     ),
@@ -68,13 +71,178 @@ class _AdminTeamsScreenState extends State<AdminTeamsScreen> {
                   ],
                 ),
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemBuilder: (context, index) {
-                    return AdminTeamWidget();
-                  },
-                  itemCount: 10,
-                ),
+              BlocBuilder<CreateUpdateSurveyorBloc, CreateUpdateSurveyorState>(
+                builder: (context, state) {
+                  if(state is CreateUpdateSurveyorLoading) {
+                    return Expanded(
+                      child: Center(
+                        child: Lottie.asset(
+                          'assets/loading.json',
+                          width: 150,
+                          height: 150,
+                        ),
+                      ),
+                    );
+                  } else if(state is CreateUpdateSurveyorError) {
+                    return Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: AppColors.dividerColor,
+                                borderRadius: BorderRadius.circular(12)
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.error_outline_outlined, color: AppColors.primaryBlue, size: 60,),
+                                SizedBox(height: 10,),
+                                Text(
+                                  state.message,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                      fontWeight: FontWeight.w600,
+                                      color: AppColors.textBlack
+                                  ),
+                                ),
+                                SizedBox(height: 10,),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        padding: EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                            gradient: LinearGradient(
+                                                begin: Alignment.bottomCenter,
+                                                end: Alignment.topCenter,
+                                                colors: [
+                                                  AppColors.primaryBlue,
+                                                  AppColors.primaryBlueLight,
+                                                ]
+                                            ),
+                                            borderRadius: BorderRadius.circular(12)
+                                        ),
+                                        child: Text(
+                                          'Try Again',
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontFamily: 'Poppins',
+                                              color: AppColors.primary,
+                                              fontWeight: FontWeight.w600
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  } else if(state is AllTeamsFetchedState) {
+                    // if(){
+                    //   return Expanded(
+                    //     child: Column(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       mainAxisSize: MainAxisSize.min,
+                    //       children: [
+                    //         Container(
+                    //           alignment: Alignment.center,
+                    //           padding: EdgeInsets.all(10),
+                    //           decoration: BoxDecoration(
+                    //               color: AppColors.dividerColor,
+                    //               borderRadius: BorderRadius.circular(12)
+                    //           ),
+                    //           child: Column(
+                    //             mainAxisAlignment: MainAxisAlignment.center,
+                    //             crossAxisAlignment: CrossAxisAlignment.center,
+                    //             mainAxisSize: MainAxisSize.min,
+                    //             children: [
+                    //               Text(
+                    //                 "No team present\nClick on + button to add",
+                    //                 textAlign: TextAlign.center,
+                    //                 style: TextStyle(
+                    //                     fontSize: 14,
+                    //                     fontFamily: 'Poppins',
+                    //                     fontWeight: FontWeight.w600,
+                    //                     color: AppColors.textBlack
+                    //                 ),
+                    //               ),
+                    //               SizedBox(height: 6,),
+                    //               GestureDetector(
+                    //                 onTap: () {},
+                    //                 child: Row(
+                    //                   mainAxisSize: MainAxisSize.min,
+                    //                   mainAxisAlignment: MainAxisAlignment.center,
+                    //                   children: [
+                    //                     Container(
+                    //                       margin: EdgeInsets.symmetric(vertical: 10),
+                    //                       padding: EdgeInsets.all(8),
+                    //                       decoration: BoxDecoration(
+                    //                           border: Border.all(
+                    //                               color: AppColors.primaryBlue
+                    //                           ),
+                    //                           borderRadius: BorderRadius.circular(12)
+                    //                       ),
+                    //                       child: Row(
+                    //                         mainAxisSize: MainAxisSize.min,
+                    //                         children: [
+                    //                           Icon(Icons.add, color: AppColors.primaryBlue,),
+                    //                           SizedBox(width: 2,),
+                    //                           Text(
+                    //                             'Add',
+                    //                             style: TextStyle(
+                    //                                 fontSize: 16,
+                    //                                 fontFamily: 'Poppins',
+                    //                                 color: AppColors.primaryBlue
+                    //                             ),
+                    //                           ),
+                    //                         ],
+                    //                       ),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //               )
+                    //             ],
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   );
+                    // } else {
+                    //   return Expanded(
+                    //     child: ListView.builder(
+                    //       itemBuilder: (context, index) {
+                    //         return AdminTeamWidget();
+                    //       },
+                    //       itemCount: 10,
+                    //     ),
+                    //   );
+                    // }
+                  }
+                  return Expanded(
+                    child: ListView.builder(
+                      itemBuilder: (context, index) {
+                        return AdminTeamWidget();
+                      },
+                      itemCount: 10,
+                    ),
+                  );
+                },
               )
             ],
           ),
@@ -83,7 +251,7 @@ class _AdminTeamsScreenState extends State<AdminTeamsScreen> {
     );
   }
 
-  Future openDialog() async{
+  Future openDialog() async {
     return showDialog(
       context: context,
       barrierDismissible: false,
@@ -101,10 +269,11 @@ class _AdminTeamsScreenState extends State<AdminTeamsScreen> {
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                context.pop();
-              },
-              child: Text('Cancel')
+                onPressed: () {
+                  context.pop();
+                  context.read<CreateUpdateSurveyorBloc>().add(CreateTeam(teamName: teamController.text));
+                },
+                child: Text('Cancel')
             ),
             TextButton(
                 onPressed: () {

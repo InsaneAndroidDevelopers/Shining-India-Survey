@@ -70,6 +70,74 @@ class _AdminSurveyorScreenState extends State<AdminSurveyorScreen> {
                   ],
                 ),
               ),
+              // Expanded(
+              //   child: Column(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     mainAxisSize: MainAxisSize.min,
+              //     children: [
+              //       Container(
+              //         alignment: Alignment.center,
+              //         padding: EdgeInsets.all(10),
+              //         decoration: BoxDecoration(
+              //             color: AppColors.dividerColor,
+              //             borderRadius: BorderRadius.circular(12)
+              //         ),
+              //         child: Column(
+              //           mainAxisAlignment: MainAxisAlignment.center,
+              //           crossAxisAlignment: CrossAxisAlignment.center,
+              //           mainAxisSize: MainAxisSize.min,
+              //           children: [
+              //             Text(
+              //               "No members present in the team\nClick on + button to add",
+              //               textAlign: TextAlign.center,
+              //               style: TextStyle(
+              //                   fontSize: 14,
+              //                   fontFamily: 'Poppins',
+              //                   fontWeight: FontWeight.w600,
+              //                   color: AppColors.textBlack
+              //               ),
+              //             ),
+              //             SizedBox(height: 6,),
+              //             GestureDetector(
+              //               onTap: () {},
+              //               child: Row(
+              //                 mainAxisSize: MainAxisSize.min,
+              //                 mainAxisAlignment: MainAxisAlignment.center,
+              //                 children: [
+              //                   Container(
+              //                     margin: EdgeInsets.symmetric(vertical: 10),
+              //                     padding: EdgeInsets.all(8),
+              //                     decoration: BoxDecoration(
+              //                         border: Border.all(
+              //                             color: AppColors.primaryBlue
+              //                         ),
+              //                         borderRadius: BorderRadius.circular(12)
+              //                     ),
+              //                     child: Row(
+              //                       mainAxisSize: MainAxisSize.min,
+              //                       children: [
+              //                         Icon(Icons.add, color: AppColors.primaryBlue,),
+              //                         SizedBox(width: 2,),
+              //                         Text(
+              //                           'Add',
+              //                           style: TextStyle(
+              //                               fontSize: 16,
+              //                               fontFamily: 'Poppins',
+              //                               color: AppColors.primaryBlue
+              //                           ),
+              //                         ),
+              //                       ],
+              //                     ),
+              //                   ),
+              //                 ],
+              //               ),
+              //             )
+              //           ],
+              //         ),
+              //       ),
+              //     ],
+              //   ),
+              // ),
               Expanded(
                 child: ListView.builder(
                   itemCount: 20,
