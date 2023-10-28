@@ -9,6 +9,8 @@ class AppUrls {
 
   //surveyor
   static const String surveyorLogin = '/auth/surveyor';
-  static const String surveyorRecent = '';
   static const String surveyorLogout = '';
+  static const String surveyorRecent = '/survey/recent';
+  static const String surveyorGetSurveyQuestions = '/survey/get';
+
 }

@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
 import 'package:shining_india_survey/modules/splash/core/bloc/splash_bloc.dart';
-import 'package:shining_india_survey/modules/surveyor_home/core/models/surveyor_home_reponse_model.dart';
+import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
 import 'package:shining_india_survey/modules/surveyor_home/core/repository/surveyor_home_repository.dart';
 import 'package:shining_india_survey/utils/exceptions.dart';
 
@@ -20,7 +20,7 @@ class SurveyorHomeBloc extends Bloc<SurveyorHomeEvent, SurveyorHomeState> {
     on<GetRecentSurveys>((event, emit) async {
       emit(SurveyorHomeLoadingState());
       try{
-        final List<SurveyorHomeResponseModel> surveys = await surveyorHomeRepository.getRecentSurveys();
+        final List<RecentSurveyModel> surveys = await surveyorHomeRepository.getRecentSurveys();
         emit(SurveyorHomeFetchedState(surveys: surveys));
       } on AppExceptionDio catch(e) {
         emit(SurveyorHomeErrorState(message: e.message));

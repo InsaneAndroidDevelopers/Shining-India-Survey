@@ -234,7 +234,7 @@ class _SurveyorHomeScreenState extends State<SurveyorHomeScreen> {
                               return ListView.builder(
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) =>
-                                    RecentSurveyHolder(surveyorHomeResponseModel: state.surveys[index]),
+                                    RecentSurveyHolder(recentSurveyHolder: state.surveys[index]),
                                 itemCount: state.surveys.length,
                                 shrinkWrap: true,
                               );

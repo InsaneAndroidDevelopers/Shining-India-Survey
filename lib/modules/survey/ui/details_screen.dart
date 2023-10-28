@@ -10,6 +10,7 @@ import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/array_res.dart';
 import 'package:shining_india_survey/utils/back_button.dart';
 import 'package:shining_india_survey/utils/custom_button.dart';
+import 'package:shining_india_survey/utils/custom_flushbar.dart';
 import 'package:shining_india_survey/utils/loading_indicator.dart';
 
 import '../core/models/location_model.dart';
@@ -26,10 +27,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
   final villageController = TextEditingController();
   final districtController = TextEditingController();
   final pinController = TextEditingController();
+  final assemblyNameController = TextEditingController();
 
   int _dropDownAgeValue = 50;
   String _dropDownGenderValue = ArrayResources.genders[0];
   String _dropDownStateValue = ArrayResources.states[0];
+  String _dropDownPlaceTypeValue = ArrayResources.placeType[0];
   bool _checkBoxValue = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -79,6 +82,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     villageController.dispose();
     districtController.dispose();
     pinController.dispose();
+    assemblyNameController.dispose();
   }
 
   @override
@@ -96,8 +100,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
         body: BlocConsumer<SurveyBloc, SurveyState>(
           listener: (context, state) {
             if (state is SurveyErrorState) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Error occurred')));
+              CustomFlushBar(
+                message: state.message,
+                context: context,
+                icon: Icon(Icons.cancel_outlined),
+                backgroundColor: Colors.red
+              ).show();
             } else if (state is SurveyDataFetchedState) {
               context.go(RouteNames.surveyScreen);
             } else if (state is SurveyLocationFetchedState) {
@@ -313,6 +321,47 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 )),
                               ],
                             ),
+                            SizedBox(height: 10,),
+                            DropdownButtonFormField(
+                              decoration: InputDecoration(
+                                fillColor: Colors.white,
+                                filled: true,
+                                labelText: 'Type',
+                                prefixIcon: const Icon(Icons.villa_outlined, color: AppColors.textBlack,),
+                                labelStyle: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    fontSize: 14,
+                                    color: AppColors.lightBlack
+                                ),
+                                border: outlineBorder,
+                                disabledBorder: outlineBorder,
+                                errorBorder: outlineBorder,
+                                focusedBorder: outlineBorder,
+                                focusedErrorBorder: outlineBorder,
+                                enabledBorder: outlineBorder,
+                              ),
+                              value: _dropDownPlaceTypeValue,
+                              items: ArrayResources.placeType
+                                  .map<DropdownMenuItem<String>>((String item) {
+                                return DropdownMenuItem<String>(
+                                    child: Text(
+                                      item,
+                                      style: const TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 14,
+                                          color: AppColors.textBlack
+                                      ),
+                                    ),
+                                    value: item
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _dropDownPlaceTypeValue = value ?? '';
+                                  print(value);
+                                });
+                              },
+                            ),
                             SizedBox(
                               height: 20,
                             ),
@@ -371,6 +420,48 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   ),
                                 ),
                               ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            ValueListenableBuilder(
+                              valueListenable: assemblyNameController,
+                              builder: (context, value, child) {
+                                return TextFormField(
+                                  controller: assemblyNameController,
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                      color: AppColors.textBlack
+                                  ),
+                                  keyboardType: TextInputType.text,
+                                  cursorColor: AppColors.lightBlack,
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    labelText: 'Assembly name',
+                                    prefixIcon: const Icon(Icons.location_city_rounded, color: AppColors.textBlack,),
+                                    labelStyle: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        color: AppColors.lightBlack
+                                    ),
+                                    border: outlineBorder,
+                                    disabledBorder: outlineBorder,
+                                    errorBorder: outlineBorder,
+                                    focusedBorder: outlineBorder,
+                                    focusedErrorBorder: outlineBorder,
+                                    enabledBorder: outlineBorder,
+                                  ),
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  validator: (assembly) {
+                                    if (assembly == null || assembly.isEmpty) {
+                                      return 'Please enter assembly name';
+                                    }
+                                    return null;
+                                  },
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 10,
@@ -560,7 +651,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   age: _dropDownAgeValue,
                                   gender: _dropDownGenderValue.trim(),
                                   latitude: 0.0000,
-                                  longitude: 0.0000
+                                  longitude: 0.0000,
+                                  placeType: _dropDownPlaceTypeValue
                                 ));
                               },
                               text: 'Start Survey',

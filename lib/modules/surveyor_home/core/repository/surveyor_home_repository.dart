@@ -1,25 +1,25 @@
 import 'package:dio/dio.dart';
 import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
-import 'package:shining_india_survey/modules/surveyor_home/core/models/surveyor_home_reponse_model.dart';
+import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
 import 'package:shining_india_survey/services/network_service.dart';
 import 'package:shining_india_survey/values/app_urls.dart';
 
 class SurveyorHomeRepository {
   final NetworkService _networkService = NetworkService();
 
-  Future<List<SurveyorHomeResponseModel>> getRecentSurveys() async {
+  Future<List<RecentSurveyModel>> getRecentSurveys() async {
     final token = await SharedPreferencesHelper.getUserToken();
-    final userId = await SharedPreferencesHelper.getUserId();
+    final teamId = await SharedPreferencesHelper.getUserTeamId();
     final Response response = await _networkService.get(
         path: AppUrls.surveyorRecent,
         query: {
-          'id': userId
+          'id': teamId
         },
         token: token
     );
     final List surveyList = response.data['data'];
     return surveyList
-        .map((e) => SurveyorHomeResponseModel.fromJson(e))
+        .map((e) => RecentSurveyModel.fromJson(e))
         .toList();
   }
 

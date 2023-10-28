@@ -42,6 +42,9 @@ class SurveyMoveNextQuestionState extends SurveyState {
 }
 
 class SurveyErrorState extends SurveyState {
+  final String message;
+  SurveyErrorState({required this.message});
+
   @override
   List<Object?> get props => [identityHashCode(this)];
 }

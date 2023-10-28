@@ -6,6 +6,7 @@ import 'package:shining_india_survey/modules/survey/ui/widgets/question_widget.d
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/custom_button.dart';
+import 'package:shining_india_survey/utils/custom_flushbar.dart';
 
 class SurveyScreen extends StatefulWidget {
   const SurveyScreen({super.key});
@@ -30,13 +31,12 @@ class _SurveyScreenState extends State<SurveyScreen> {
     return BlocConsumer<SurveyBloc, SurveyState>(
       listener: (context, state) {
         if(state is SurveyErrorState){
-          ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                  content: Text(
-                      'Error occurred'
-                  )
-              )
-          );
+          CustomFlushBar(
+            message: state.message,
+            context: context,
+            icon: Icon(Icons.cancel_outlined, color: AppColors.primary),
+            backgroundColor: Colors.red
+          ).show();
         } else if(state is SurveyFinishState) {
           context.go(RouteNames.additionalDetailsScreen);
         } else if(state is SurveyMoveNextQuestionState) {

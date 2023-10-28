@@ -4,6 +4,7 @@ import 'package:shining_india_survey/modules/admin_home/ui/admin_home_screen.dar
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/admin_surveyors_screen.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/admin_teams_screen.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/filled_surveys.dart';
+import 'package:shining_india_survey/modules/filled_surveys/ui/survey_detail_screen.dart';
 import 'package:shining_india_survey/modules/login/ui/admin_login_screen.dart';
 import 'package:shining_india_survey/modules/login/ui/login_screen.dart';
 import 'package:shining_india_survey/modules/login/ui/surveyor_login_screen.dart';
@@ -121,10 +122,17 @@ class AppRouter {
         },
       ),
       GoRoute(
-        name: RouteNames.adminFilledSurveys,
-        path: RouteNames.adminFilledSurveys,
+        name: RouteNames.adminFilledSurveysScreen,
+        path: RouteNames.adminFilledSurveysScreen,
         builder: (context, state) {
           return AdminFilledSurveys();
+        },
+      ),
+      GoRoute(
+        name: RouteNames.adminFilledSurveyDetailScreen,
+        path: RouteNames.adminFilledSurveyDetailScreen,
+        builder: (context, state) {
+          return SurveyDetailScreen();
         },
       ),
     ]

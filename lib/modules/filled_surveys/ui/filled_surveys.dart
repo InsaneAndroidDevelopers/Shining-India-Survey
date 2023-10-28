@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/bloc/filled_survey_bloc.dart';
 import 'package:shining_india_survey/modules/filled_surveys/widgets/date_chips.dart';
 import 'package:shining_india_survey/modules/filled_surveys/widgets/gender_chips.dart';
-import 'package:shining_india_survey/modules/surveyor_home/core/models/surveyor_home_reponse_model.dart';
+import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/array_res.dart';
 import 'package:shining_india_survey/utils/back_button.dart';
@@ -72,7 +72,8 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                         color: AppColors.textBlack,
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
-                        fontFamily: 'Poppins'),
+                        fontFamily: 'Poppins'
+                    ),
                   ),
                   IconButton(
                       onPressed: () {
@@ -253,8 +254,8 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                   return Expanded(
                     child: ListView.builder(
                       itemBuilder: (context, index) => RecentSurveyHolder(
-                          surveyorHomeResponseModel:
-                              SurveyorHomeResponseModel()),
+                          recentSurveyHolder:
+                              RecentSurveyModel()),
                       itemCount: 20,
                     ),
                   );

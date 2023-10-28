@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/admin_home/core/bloc/admin_home_bloc.dart';
-import 'package:shining_india_survey/modules/surveyor_home/core/models/surveyor_home_reponse_model.dart';
+import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/custom_button.dart';
@@ -131,7 +131,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             text: 'View filled surveys',
                             image: 'assets/viewfilled.png',
                             onTap: () {
-                              context.push(RouteNames.adminFilledSurveys);
+                              context.push(RouteNames.adminFilledSurveysScreen);
                             },
                           ),
                           SizedBox(height: 12,),

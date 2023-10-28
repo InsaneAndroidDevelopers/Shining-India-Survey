@@ -31,7 +31,7 @@ class SurveyorHomeErrorState extends SurveyorHomeState {
 }
 
 class  SurveyorHomeFetchedState extends SurveyorHomeState {
-  final List<SurveyorHomeResponseModel> surveys;
+  final List<RecentSurveyModel> surveys;
   const SurveyorHomeFetchedState({required this.surveys});
 
   @override

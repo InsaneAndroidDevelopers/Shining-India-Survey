@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
@@ -8,6 +9,7 @@ import 'package:shining_india_survey/models/question.dart';
 import 'package:shining_india_survey/modules/survey/core/models/location_model.dart';
 import 'package:shining_india_survey/modules/survey/core/models/question_response.dart';
 import 'package:shining_india_survey/modules/survey/core/repository/survey_repository.dart';
+import 'package:shining_india_survey/utils/exceptions.dart';
 import 'package:shining_india_survey/utils/string_constants.dart';
 
 import '../models/survey_response_model.dart';
@@ -45,15 +47,19 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
             state: locationModel.state ?? ''
           )
         );
+      } on AppExceptionDio catch(e) {
+        emit(SurveyErrorState(message: e.message));
+      } on DioException catch(e) {
+        emit(SurveyErrorState(message: e.message ?? 'Something went wrong'));
       } catch(e) {
-        emit(SurveyErrorState());
+        emit(SurveyErrorState(message: 'Something went wrong'));
       }
     });
 
-    on<SubmitDetailsAndStartSurveyEvent>((event, emit) {
+    on<SubmitDetailsAndStartSurveyEvent>((event, emit) async {
       emit(SurveyLoadingState());
 
-      //save and fetch the data from the API and set the length of the question
+      //final questionsList = await surveyRepository.getSurveyQuestions(event.placeType);
 
       surveyResponseModel.locationModel = event.locationModel;
       surveyResponseModel.age = event.age;
@@ -102,7 +108,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
             emit(SurveyMoveNextQuestionState(index: currentIndex++));
           }
         } else {
-          emit(SurveyErrorState());
+          emit(SurveyErrorState(message: 'Please select to proceed'));
         }
       } else if(question.type == StringsConstants.QUES_TYPE_SINGLE) {
         if(question.selectedIndex != -1) {
@@ -113,7 +119,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
             emit(SurveyMoveNextQuestionState(index: currentIndex++));
           }
         } else {
-          emit(SurveyErrorState());
+          emit(SurveyErrorState(message: 'Please select to proceed'));
         }
       } else if(question.type == StringsConstants.QUES_TYPE_SLIDER) {
         if(currentIndex == quesList.length - 1) {

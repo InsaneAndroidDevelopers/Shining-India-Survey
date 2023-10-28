@@ -19,6 +19,7 @@ class SubmitDetailsAndStartSurveyEvent extends SurveyEvent {
   final int age;
   final double latitude;
   final double longitude;
+  final String placeType;
   final LocationModel locationModel;
 
   SubmitDetailsAndStartSurveyEvent({
@@ -27,7 +28,8 @@ class SubmitDetailsAndStartSurveyEvent extends SurveyEvent {
     required this.latitude,
     required this.gender,
     required this.name,
-    required this.age
+    required this.age,
+    required this.placeType
   });
 
   @override
