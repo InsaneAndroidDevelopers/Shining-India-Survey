@@ -699,7 +699,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   city: cityController.text.trim(),
                                   placeType: _dropDownPlaceTypeValue,
                                   assemblyName: assemblyNameController.text.trim(),
-                                  dateTime: DateTime.timestamp().toString(),
+                                  dateTime: DateTime.now().toIso8601String(),
                                 ));
                               },
                               text: 'Start Survey',

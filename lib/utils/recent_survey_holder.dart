@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 
@@ -55,7 +56,7 @@ class RecentSurveyHolder extends StatelessWidget {
             SizedBox(width: 4,),
             Expanded(
               child: Text(
-                recentSurveyHolder.time ?? '-',
+                convertDateTime(recentSurveyHolder.time ?? ''),
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 16,
@@ -67,5 +68,15 @@ class RecentSurveyHolder extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String convertDateTime(String isoString) {
+    if(isoString.isEmpty) {
+      return '-';
+    }
+    DateFormat customDateFormat = DateFormat('MMM dd, yyyy, HH:mm a');
+    DateTime isoDate = DateTime.parse(isoString);
+    String customFormattedDate = customDateFormat.format(isoDate);
+    return customFormattedDate;
   }
 }

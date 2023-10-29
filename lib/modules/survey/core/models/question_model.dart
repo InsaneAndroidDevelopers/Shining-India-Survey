@@ -13,7 +13,9 @@ class QuestionModel {
 
   QuestionModel({this.id, this.question, this.options, this.type, this.other}) {
     if(type == StringsConstants.QUES_TYPE_MULTI) {
-      selectedOptions = List.generate(selectedOptions.length, (index) => 0);
+      selectedOptions = List.generate(options?.length ?? 0, (index) => 0);
+    } if(type == StringsConstants.QUES_TYPE_SLIDER) {
+      selectedIndex = 0;
     }
   }
 

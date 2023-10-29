@@ -40,7 +40,7 @@ class _OptionWidgetState extends State<OptionWidget> {
         ),
         borderRadius: BorderRadius.circular(16)
     );
-
+    debugPrint(widget.question.other.toString());
     return BlocListener<SurveyBloc, SurveyState>(
       listener: (context, state) {
 

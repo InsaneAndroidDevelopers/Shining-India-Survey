@@ -54,6 +54,7 @@ dependencies:
   screenshot: ^2.1.0
   share_plus: ^7.1.0
   another_flushbar: ^1.12.30
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:

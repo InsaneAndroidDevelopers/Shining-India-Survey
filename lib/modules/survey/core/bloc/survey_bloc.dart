@@ -46,7 +46,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
         }
         return QuestionResponse(
           questionId: e.id,
-          answer: []
+          answer: answers
         );
       }).toList();
     }
@@ -114,12 +114,13 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
             id: element.id,
             question: element.question,
             options: element.options,
-            type: element.type
+            type: element.type,
+            other: element.other
           )
         );
       }
       surveySubmitModel.response = List.generate(quesList.length, (index) => QuestionResponse());
-      emit(SurveyDataLoadedState(questions: event.list));
+      emit(SurveyDataLoadedState(questions: quesList));
     });
 
     on<CheckQuestionResponseEvent>((event, emit) async {
