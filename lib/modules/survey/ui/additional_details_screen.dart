@@ -326,7 +326,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                       return;
                                     }
                                     context.read<SurveyBloc>().add(SubmitAdditionalDetailsAndFinishEvent(
-                                      phone: phoneController.text.trim(),
+                                      mobileNum: phoneController.text.trim(),
                                       address: addressController.text.trim(),
                                       religion: _dropDownReligionValue.trim(),
                                       caste: _dropDownCasteValue.trim()

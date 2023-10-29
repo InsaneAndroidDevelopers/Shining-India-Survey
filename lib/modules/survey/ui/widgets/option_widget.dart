@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shining_india_survey/models/question.dart';
 import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
+import 'package:shining_india_survey/modules/survey/core/models/question_model.dart';
 import 'package:shining_india_survey/modules/survey/ui/widgets/build_option.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/array_res.dart';
 import 'package:shining_india_survey/utils/string_constants.dart';
 
 class OptionWidget extends StatefulWidget {
-  final Question question;
+  final QuestionModel question;
 
   const OptionWidget({super.key, required this.question});
 
@@ -52,7 +52,7 @@ class _OptionWidgetState extends State<OptionWidget> {
             children: [
               SizedBox(height: 20,),
               Text(
-                '${ArrayResources.emojis[currentValue.toInt()]}\n${widget.question.options[currentValue.toInt()]}',
+                '${ArrayResources.emojis[currentValue.toInt()]}\n${widget.question.options?[currentValue.toInt()]}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
@@ -72,7 +72,7 @@ class _OptionWidgetState extends State<OptionWidget> {
                 child: Slider(
                   min: 0,
                   max: 4,
-                  divisions: widget.question.options.length - 1,
+                  divisions: widget.question.options?.length ?? 1 - 1 ,
                   onChanged: (value) {
                     setState(() {
                       currentValue = value;
@@ -86,7 +86,7 @@ class _OptionWidgetState extends State<OptionWidget> {
           )
               : Expanded(
             child: ListView.builder(
-              itemCount: widget.question.options.length,
+              itemCount: widget.question.options?.length ?? 0,
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
@@ -103,7 +103,7 @@ class _OptionWidgetState extends State<OptionWidget> {
                     });
                   },
                   child: BuildOption(
-                      option: widget.question.options[index],
+                      option: widget.question.options?[index] ?? '',
                       isSelected: widget.question.type == StringsConstants.QUES_TYPE_MULTI
                           ? widget.question.selectedOptions[index] != 0
                           : widget.question.selectedIndex == index
@@ -113,7 +113,7 @@ class _OptionWidgetState extends State<OptionWidget> {
             ),
           ),
           SizedBox(height: 20,),
-          if (widget.question.type == StringsConstants.QUES_TYPE_MULTI)
+          if (widget.question.other == true)
             TextField(
                 controller: othersController,
                 keyboardType: TextInputType.text,

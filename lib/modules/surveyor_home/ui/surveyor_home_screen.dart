@@ -231,6 +231,70 @@ class _SurveyorHomeScreenState extends State<SurveyorHomeScreen> {
                                 ),
                               );
                             } else if (state is SurveyorHomeFetchedState) {
+                              if(state.surveys.isEmpty) {
+                                return Container(
+                                  alignment: Alignment.center,
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: AppColors.dividerColor,
+                                      borderRadius: BorderRadius.circular(12)
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'No Surveys',
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontFamily: 'Poppins',
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColors.textBlack
+                                        ),
+                                      ),
+                                      SizedBox(height: 10,),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              context.read<SurveyorHomeBloc>().add(
+                                                  GetRecentSurveys());
+                                            },
+                                            child: Container(
+                                              alignment: Alignment.center,
+                                              padding: EdgeInsets.all(8),
+                                              decoration: BoxDecoration(
+                                                  gradient: LinearGradient(
+                                                      begin: Alignment.bottomCenter,
+                                                      end: Alignment.topCenter,
+                                                      colors: [
+                                                        AppColors.primaryBlue,
+                                                        AppColors.primaryBlueLight,
+                                                      ]
+                                                  ),
+                                                  borderRadius: BorderRadius.circular(12)
+                                              ),
+                                              child: Text(
+                                                'Try Again',
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontFamily: 'Poppins',
+                                                    color: AppColors.primary,
+                                                    fontWeight: FontWeight.w600
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }
                               return ListView.builder(
                                 physics: NeverScrollableScrollPhysics(),
                                 itemBuilder: (context, index) =>

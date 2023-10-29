@@ -11,6 +11,7 @@ class AppUrls {
   static const String surveyorLogin = '/auth/surveyor';
   static const String surveyorLogout = '';
   static const String surveyorRecent = '/survey/recent';
-  static const String surveyorGetSurveyQuestions = '/survey/get';
+  static const String surveyorGetSurveyQuestions = '/survey';
+  static const String surveyorSubmitSurvey = '/survey/submit';
 
 }

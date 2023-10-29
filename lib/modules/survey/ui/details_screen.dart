@@ -25,6 +25,7 @@ class DetailsScreen extends StatefulWidget {
 class _DetailsScreenState extends State<DetailsScreen> {
   final nameController = TextEditingController();
   final villageController = TextEditingController();
+  final cityController = TextEditingController();
   final districtController = TextEditingController();
   final pinController = TextEditingController();
   final assemblyNameController = TextEditingController();
@@ -80,6 +81,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
     super.dispose();
     nameController.dispose();
     villageController.dispose();
+    cityController.dispose();
     districtController.dispose();
     pinController.dispose();
     assemblyNameController.dispose();
@@ -481,7 +483,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   decoration: InputDecoration(
                                     fillColor: Colors.white,
                                     filled: true,
-                                    labelText: 'City / Village',
+                                    labelText: 'Village / Ward',
                                     prefixIcon: const Icon(Icons.holiday_village_rounded, color: AppColors.textBlack,),
                                     labelStyle: const TextStyle(
                                         fontFamily: 'Poppins',
@@ -499,6 +501,48 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   validator: (village) {
                                     if (village == null || village.isEmpty) {
                                       return 'Please enter village';
+                                    }
+                                    return null;
+                                  },
+                                );
+                              },
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            ValueListenableBuilder(
+                              valueListenable: cityController,
+                              builder: (context, value, child) {
+                                return TextFormField(
+                                  controller: cityController,
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontFamily: 'Poppins',
+                                      color: AppColors.textBlack
+                                  ),
+                                  keyboardType: TextInputType.text,
+                                  cursorColor: AppColors.lightBlack,
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    labelText: 'City',
+                                    prefixIcon: const Icon(Icons.holiday_village_rounded, color: AppColors.textBlack,),
+                                    labelStyle: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        color: AppColors.lightBlack
+                                    ),
+                                    border: outlineBorder,
+                                    disabledBorder: outlineBorder,
+                                    errorBorder: outlineBorder,
+                                    focusedBorder: outlineBorder,
+                                    focusedErrorBorder: outlineBorder,
+                                    enabledBorder: outlineBorder,
+                                  ),
+                                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                                  validator: (city) {
+                                    if (city == null || city.isEmpty) {
+                                      return 'Please enter city';
                                     }
                                     return null;
                                   },
@@ -652,7 +696,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   gender: _dropDownGenderValue.trim(),
                                   latitude: 0.0000,
                                   longitude: 0.0000,
-                                  placeType: _dropDownPlaceTypeValue
+                                  city: cityController.text.trim(),
+                                  placeType: _dropDownPlaceTypeValue,
+                                  assemblyName: assemblyNameController.text.trim(),
+                                  dateTime: DateTime.timestamp().toString(),
                                 ));
                               },
                               text: 'Start Survey',

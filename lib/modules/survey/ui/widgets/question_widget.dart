@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shining_india_survey/models/question.dart';
+import 'package:shining_india_survey/modules/survey/core/models/question_model.dart';
 import 'package:shining_india_survey/modules/survey/ui/widgets/option_widget.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 
 class QuestionWidget extends StatefulWidget {
-  final Question question;
+  final QuestionModel question;
   const QuestionWidget({super.key, required this.question});
 
   @override
@@ -20,7 +20,7 @@ class _QuestionWidgetState extends State<QuestionWidget> {
       child: Column(
         children: [
           Text(
-            widget.question.questionText,
+            widget.question.question ?? '',
             style: TextStyle(
               fontSize: 22,
               fontFamily: 'Poppins',

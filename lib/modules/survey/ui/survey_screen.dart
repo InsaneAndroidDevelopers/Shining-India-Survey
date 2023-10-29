@@ -192,8 +192,10 @@ class _SurveyScreenState extends State<SurveyScreen> {
                                   padding: const EdgeInsets.symmetric(horizontal: 14),
                                   child: CustomButton(
                                     onTap: () {
-                                      context.read<SurveyBloc>().add(CheckQuestionResponseEvent(index: (_pageController.page ?? 0).toInt(),
-                                          question: state.questions[(_pageController.page ?? 0).toInt()])
+                                      context.read<SurveyBloc>().add(CheckQuestionResponseEvent(
+                                          index: (_pageController.page ?? 0).toInt(),
+                                          question: state.questions[(_pageController.page ?? 0).toInt()]
+                                        )
                                       );
                                     },
                                     text: (_pageController.page ?? 0).toInt() == state.questions.length - 1 ? 'Finish' : 'Next',

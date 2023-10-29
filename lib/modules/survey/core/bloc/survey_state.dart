@@ -26,7 +26,7 @@ class SurveyLocationFetchedState extends SurveyState {
 }
 
 class SurveyDataLoadedState extends SurveyState {
-  final List<Question> questions;
+  final List<QuestionModel> questions;
   SurveyDataLoadedState({required this.questions});
 
   @override

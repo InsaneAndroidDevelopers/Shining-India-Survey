@@ -28,7 +28,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         );
         await SharedPreferencesHelper.setUserId(adminResponseModel.id ?? '');
         await SharedPreferencesHelper.setUserName(adminResponseModel.name ?? '');
-        ////TODO: set user team id
         await SharedPreferencesHelper.setUserLevel(StringsConstants.ADMIN);
         emit(AdminLoginSuccessState());
       } on AppExceptionDio catch(e) {
@@ -50,7 +49,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         );
         await SharedPreferencesHelper.setUserId(surveyorResponseModel.id ?? '');
         await SharedPreferencesHelper.setUserName(surveyorResponseModel.name ?? '');
-        ////TODO: set user team id
+        await SharedPreferencesHelper.setUserTeamId(surveyorResponseModel.teamId ?? '');
         await SharedPreferencesHelper.setUserLevel(StringsConstants.SURVEYOR);
         emit(SurveyorLoginSuccessState());
       } on AppExceptionDio catch(e) {

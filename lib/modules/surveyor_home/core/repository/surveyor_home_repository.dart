@@ -11,10 +11,7 @@ class SurveyorHomeRepository {
     final token = await SharedPreferencesHelper.getUserToken();
     final teamId = await SharedPreferencesHelper.getUserTeamId();
     final Response response = await _networkService.get(
-        path: AppUrls.surveyorRecent,
-        query: {
-          'id': teamId
-        },
+        path: '${AppUrls.surveyorRecent}/$teamId',
         token: token
     );
     final List surveyList = response.data['data'];

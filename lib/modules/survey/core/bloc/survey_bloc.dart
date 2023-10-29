@@ -1,18 +1,14 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
-import 'package:shining_india_survey/models/question.dart';
+import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
 import 'package:shining_india_survey/modules/survey/core/models/location_model.dart';
-import 'package:shining_india_survey/modules/survey/core/models/question_response.dart';
+import 'package:shining_india_survey/modules/survey/core/models/question_model.dart';
+import 'package:shining_india_survey/modules/survey/core/models/survey_submit_model.dart';
 import 'package:shining_india_survey/modules/survey/core/repository/survey_repository.dart';
 import 'package:shining_india_survey/utils/exceptions.dart';
 import 'package:shining_india_survey/utils/string_constants.dart';
-
-import '../models/survey_response_model.dart';
 
 part 'survey_event.dart';
 part 'survey_state.dart';
@@ -22,16 +18,35 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
   SurveyBloc() : super(SurveyInitial()) {
 
     final SurveyRepository surveyRepository = SurveyRepository();
-    List<Question> quesList = [];
-    SurveyResponseModel surveyResponseModel = SurveyResponseModel();
+    List<QuestionModel> quesList = [];
+    SurveySubmitModel surveySubmitModel = SurveySubmitModel();
 
     void updateResponse() {
-      surveyResponseModel.questionResponses = quesList.map((e){
-        return QuestionResponseModel(
-            id: e.id,
-            selectedIndex: e.selectedIndex,
-            selectedOptionsIndex: e.selectedOptions,
-            othersText: e.otherText
+      surveySubmitModel.response = quesList.map((e) {
+        List<String> answers = [];
+        if(e.type == StringsConstants.QUES_TYPE_MULTI) {
+          for(int i=0; i<e.selectedOptions.length; i++) {
+            if(e.selectedOptions[i] == 1) {
+              answers.add(e.options?[i] ?? '');
+            }
+          }
+          if(e.otherText.isNotEmpty) {
+            answers.add(e.otherText);
+          }
+        } else if(e.type == StringsConstants.QUES_TYPE_SINGLE) {
+          answers.add(e.options?[e.selectedIndex] ?? '');
+          if(e.otherText.isNotEmpty) {
+            answers.add(e.otherText);
+          }
+        } else if(e.type == StringsConstants.QUES_TYPE_SLIDER) {
+          answers.add(e.options?[e.selectedIndex] ?? '');
+          if(e.otherText.isNotEmpty) {
+            answers.add(e.otherText);
+          }
+        }
+        return QuestionResponse(
+          questionId: e.id,
+          answer: []
         );
       }).toList();
     }
@@ -58,43 +73,57 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
 
     on<SubmitDetailsAndStartSurveyEvent>((event, emit) async {
       emit(SurveyLoadingState());
+      final userName = await SharedPreferencesHelper.getUserName();
+      final teamId = await SharedPreferencesHelper.getUserTeamId();
+      try {
+        final listFromApi = await surveyRepository.getSurveyQuestions(placeType: event.placeType);
 
-      //final questionsList = await surveyRepository.getSurveyQuestions(event.placeType);
+        surveySubmitModel.username = userName;
+        surveySubmitModel.teamID = teamId;
+        surveySubmitModel.country = event.locationModel.country;
+        surveySubmitModel.assemblyName = event.assemblyName;
+        surveySubmitModel.surveyDateTime = event.dateTime;
+        surveySubmitModel.personName = event.name;
+        surveySubmitModel.gender = event.gender;
+        surveySubmitModel.age = event.age;
+        surveySubmitModel.latitude = event.latitude.toString();
+        surveySubmitModel.longitude = event.longitude.toString();
+        surveySubmitModel.ward = event.locationModel.village;
+        surveySubmitModel.city = event.city;
+        surveySubmitModel.pincode = event.locationModel.postcode;
+        surveySubmitModel.state = event.locationModel.state;
+        surveySubmitModel.district = event.locationModel.stateDistrict;
 
-      surveyResponseModel.locationModel = event.locationModel;
-      surveyResponseModel.age = event.age;
-      surveyResponseModel.name = event.name;
-      surveyResponseModel.gender = event.gender;
-      surveyResponseModel.latitude = event.latitude;
-      surveyResponseModel.longitude = event.longitude;
+        add(LoadFetchedDataEvent(list: listFromApi));
 
-      add(LoadFetchedDataEvent());
-
-      emit(SurveyDataFetchedState());
+        emit(SurveyDataFetchedState());
+      } on AppExceptionDio catch(e) {
+        emit(SurveyErrorState(message: e.message));
+      } on DioException catch(e) {
+        emit(SurveyErrorState(message: e.message ?? 'Something went wrong'));
+      } catch(e) {
+        emit(SurveyErrorState(message: 'Something went wrong'));
+      }
     });
 
     on<LoadFetchedDataEvent>((event, emit)  {
-      emit(SurveyLoadingState());
-
-      //fetch data from API
       quesList.clear();
-      for (var element in ques) {
+      for (var element in event.list) {
         quesList.add(
-          Question(
+          QuestionModel(
             id: element.id,
-            questionText: element.questionText,
+            question: element.question,
             options: element.options,
             type: element.type
           )
         );
       }
-      surveyResponseModel.questionResponses = List.generate(quesList.length, (index) => QuestionResponseModel());
-
-      emit(SurveyDataLoadedState(questions: quesList));
+      surveySubmitModel.response = List.generate(quesList.length, (index) => QuestionResponse());
+      emit(SurveyDataLoadedState(questions: event.list));
     });
 
     on<CheckQuestionResponseEvent>((event, emit) async {
-      Question question = event.question;
+      QuestionModel question = event.question;
       int currentIndex = event.index;
       print("Index - ${event.index}");
       print(question.selectedOptions.toString());
@@ -131,23 +160,38 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
       }
     });
 
-    on<SubmitAdditionalDetailsAndFinishEvent>((event, emit) {
+    on<SubmitAdditionalDetailsAndFinishEvent>((event, emit) async {
       emit(SurveyLoadingState());
-
-      surveyResponseModel.phone = event.phone;
-      surveyResponseModel.address = event.address;
-      surveyResponseModel.religion = event.religion;
-      surveyResponseModel.caste = event.caste;
-
-      debugPrint(surveyResponseModel.toJson().toString());
-
-      emit(SurveySuccessState());
+      surveySubmitModel.mobileNum = event.mobileNum;
+      surveySubmitModel.address = event.address;
+      surveySubmitModel.religion = event.religion;
+      surveySubmitModel.caste = event.caste;
+      try {
+        await surveyRepository.submitSurvey(surveySubmitModel: surveySubmitModel);
+        debugPrint(surveySubmitModel.toJson().toString());
+        emit(SurveySuccessState());
+      } on AppExceptionDio catch(e) {
+        emit(SurveyErrorState(message: e.message));
+      } on DioException catch(e) {
+        emit(SurveyErrorState(message: e.message ?? 'Something went wrong'));
+      } catch(e) {
+        emit(SurveyErrorState(message: e.toString()));
+      }
     });
 
-    on<SkipAndFinishSurveyEvent>((event, emit) {
+    on<SkipAndFinishSurveyEvent>((event, emit) async {
       emit(SurveyLoadingState());
-      //send the response to the API
-      emit(SurveySuccessState());
+      try {
+        await surveyRepository.submitSurvey(surveySubmitModel: surveySubmitModel);
+        debugPrint(surveySubmitModel.toJson().toString());
+        emit(SurveySuccessState());
+      } on AppExceptionDio catch(e) {
+        emit(SurveyErrorState(message: e.message));
+      } on DioException catch(e) {
+        emit(SurveyErrorState(message: e.message ?? 'Something went wrong'));
+      } catch(e) {
+        emit(SurveyErrorState(message: e.toString()));
+      }
     });
   }
 }
