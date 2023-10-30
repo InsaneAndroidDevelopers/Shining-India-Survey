@@ -3,6 +3,7 @@ import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/adm
 import 'package:shining_india_survey/modules/admin_home/ui/admin_home_screen.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/admin_surveyors_screen.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/admin_teams_screen.dart';
+import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/filled_surveys.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/survey_detail_screen.dart';
 import 'package:shining_india_survey/modules/login/ui/admin_login_screen.dart';
@@ -132,7 +133,8 @@ class AppRouter {
         name: RouteNames.adminFilledSurveyDetailScreen,
         path: RouteNames.adminFilledSurveyDetailScreen,
         builder: (context, state) {
-          return SurveyDetailScreen();
+          final SurveyResponseModel surveyResponseModel = state.extra as SurveyResponseModel;
+          return SurveyDetailScreen(surveyResponseModel: surveyResponseModel);
         },
       ),
     ]

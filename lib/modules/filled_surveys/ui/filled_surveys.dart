@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/bloc/filled_survey_bloc.dart';
-import 'package:shining_india_survey/modules/filled_surveys/widgets/date_chips.dart';
-import 'package:shining_india_survey/modules/filled_surveys/widgets/gender_chips.dart';
+import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
+import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/date_chips.dart';
+import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/filled_survey_holder.dart';
 import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/array_res.dart';
@@ -22,6 +24,19 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
   String _dropDownStateValue = ArrayResources.states[0];
   String _dropDownUserValue = ArrayResources.users[0];
   ValueNotifier<bool> isVisible = ValueNotifier<bool>(true);
+
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<FilledSurveyBloc>().add(FetchAllSurveys());
+    scrollController.addListener(() {
+      if(scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+        context.read<FilledSurveyBloc>().add(FetchMoreSurveys());
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -251,14 +266,113 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
               SizedBox(height: 10,),
               BlocBuilder<FilledSurveyBloc, FilledSurveyState>(
                 builder: (context, state) {
-                  return Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) => RecentSurveyHolder(
-                          recentSurveyHolder:
-                              RecentSurveyModel()),
-                      itemCount: 20,
-                    ),
-                  );
+                  if(state is FilledSurveyLoading) {
+                    return Expanded(
+                      child: Center(
+                        child: Lottie.asset(
+                          'assets/loading.json',
+                          width: 150,
+                          height: 150,
+                        ),
+                      ),
+                    );
+                  } else if(state is FilledSurveyFetched) {
+                    List<SurveyResponseModel> list = state.surveys;
+                    if(list.isEmpty) {
+                      return Expanded(
+                        child: Center(
+                          child: Text(
+                            'No surveys found',
+                            style: TextStyle(
+                                fontSize: 14,
+                                fontFamily: 'Poppins',
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textBlack
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+                    return Expanded(
+                      child: ListView.builder(
+                        controller: scrollController,
+                        itemBuilder: (context, index) {
+                          if(index >= list.length) {
+                            return Center(child: CircularProgressIndicator());
+                          } else {
+                            return FilledSurveyHolder(surveyResponseModel: list[index]);
+                          }
+                        },
+                        itemCount: list.length,
+                      ),
+                    );
+                  } else if(state is FilledSurveyError) {
+                    return Expanded(
+                      child: Container(
+                        alignment: Alignment.center,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: AppColors.dividerColor,
+                            borderRadius: BorderRadius.circular(12)
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.error_outline_outlined, color: AppColors.primaryBlue, size: 50),
+                            Text(
+                              state.message,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.textBlack
+                              ),
+                            ),
+                            SizedBox(height: 10,),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+
+                                  },
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                            begin: Alignment.bottomCenter,
+                                            end: Alignment.topCenter,
+                                            colors: [
+                                              AppColors.primaryBlue,
+                                              AppColors.primaryBlueLight,
+                                            ]
+                                        ),
+                                        borderRadius: BorderRadius.circular(12)
+                                    ),
+                                    child: Text(
+                                      'Try Again',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'Poppins',
+                                          color: AppColors.primary,
+                                          fontWeight: FontWeight.w600
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+                  return SizedBox.shrink();
                 },
               )
             ],

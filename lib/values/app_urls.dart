@@ -4,8 +4,10 @@ class AppUrls {
   //admin
   static const String adminLogin = '/auth/admin';
   static const String adminLogout = '';
+  static const String adminGetAllSurveys = '/survey/surveys';
   static const String adminGetAllTeams = '';
   static const String adminCreateTeam = '';
+  static const String adminCreateSurveyor = '';
 
   //surveyor
   static const String surveyorLogin = '/auth/surveyor';

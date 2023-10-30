@@ -36,6 +36,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
   String _dropDownPlaceTypeValue = ArrayResources.placeType[0];
   bool _checkBoxValue = false;
 
+  double latitude = 0.00;
+  double longitude = 0.00;
+
   final _formKey = GlobalKey<FormState>();
 
   Future<bool> _handleLocationPermission() async {
@@ -72,6 +75,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
     if (!hasPermission) return;
 
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.best);
+    latitude = position.latitude;
+    longitude = position.longitude;
     context.read<SurveyBloc>().add(FetchLocationFromLatLngEvent(latitude: position.latitude, longitude: position.longitude));
 
   }
@@ -105,7 +110,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               CustomFlushBar(
                 message: state.message,
                 context: context,
-                icon: Icon(Icons.cancel_outlined),
+                icon: Icon(Icons.cancel_outlined, color: AppColors.primary),
                 backgroundColor: Colors.red
               ).show();
             } else if (state is SurveyDataFetchedState) {
@@ -694,8 +699,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   name: nameController.text.trim(),
                                   age: _dropDownAgeValue,
                                   gender: _dropDownGenderValue.trim(),
-                                  latitude: 0.0000,
-                                  longitude: 0.0000,
+                                  latitude: latitude,
+                                  longitude: longitude,
                                   city: cityController.text.trim(),
                                   placeType: _dropDownPlaceTypeValue,
                                   assemblyName: assemblyNameController.text.trim(),

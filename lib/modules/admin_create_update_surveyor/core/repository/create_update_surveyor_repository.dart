@@ -38,5 +38,22 @@ class CreateUpdateSurveyorRepository {
     return false;
   }
 
-
+  Future<bool> createSurveyor({required String teamName}) async {
+    final token = await SharedPreferencesHelper.getUserToken();
+    final userId = await SharedPreferencesHelper.getUserId();
+    final Response response = await _networkService.post(
+        path: AppUrls.adminCreateSurveyor,
+        query: {
+          'id': userId
+        },
+        data: {
+          'teamName': teamName
+        },
+        token: token
+    );
+    if(response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
 }

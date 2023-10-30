@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shining_india_survey/modules/filled_surveys/widgets/survey_detail_holder.dart';
+import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
+import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/survey_detail_holder.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/back_button.dart';
 
 class SurveyDetailScreen extends StatelessWidget {
-  const SurveyDetailScreen({super.key});
+  final SurveyResponseModel surveyResponseModel;
+  const SurveyDetailScreen({super.key, required this.surveyResponseModel});
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,6 @@ class SurveyDetailScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-
                     ],
                   ),
                 ),

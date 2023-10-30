@@ -1,4 +1,4 @@
-class SurveySubmitModel {
+class SurveyResponseModel {
   String? username;
   String? teamID;
   String? country;
@@ -18,31 +18,31 @@ class SurveySubmitModel {
   String? caste;
   String? mobileNum;
   String? address;
-  List<QuestionResponse>? response;
+  List<QuestionResponseModel>? response;
 
-  SurveySubmitModel({this.username,
-        this.teamID,
-        this.country,
-        this.assemblyName,
-        this.surveyDateTime,
-        this.personName,
-        this.gender,
-        this.latitude,
-        this.longitude,
-        this.ward,
-        this.district,
-        this.pincode,
-        this.city,
-        this.state,
-        this.age,
-        this.address,
-        this.caste,
-        this.religion,
-        this.mobileNum,
-        this.response
+  SurveyResponseModel({this.username,
+    this.teamID,
+    this.country,
+    this.assemblyName,
+    this.surveyDateTime,
+    this.personName,
+    this.gender,
+    this.latitude,
+    this.longitude,
+    this.ward,
+    this.district,
+    this.pincode,
+    this.city,
+    this.state,
+    this.age,
+    this.address,
+    this.caste,
+    this.religion,
+    this.mobileNum,
+    this.response
   });
 
-  SurveySubmitModel.fromJson(Map<String, dynamic> json) {
+  SurveyResponseModel.fromJson(Map<String, dynamic> json) {
     username = json['username'];
     teamID = json['teamID'];
     country = json['country'];
@@ -63,9 +63,9 @@ class SurveySubmitModel {
     caste = json['caste'];
     mobileNum = json['mobile_num'];
     if (json['response'] != null) {
-      response = <QuestionResponse>[];
+      response = <QuestionResponseModel>[];
       json['response'].forEach((v) {
-        response!.add(QuestionResponse.fromJson(v));
+        response!.add(QuestionResponseModel.fromJson(v));
       });
     }
   }
@@ -98,13 +98,13 @@ class SurveySubmitModel {
   }
 }
 
-class QuestionResponse {
+class QuestionResponseModel {
   String? questionId;
   List<String>? answer;
 
-  QuestionResponse({this.questionId, this.answer});
+  QuestionResponseModel({this.questionId, this.answer});
 
-  QuestionResponse.fromJson(Map<String, dynamic> json) {
+  QuestionResponseModel.fromJson(Map<String, dynamic> json) {
     questionId = json['questionId'];
     answer = json['answer'].cast<String>();
   }
