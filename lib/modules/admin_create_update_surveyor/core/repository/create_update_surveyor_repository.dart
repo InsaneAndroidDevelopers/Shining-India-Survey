@@ -1,57 +1,75 @@
 import 'package:dio/dio.dart';
 import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
+import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/services/network_service.dart';
 import 'package:shining_india_survey/values/app_urls.dart';
 
 class CreateUpdateSurveyorRepository {
   final NetworkService _networkService = NetworkService();
 
-  Future getAllTeams() async {
+  Future<List<TeamModel>> getAllTeams() async {
     final token = await SharedPreferencesHelper.getUserToken();
-    final userId = await SharedPreferencesHelper.getUserId();
     final Response response = await _networkService.get(
         path: AppUrls.adminGetAllTeams,
-        query: {
-          'id': userId
-        },
         token: token
     );
-    return;
+    final List list = response.data['data'];
+    return list.map((e) => TeamModel.fromJson(e)).toList();
   }
 
   Future<bool> createTeam({required String teamName}) async {
     final token = await SharedPreferencesHelper.getUserToken();
-    final userId = await SharedPreferencesHelper.getUserId();
     final Response response = await _networkService.post(
       path: AppUrls.adminCreateTeam,
-      query: {
-        'id': userId
-      },
       data: {
         'teamName': teamName
       },
       token: token
     );
-    if(response.statusCode == 200) {
+    if(response.statusCode == 201) {
       return true;
     }
     return false;
   }
 
-  Future<bool> createSurveyor({required String teamName}) async {
-    final token = await SharedPreferencesHelper.getUserToken();
-    final userId = await SharedPreferencesHelper.getUserId();
+  Future<String> createSurveyor({required String name, required String email, required String password}) async {
     final Response response = await _networkService.post(
-        path: AppUrls.adminCreateSurveyor,
-        query: {
-          'id': userId
-        },
-        data: {
-          'teamName': teamName
-        },
-        token: token
+      path: AppUrls.adminCreateSurveyor,
+      data: {
+        'name': name,
+        'email': email,
+        'password': password
+      }
     );
-    if(response.statusCode == 200) {
+    if(response.statusCode == 201) {
+      return response.data['data']['id'];
+    }
+    return '';
+  }
+
+  Future<bool> addSurveyorIntoTeam({required String teamId, required String surveyorId}) async {
+    final Response response = await _networkService.post(
+        path: AppUrls.adminAddSurveyorIntoTeam,
+        data: {
+          'teamId': teamId,
+          'members': [surveyorId],
+        }
+    );
+    if(response.statusCode == 201) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> removeSurveyor({required String teamId, required String surveyorId}) async {
+    final Response response = await _networkService.delete(
+        path: AppUrls.adminDeleteSurveyor,
+        data: {
+          'teamId': teamId,
+          'members': [surveyorId],
+        }
+    );
+    if(response.statusCode == 201) {
       return true;
     }
     return false;

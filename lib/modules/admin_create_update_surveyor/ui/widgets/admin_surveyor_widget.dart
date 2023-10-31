@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 
 class AdminSurveyorWidget extends StatefulWidget {
+  final Members member;
   final VoidCallback onTap;
-  const AdminSurveyorWidget({super.key, required this.onTap});
+  const AdminSurveyorWidget({super.key, required this.onTap, required this.member});
 
   @override
   State<AdminSurveyorWidget> createState() => _AdminSurveyorWidgetState();
@@ -35,7 +37,7 @@ class _AdminSurveyorWidgetState extends State<AdminSurveyorWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'username',
+                    widget.member.name ?? '-',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -44,7 +46,7 @@ class _AdminSurveyorWidgetState extends State<AdminSurveyorWidget> {
                   ),
                   SizedBox(height: 2,),
                   Text(
-                    'email',
+                    widget.member.email ?? '-',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,
@@ -58,11 +60,11 @@ class _AdminSurveyorWidgetState extends State<AdminSurveyorWidget> {
           Column(
             children: [
               CircleAvatar(
-                backgroundColor: Colors.red,
+                backgroundColor: widget.member.active==true ? AppColors.green : Colors.red,
                 maxRadius: 8,
               ),
               Text(
-                'Inactive',
+                widget.member.active==true ? 'Active' : 'Inactive',
                 style: TextStyle(
                   fontFamily: 'Poppins',
                   fontSize: 10,

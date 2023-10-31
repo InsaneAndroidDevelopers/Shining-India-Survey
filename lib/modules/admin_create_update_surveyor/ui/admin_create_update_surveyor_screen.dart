@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
+import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/array_res.dart';
@@ -14,9 +15,11 @@ import 'package:shining_india_survey/utils/custom_loader.dart';
 class AdminCreateUpdateSurveyorScreen extends StatefulWidget {
   final bool isUpdate;
   final String name;
+  final String surveyorId;
+  final String teamId;
 
   const AdminCreateUpdateSurveyorScreen(
-      {super.key, required this.isUpdate, required this.name});
+      {super.key, required this.isUpdate, required this.name, required this.surveyorId, required this.teamId});
 
   @override
   State<AdminCreateUpdateSurveyorScreen> createState() =>
@@ -32,8 +35,9 @@ class _AdminCreateUpdateSurveyorScreenState
   final passwordController = TextEditingController();
 
   bool isPasswordVisible = false;
+  String? team;
 
-  String _dropDownStateValue = ArrayResources.states[0];
+  ValueNotifier<List<TeamModel>> _teamsNotifier = ValueNotifier([]);
 
   String? _validateEmail(String? email) {
     if (email != null) {
@@ -58,6 +62,13 @@ class _AdminCreateUpdateSurveyorScreenState
   }
 
   @override
+  void initState() {
+    super.initState();
+    team = widget.teamId;
+    context.read<CreateUpdateSurveyorBloc>().add(GetAllTeamsData());
+  }
+
+  @override
   Widget build(BuildContext context) {
     final outlineBorder = OutlineInputBorder(
         borderSide: const BorderSide(color: AppColors.lightBlack),
@@ -74,7 +85,13 @@ class _AdminCreateUpdateSurveyorScreenState
             return true;
           },
           listener: (context, state) {
-            if(state is SurveyorEditedState) {
+            if(state is SurveyorAddedState) {
+              CustomFlushBar(
+                message: 'Surveyor created successfully',
+                backgroundColor: AppColors.green,
+                icon: Icon(Icons.done, color: AppColors.primary,),
+                context: context
+              ).show();
               context.go(RouteNames.adminHomeScreen);
             } else if(state is CreateUpdateSurveyorLoading) {
               CustomLoader(
@@ -84,9 +101,20 @@ class _AdminCreateUpdateSurveyorScreenState
               CustomFlushBar(
                 message: state.message,
                 backgroundColor: Colors.red,
-                icon: Icon(Icons.cancel_outlined),
+                icon: Icon(Icons.cancel_outlined, color: AppColors.primary,),
                 context: context
               ).show();
+            } else if(state is SurveyorDeletedState) {
+              CustomFlushBar(
+                  message: 'Surveyor deleted successfully',
+                  backgroundColor: AppColors.green,
+                  icon: Icon(Icons.delete_rounded, color: AppColors.primary,),
+                  context: context
+              ).show();
+              context.go(RouteNames.adminHomeScreen);
+            } else if(state is AllTeamsFetchedState) {
+              _teamsNotifier.value = state.teams;
+              team = _teamsNotifier.value[0].id;
             }
           },
           builder: (context, state) {
@@ -131,7 +159,9 @@ class _AdminCreateUpdateSurveyorScreenState
                           borderRadius: BorderRadius.circular(12)
                       ),
                       child: GestureDetector(
-                        onTap: (){},
+                        onTap: (){
+                          context.read<CreateUpdateSurveyorBloc>().add(RemoveSurveyor(teamId: widget.teamId, surveyorId: widget.surveyorId));
+                        },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -237,7 +267,54 @@ class _AdminCreateUpdateSurveyorScreenState
                             SizedBox(
                               height: 10,
                             ),
-                            DropdownButtonFormField(
+                            _teamsNotifier.value.isNotEmpty
+                            ? ValueListenableBuilder(
+                              valueListenable: _teamsNotifier,
+                              builder: (context, value, child) {
+                                return DropdownButtonFormField(
+                                  isExpanded: true,
+                                  decoration: InputDecoration(
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    labelText: 'Team',
+                                    prefixIcon: const Icon(
+                                      Icons.groups_2_rounded,
+                                      color: AppColors.textBlack,
+                                    ),
+                                    labelStyle: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        fontSize: 14,
+                                        color: AppColors.lightBlack),
+                                    border: outlineBorder,
+                                    disabledBorder: outlineBorder,
+                                    errorBorder: outlineBorder,
+                                    focusedBorder: outlineBorder,
+                                    focusedErrorBorder: outlineBorder,
+                                    enabledBorder: outlineBorder,
+                                  ),
+                                  value: team,
+                                  items: _teamsNotifier.value
+                                      .map<DropdownMenuItem<String>>((e) {
+                                    return DropdownMenuItem<String>(
+                                        child: Text(
+                                          e.teamName ?? 'Unable to fetch team name',
+                                          style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 14,
+                                              color: AppColors.textBlack),
+                                        ),
+                                        value: e.id);
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      team = value;
+                                      print(value);
+                                    });
+                                  },
+                                );
+                              },
+                            )
+                            : DropdownButtonFormField(
                               isExpanded: true,
                               decoration: InputDecoration(
                                 fillColor: Colors.white,
@@ -258,22 +335,18 @@ class _AdminCreateUpdateSurveyorScreenState
                                 focusedErrorBorder: outlineBorder,
                                 enabledBorder: outlineBorder,
                               ),
-                              value: _dropDownStateValue,
-                              items: ArrayResources.states
-                                  .map<DropdownMenuItem<String>>((String item) {
-                                return DropdownMenuItem<String>(
+                              value: 'Unable to fetch teams',
+                              items: [DropdownMenuItem<String>(
                                     child: Text(
-                                      item,
+                                     'Unable to fetch teams',
                                       style: const TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 14,
                                           color: AppColors.textBlack),
                                     ),
-                                    value: item);
-                              }).toList(),
+                                    value: 'Unable to fetch teams')],
                               onChanged: (value) {
                                 setState(() {
-                                  _dropDownStateValue = value ?? '';
                                   print(value);
                                 });
                               },
@@ -281,7 +354,8 @@ class _AdminCreateUpdateSurveyorScreenState
                             SizedBox(
                               height: 10,
                             ),
-                            ValueListenableBuilder(
+                            widget.isUpdate==false
+                            ? ValueListenableBuilder(
                               valueListenable: passwordController,
                               builder: (context, value, child) {
                                 return TextFormField(
@@ -329,16 +403,26 @@ class _AdminCreateUpdateSurveyorScreenState
                                     AutovalidateMode.onUserInteraction,
                                     validator: _validatePassword);
                               },
-                            ),
+                            ) : SizedBox.shrink(),
                             SizedBox(
                               height: 10,
                             ),
-                            CustomButton(
+                            widget.isUpdate==false
+                            ? CustomButton(
                               onTap: () {
-
+                                if(_formKey.currentState!.validate() && (team != null && team != '')) {
+                                  context.read<CreateUpdateSurveyorBloc>().add(
+                                    CreateSurveyor(
+                                      teamId: widget.teamId,
+                                      email: emailController.text.trim(),
+                                      password: passwordController.text.trim(),
+                                      name: userNameController.text.trim()
+                                    )
+                                  );
+                                }
                               },
-                              text: widget.isUpdate ? 'Update' : 'Create',
-                            ),
+                              text: 'Create',
+                            ) : SizedBox.shrink()
                           ],
                         ),
                       ),

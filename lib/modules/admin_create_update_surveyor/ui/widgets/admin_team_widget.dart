@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
 
 class AdminTeamWidget extends StatelessWidget {
-  const AdminTeamWidget({super.key});
+  final TeamModel teamModel;
+  const AdminTeamWidget({super.key, required this.teamModel});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        context.push(RouteNames.adminSurveyorsScreen);
+        context.push(RouteNames.adminSurveyorsScreen, extra: {'surveyors': teamModel.members, 'teamName': teamModel.teamName, 'teamId': teamModel.id});
       },
       child: Container(
         padding: EdgeInsets.all(10),
@@ -30,7 +32,7 @@ class AdminTeamWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Team name',
+                    teamModel.teamName ?? '-',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 16,
@@ -39,7 +41,7 @@ class AdminTeamWidget extends StatelessWidget {
                   ),
                   SizedBox(height: 2,),
                   Text(
-                    '8 Members',
+                    '${teamModel.members?.length} members',
                     style: TextStyle(
                       fontFamily: 'Poppins',
                       fontSize: 14,

@@ -23,6 +23,9 @@ class CreateUpdateSurveyorError extends CreateUpdateSurveyorState {
 }
 
 class AllTeamsFetchedState extends CreateUpdateSurveyorState {
+  final List<TeamModel> teams;
+  const AllTeamsFetchedState({required this.teams});
+
   @override
   List<Object> get props => [];
 }
@@ -32,7 +35,12 @@ class TeamCreatedSuccessState extends CreateUpdateSurveyorState {
   List<Object> get props => [];
 }
 
-class SurveyorEditedState extends CreateUpdateSurveyorState {
+class SurveyorAddedState extends CreateUpdateSurveyorState {
+  @override
+  List<Object> get props => [];
+}
+
+class SurveyorDeletedState extends CreateUpdateSurveyorState {
   @override
   List<Object> get props => [];
 }

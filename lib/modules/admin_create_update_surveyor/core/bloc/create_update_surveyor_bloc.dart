@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/repository/create_update_surveyor_repository.dart';
 import 'package:shining_india_survey/utils/exceptions.dart';
 
@@ -14,41 +15,52 @@ class CreateUpdateSurveyorBloc extends Bloc<CreateUpdateSurveyorEvent, CreateUpd
 
     final CreateUpdateSurveyorRepository createUpdateSurveyorRepository = CreateUpdateSurveyorRepository();
 
-    on<GetAllTeamsData>((event, emit) {
+    on<GetAllTeamsData>((event, emit) async {
       emit(CreateUpdateSurveyorLoading());
       try {
-
-        emit(AllTeamsFetchedState());
+        final teams = await createUpdateSurveyorRepository.getAllTeams();
+        emit(AllTeamsFetchedState(teams: teams));
       } on AppExceptionDio catch(e) {
         emit(CreateUpdateSurveyorError(message: e.message));
       } on DioException catch(e) {
         emit(CreateUpdateSurveyorError(message: e.message ?? 'Something went wrong'));
       } catch(e) {
-        emit(CreateUpdateSurveyorError(message: e.toString()));
+        emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
       }
     });
 
     on<CreateTeam>((event, emit) async {
       emit(CreateUpdateSurveyorLoading());
       try {
-
-        emit(TeamCreatedSuccessState());
-        add(GetAllTeamsData());
+        final bool isTeamCreated = await createUpdateSurveyorRepository.createTeam(teamName: event.teamName);
+        if(isTeamCreated) {
+          emit(TeamCreatedSuccessState());
+          add(GetAllTeamsData());
+        } else {
+          emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
+        }
       } on AppExceptionDio catch(e) {
         emit(CreateUpdateSurveyorError(message: e.message));
       } on DioException catch(e) {
         emit(CreateUpdateSurveyorError(message: e.message ?? 'Something went wrong'));
       } catch(e) {
-        emit(CreateUpdateSurveyorError(message: e.toString()));
+        emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
       }
     });
 
     on<CreateSurveyor>((event, emit) async {
       emit(CreateUpdateSurveyorLoading());
       try {
-
-
-        add(GetAllTeamsData());
+        final String id = await createUpdateSurveyorRepository.createSurveyor(
+            name: event.name,
+            email: event.email,
+            password: event.password
+        );
+        if(id.isNotEmpty) {
+          add(AddSurveyorIntoTeam(teamId: event.teamId, surveyorId: id));
+        } else {
+          emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
+        }
       } on AppExceptionDio catch(e) {
         emit(CreateUpdateSurveyorError(message: e.message));
       } on DioException catch(e) {
@@ -57,27 +69,39 @@ class CreateUpdateSurveyorBloc extends Bloc<CreateUpdateSurveyorEvent, CreateUpd
         emit(CreateUpdateSurveyorError(message: e.toString()));
       }
     });
+
+    on<AddSurveyorIntoTeam>((event, emit) async {
+      emit(CreateUpdateSurveyorLoading());
+      try {
+        final bool isSurveyorAdded = await createUpdateSurveyorRepository.addSurveyorIntoTeam(
+          surveyorId: event.surveyorId,
+          teamId: event.teamId
+        );
+        if(isSurveyorAdded) {
+          emit(SurveyorAddedState());
+        } else {
+          emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
+        }
+      } on AppExceptionDio catch(e) {
+        emit(CreateUpdateSurveyorError(message: e.message));
+      } on DioException catch(e) {
+        emit(CreateUpdateSurveyorError(message: e.message ?? 'Something went wrong'));
+      } catch(e) {
+        emit(CreateUpdateSurveyorError(message: e.toString()));
+      }
+    });
+
+
 
     on<RemoveSurveyor>((event, emit) async {
       emit(CreateUpdateSurveyorLoading());
       try {
-
-
-      } on AppExceptionDio catch(e) {
-        emit(CreateUpdateSurveyorError(message: e.message));
-      } on DioException catch(e) {
-        emit(CreateUpdateSurveyorError(message: e.message ?? 'Something went wrong'));
-      } catch(e) {
-        emit(CreateUpdateSurveyorError(message: e.toString()));
-      }
-    });
-
-    on<UpdateSurveyor>((event, emit) async {
-      emit(CreateUpdateSurveyorLoading());
-      try {
-
-
-        add(GetAllTeamsData());
+        final isDeleted = await createUpdateSurveyorRepository.removeSurveyor(teamId: event.teamId, surveyorId: event.surveyorId);
+        if(isDeleted) {
+          emit(SurveyorDeletedState());
+        } else {
+          emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
+        }
       } on AppExceptionDio catch(e) {
         emit(CreateUpdateSurveyorError(message: e.message));
       } on DioException catch(e) {

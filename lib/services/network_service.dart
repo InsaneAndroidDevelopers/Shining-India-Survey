@@ -138,7 +138,7 @@ class NetworkService {
     required String path,
     Map<String, dynamic>? query,
     Map<String, dynamic>? data,
-    required String token
+    String? token
   }) async {
     try {
       final response = await _dio.delete(

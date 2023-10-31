@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/admin_create_update_surveyor_screen.dart';
 import 'package:shining_india_survey/modules/admin_home/ui/admin_home_screen.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/admin_surveyors_screen.dart';
@@ -102,7 +103,14 @@ class AppRouter {
         name: RouteNames.adminSurveyorsScreen,
         path: RouteNames.adminSurveyorsScreen,
         builder: (context, state) {
-          return AdminSurveyorScreen();
+          final List<Members> surveyors = state.extra as List<Members>;
+          final String teamName = state.extra as String;
+          final String teamId = state.extra as String;
+          return AdminSurveyorScreen(
+            surveyors: surveyors,
+            teamName: teamName,
+            teamId: teamId
+          );
         },
       ),
       GoRoute(
@@ -112,6 +120,8 @@ class AppRouter {
           return AdminCreateUpdateSurveyorScreen(
             isUpdate: bool.parse(state.uri.queryParameters['isUpdate'] ?? 'false'),
             name: state.uri.queryParameters['name'] as String,
+            surveyorId: state.uri.queryParameters['surveyorId'] as String,
+            teamId: state.uri.queryParameters['teamId'] as String
           );
         },
       ),
