@@ -76,7 +76,7 @@ class _SurveyorHomeScreenState extends State<SurveyorHomeScreen> {
                             'Hi, ${username.value}',
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 28,
+                                fontSize: 24,
                                 fontFamily: 'Poppins',
                                 fontWeight: FontWeight.w700,
                                 color: AppColors.primary

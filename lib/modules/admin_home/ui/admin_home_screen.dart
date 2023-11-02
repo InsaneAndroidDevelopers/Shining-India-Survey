@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/admin_home/core/bloc/admin_home_bloc.dart';
+import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
 import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/utils/app_colors.dart';
@@ -73,7 +74,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                               'Hi, ${username.value}',
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 28,
+                                  fontSize: 24,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w700,
                                   color: AppColors.primary

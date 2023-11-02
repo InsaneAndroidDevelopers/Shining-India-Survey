@@ -337,7 +337,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-
+                                    context.read<FilledSurveyBloc>().add(FetchAllSurveys());
                                   },
                                   child: Container(
                                     alignment: Alignment.center,

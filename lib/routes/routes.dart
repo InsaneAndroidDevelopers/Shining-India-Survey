@@ -17,4 +17,5 @@ class RouteNames {
   static const String adminSurveyAnalysisScreen = '/admin_survey_analysis';
   static const String adminFilledSurveysScreen = '/admin_filled_surveys';
   static const String adminFilledSurveyDetailScreen = '/admin_filled_survey_detail';
+  static const String adminFilledSurveyResponses = '/admin_filled_survey_responses';
 }

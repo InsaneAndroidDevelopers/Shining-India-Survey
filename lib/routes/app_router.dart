@@ -7,6 +7,7 @@ import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/adm
 import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/filled_surveys.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/survey_detail_screen.dart';
+import 'package:shining_india_survey/modules/filled_surveys/ui/survey_reponses_screen.dart';
 import 'package:shining_india_survey/modules/login/ui/admin_login_screen.dart';
 import 'package:shining_india_survey/modules/login/ui/login_screen.dart';
 import 'package:shining_india_survey/modules/login/ui/surveyor_login_screen.dart';
@@ -104,12 +105,10 @@ class AppRouter {
         path: RouteNames.adminSurveyorsScreen,
         builder: (context, state) {
           final List<Members> surveyors = state.extra as List<Members>;
-          final String teamName = state.extra as String;
-          final String teamId = state.extra as String;
           return AdminSurveyorScreen(
             surveyors: surveyors,
-            teamName: teamName,
-            teamId: teamId
+            teamName: state.uri.queryParameters['teamName'] as String,
+            teamId: state.uri.queryParameters['teamId'] as String
           );
         },
       ),
@@ -145,6 +144,14 @@ class AppRouter {
         builder: (context, state) {
           final SurveyResponseModel surveyResponseModel = state.extra as SurveyResponseModel;
           return SurveyDetailScreen(surveyResponseModel: surveyResponseModel);
+        },
+      ),
+      GoRoute(
+        name: RouteNames.adminFilledSurveyResponses,
+        path: RouteNames.adminFilledSurveyResponses,
+        builder: (context, state) {
+          final List<QuestionResponseModel> responses = state.extra as List<QuestionResponseModel>;
+          return SurveyResponsesScreen(responses: responses);
         },
       ),
     ]

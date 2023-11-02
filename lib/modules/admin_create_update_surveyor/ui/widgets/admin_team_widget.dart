@@ -12,7 +12,10 @@ class AdminTeamWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        context.push(RouteNames.adminSurveyorsScreen, extra: {'surveyors': teamModel.members, 'teamName': teamModel.teamName, 'teamId': teamModel.id});
+        context.pushNamed(RouteNames.adminSurveyorsScreen, extra: teamModel.members, queryParameters: {
+          'teamName': teamModel.teamName,
+          'teamId': teamModel.id
+        });
       },
       child: Container(
         padding: EdgeInsets.all(10),

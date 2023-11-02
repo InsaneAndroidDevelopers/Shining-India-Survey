@@ -9,6 +9,8 @@
         android:label="shining_india_survey"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDGRHZ4hKmSy2UOl7sBvr4G2fSei5ew7xQ"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

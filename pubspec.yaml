@@ -55,6 +55,7 @@ dependencies:
   share_plus: ^7.1.0
   another_flushbar: ^1.12.30
   intl: ^0.18.1
+  google_maps_flutter: ^2.5.0
 
 dev_dependencies:
   flutter_test:
