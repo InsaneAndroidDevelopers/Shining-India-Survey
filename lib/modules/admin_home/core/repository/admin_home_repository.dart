@@ -8,12 +8,8 @@ class AdminHomeRepository {
 
   Future<bool> adminLogout() async {
     final token = await SharedPreferencesHelper.getUserToken();
-    final userId = await SharedPreferencesHelper.getUserId();
-    final Response response = await _networkService.get(
+    final Response response = await _networkService.post(
         path: AppUrls.adminLogout,
-        query: {
-          'id': userId
-        },
         token: token
     );
     if(response.statusCode == 200) {

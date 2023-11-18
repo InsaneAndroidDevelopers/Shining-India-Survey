@@ -48,12 +48,14 @@ class CreateUpdateSurveyorRepository {
   }
 
   Future<bool> addSurveyorIntoTeam({required String teamId, required String surveyorId}) async {
+    final token = await SharedPreferencesHelper.getUserToken();
     final Response response = await _networkService.post(
         path: AppUrls.adminAddSurveyorIntoTeam,
         data: {
           'teamId': teamId,
           'members': [surveyorId],
-        }
+        },
+        token: token
     );
     if(response.statusCode == 201) {
       return true;
@@ -62,14 +64,16 @@ class CreateUpdateSurveyorRepository {
   }
 
   Future<bool> removeSurveyor({required String teamId, required String surveyorId}) async {
-    final Response response = await _networkService.delete(
+    final token = await SharedPreferencesHelper.getUserToken();
+    final Response response = await _networkService.put(
         path: AppUrls.adminDeleteSurveyor,
         data: {
           'teamId': teamId,
           'members': [surveyorId],
-        }
+        },
+      token: token
     );
-    if(response.statusCode == 201) {
+    if(response.statusCode == 200) {
       return true;
     }
     return false;

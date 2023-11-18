@@ -9,6 +9,8 @@ import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/array_res.dart';
 import 'package:shining_india_survey/utils/back_button.dart';
 import 'package:shining_india_survey/utils/custom_button.dart';
+import 'package:shining_india_survey/utils/custom_flushbar.dart';
+import 'package:shining_india_survey/utils/custom_loader.dart';
 
 class AdditionalDetailsScreen extends StatefulWidget {
   const AdditionalDetailsScreen({super.key});
@@ -47,6 +49,15 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
       listener: (context, state) {
         if (state is SurveySuccessState) {
           context.go(RouteNames.surveyResultScreen);
+        } else if(state is SurveyLoadingState) {
+          CustomLoader(context: context).show();
+        } else if(state is SurveyErrorState) {
+          CustomFlushBar(
+            context: context,
+            message: state.message,
+            backgroundColor: Colors.red,
+            icon: Icon(Icons.cancel_outlined, color: Colors.white)
+          ).show();
         }
       },
       child: WillPopScope(

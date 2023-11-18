@@ -17,9 +17,10 @@ class AdminCreateUpdateSurveyorScreen extends StatefulWidget {
   final String name;
   final String surveyorId;
   final String teamId;
+  final String email;
 
   const AdminCreateUpdateSurveyorScreen(
-      {super.key, required this.isUpdate, required this.name, required this.surveyorId, required this.teamId});
+      {super.key, required this.isUpdate, required this.name, required this.surveyorId, required this.teamId, required this.email});
 
   @override
   State<AdminCreateUpdateSurveyorScreen> createState() =>
@@ -65,6 +66,8 @@ class _AdminCreateUpdateSurveyorScreenState
   void initState() {
     super.initState();
     team = widget.teamId;
+    userNameController.text = widget.name;
+    emailController.text = widget.email;
     context.read<CreateUpdateSurveyorBloc>().add(GetAllTeamsData());
   }
 
@@ -86,12 +89,6 @@ class _AdminCreateUpdateSurveyorScreenState
           },
           listener: (context, state) {
             if(state is SurveyorAddedState) {
-              CustomFlushBar(
-                message: 'Surveyor created successfully',
-                backgroundColor: AppColors.green,
-                icon: Icon(Icons.done, color: AppColors.primary,),
-                context: context
-              ).show();
               context.go(RouteNames.adminHomeScreen);
             } else if(state is CreateUpdateSurveyorLoading) {
               CustomLoader(
@@ -105,12 +102,6 @@ class _AdminCreateUpdateSurveyorScreenState
                 context: context
               ).show();
             } else if(state is SurveyorDeletedState) {
-              CustomFlushBar(
-                  message: 'Surveyor deleted successfully',
-                  backgroundColor: AppColors.green,
-                  icon: Icon(Icons.delete_rounded, color: AppColors.primary,),
-                  context: context
-              ).show();
               context.go(RouteNames.adminHomeScreen);
             } else if(state is AllTeamsFetchedState) {
               _teamsNotifier.value = state.teams;
@@ -190,6 +181,7 @@ class _AdminCreateUpdateSurveyorScreenState
                               valueListenable: userNameController,
                               builder: (context, value, child) {
                                 return TextFormField(
+                                  enabled: !widget.isUpdate,
                                   controller: userNameController,
                                   style: const TextStyle(
                                       fontSize: 14,
@@ -234,6 +226,7 @@ class _AdminCreateUpdateSurveyorScreenState
                               valueListenable: emailController,
                               builder: (context, value, child) {
                                 return TextFormField(
+                                  enabled: !widget.isUpdate,
                                     controller: emailController,
                                     style: const TextStyle(
                                         fontFamily: 'Poppins',

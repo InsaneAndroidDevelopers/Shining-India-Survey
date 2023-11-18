@@ -120,7 +120,8 @@ class AppRouter {
             isUpdate: bool.parse(state.uri.queryParameters['isUpdate'] ?? 'false'),
             name: state.uri.queryParameters['name'] as String,
             surveyorId: state.uri.queryParameters['surveyorId'] as String,
-            teamId: state.uri.queryParameters['teamId'] as String
+            teamId: state.uri.queryParameters['teamId'] as String,
+            email: state.uri.queryParameters['email'] as String
           );
         },
       ),

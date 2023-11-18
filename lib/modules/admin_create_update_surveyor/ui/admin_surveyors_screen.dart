@@ -57,7 +57,8 @@ class _AdminSurveyorScreenState extends State<AdminSurveyorScreen> {
                               'isUpdate': 'false',
                               'name': '',
                               'surveyorId': '',
-                              'teamId': widget.teamId
+                              'teamId': widget.teamId,
+                              'email': ''
                             },
                         );
                       },
@@ -158,7 +159,8 @@ class _AdminSurveyorScreenState extends State<AdminSurveyorScreen> {
                             'isUpdate': 'true',
                             'name': widget.surveyors[index].name,
                             'surveyorId': widget.surveyors[index].surveyorId,
-                            'teamId': widget.teamId
+                            'teamId': widget.teamId,
+                            'email': widget.surveyors[index].email
                           },
                         );
                       },
