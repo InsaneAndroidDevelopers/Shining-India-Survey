@@ -8,6 +8,7 @@ class RouteNames {
   static const String surveyScreen = '/survey_screen';
   static const String additionalDetailsScreen = '/additional_details_screen';
   static const String surveyResultScreen = '/survey_result_screen';
+  static const String surveyorMapDetailsScreen = '/surveyor_map_details_screen';
 
   static const String adminLoginScreen = '/admin_login_screen';
   static const String adminHomeScreen = '/admin_home_screen';

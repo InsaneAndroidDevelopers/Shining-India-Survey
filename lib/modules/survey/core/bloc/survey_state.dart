@@ -63,3 +63,8 @@ class SurveyFinishState extends SurveyState {
   @override
   List<Object?> get props => [];
 }
+
+class SurveyLocationLoadingState extends SurveyState {
+  @override
+  List<Object?> get props => [];
+}

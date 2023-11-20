@@ -12,7 +12,7 @@ import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/custom_card.dart';
 import 'package:shining_india_survey/utils/custom_flushbar.dart';
 import 'package:shining_india_survey/utils/custom_loader.dart';
-import 'package:shining_india_survey/utils/recent_survey_holder.dart';
+import 'package:shining_india_survey/modules/surveyor_home/ui/widgets/recent_survey_holder.dart';
 
 class SurveyorHomeScreen extends StatefulWidget {
   const SurveyorHomeScreen({super.key});

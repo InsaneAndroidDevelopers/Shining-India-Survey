@@ -14,6 +14,7 @@ import 'package:shining_india_survey/modules/login/ui/surveyor_login_screen.dart
 import 'package:shining_india_survey/modules/survey/ui/details_screen.dart';
 import 'package:shining_india_survey/modules/survey/ui/survey_result_screen.dart';
 import 'package:shining_india_survey/modules/survey_analysis/ui/admin_survey_analysis_screen.dart';
+import 'package:shining_india_survey/modules/surveyor_home/ui/surveyor_map_screen.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/modules/splash/ui/splash_screen.dart';
 import 'package:shining_india_survey/modules/survey/ui/additional_details_screen.dart';
@@ -153,6 +154,16 @@ class AppRouter {
         builder: (context, state) {
           final List<QuestionResponseModel> responses = state.extra as List<QuestionResponseModel>;
           return SurveyResponsesScreen(responses: responses);
+        },
+      ),
+      GoRoute(
+        name: RouteNames.surveyorMapDetailsScreen,
+        path: RouteNames.surveyorMapDetailsScreen,
+        builder: (context, state) {
+          return SurveyorMapScreen(
+            longitude: double.parse(state.uri.queryParameters['longitude'] ?? '0.00'),
+            latitude: double.parse(state.uri.queryParameters['latitude'] ?? '0.00')
+          );
         },
       ),
     ]

@@ -393,7 +393,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     }
                                   },
                                   child: Container(
-                                    padding: EdgeInsets.all(6),
+                                    padding: EdgeInsets.all(8),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       gradient: LinearGradient(
@@ -405,7 +405,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         ]
                                       ),
                                     ),
-                                    child: Row(
+                                    child: state is SurveyLocationLoadingState
+                                    ? SizedBox(
+                                      height: 18,
+                                      width: 80,
+                                      child: Center(
+                                        child: CircularProgressIndicator(color: AppColors.white, ),
+                                      ),
+                                    )
+                                    : Row(
                                       children: [
                                         Icon(
                                           Icons.location_searching_rounded,

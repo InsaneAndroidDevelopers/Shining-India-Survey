@@ -1,19 +1,20 @@
 part of 'filled_survey_bloc.dart';
 
 abstract class FilledSurveyState extends Equatable {
-  final surveys;
-  const FilledSurveyState(this.surveys);
+  const FilledSurveyState();
 }
 
 class FilledSurveyInitial extends FilledSurveyState {
-  const FilledSurveyInitial(super.surveys);
+  const FilledSurveyInitial();
 
   @override
   List<Object> get props => [];
 }
 
 class FilledSurveyLoading extends FilledSurveyState {
-  const FilledSurveyLoading(super.surveys);
+  final List<SurveyResponseModel> oldList;
+  final bool isFirstFetch;
+  const FilledSurveyLoading({required this.oldList, this.isFirstFetch = false});
 
   @override
   List<Object> get props => [];
@@ -21,14 +22,15 @@ class FilledSurveyLoading extends FilledSurveyState {
 
 class FilledSurveyError extends FilledSurveyState {
   final String message;
-  const FilledSurveyError(super.surveys, {required this.message});
+  const FilledSurveyError({required this.message});
 
   @override
   List<Object> get props => [];
 }
 
 class FilledSurveyFetched extends FilledSurveyState {
-  const FilledSurveyFetched({required surveys}) : super(surveys);
+  final List<SurveyResponseModel> list;
+  const FilledSurveyFetched({required this.list});
 
   @override
   List<Object?> get props => [];

@@ -190,15 +190,50 @@ class _SurveyScreenState extends State<SurveyScreen> {
                               builder: (context, child) {
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 14),
-                                  child: CustomButton(
-                                    onTap: () {
-                                      context.read<SurveyBloc>().add(CheckQuestionResponseEvent(
-                                          index: (_pageController.page ?? 0).toInt(),
-                                          question: state.questions[(_pageController.page ?? 0).toInt()]
-                                        )
-                                      );
-                                    },
-                                    text: (_pageController.page ?? 0).toInt() == state.questions.length - 1 ? 'Finish' : 'Next',
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: CustomButton(
+                                          onTap: () {
+                                            context.read<SurveyBloc>().add(CheckQuestionResponseEvent(
+                                                index: (_pageController.page ?? 0).toInt(),
+                                                question: state.questions[(_pageController.page ?? 0).toInt()]
+                                              )
+                                            );
+                                          },
+                                          text: (_pageController.page ?? 0).toInt() == state.questions.length - 1 ? 'Finish' : 'Next',
+                                        ),
+                                      ),
+                                      SizedBox(width: 10,),
+                                      GestureDetector(
+                                        onTap: (){
+                                          context.read<SurveyBloc>().add(SkipQuestionEvent(
+                                              index: (_pageController.page ?? 0).toInt(),
+                                              question: state.questions[(_pageController.page ?? 0).toInt()]
+                                            )
+                                          );
+                                        },
+                                        child: Container(
+                                          height: 50,
+                                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: AppColors.primary
+                                              ),
+                                              borderRadius: BorderRadius.circular(12)
+                                          ),
+                                          child: Text(
+                                            'Skip',
+                                            style: TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: 'Poppins',
+                                                color: AppColors.primary
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 );
                               },

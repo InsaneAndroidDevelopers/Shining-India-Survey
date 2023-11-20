@@ -152,7 +152,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                   decoration: InputDecoration(
                                     fillColor: Colors.white,
                                     filled: true,
-                                    labelText: 'Name',
+                                    labelText: 'Phone Number',
                                     prefixIcon: const Icon(Icons.phone, color: AppColors.textBlack,),
                                     labelStyle: const TextStyle(
                                         fontFamily: 'Poppins',

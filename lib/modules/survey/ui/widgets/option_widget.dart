@@ -40,7 +40,6 @@ class _OptionWidgetState extends State<OptionWidget> {
         ),
         borderRadius: BorderRadius.circular(16)
     );
-    debugPrint(widget.question.other.toString());
     return BlocListener<SurveyBloc, SurveyState>(
       listener: (context, state) {
 
@@ -141,19 +140,6 @@ class _OptionWidgetState extends State<OptionWidget> {
                   enabledBorder: outlineBorder,
                 ),
             ),
-            // TextField(
-            //   controller: othersController,
-            //   keyboardType: TextInputType.text,
-            //   style: TextStyle(
-            //     fontSize: 12,
-            //   ),
-            //   decoration: InputDecoration(
-            //       border: OutlineInputBorder(),
-            //       labelText: 'Others',
-            //       contentPadding: EdgeInsets.symmetric(
-            //           horizontal: 10, vertical: 4)
-            //   ),
-            // )
         ],
       ),
     );

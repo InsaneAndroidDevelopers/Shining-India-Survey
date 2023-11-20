@@ -163,7 +163,13 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
                                         double.parse(widget.surveyResponseModel.longitude ?? '0.00')
                                       ),
                                       zoom: 14
-                                  )
+                                  ),
+                                  markers: {
+                                    Marker(markerId: MarkerId('001'), position: LatLng(
+                                        double.parse(widget.surveyResponseModel.latitude ?? '0.00'),
+                                        double.parse(widget.surveyResponseModel.longitude ?? '0.00')
+                                    )),
+                                  },
                               )
                               : Center(
                                 child: Text(

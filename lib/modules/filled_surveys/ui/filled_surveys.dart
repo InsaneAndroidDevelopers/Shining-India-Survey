@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -11,7 +13,7 @@ import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/array_res.dart';
 import 'package:shining_india_survey/utils/back_button.dart';
 import 'package:shining_india_survey/utils/custom_button.dart';
-import 'package:shining_india_survey/utils/recent_survey_holder.dart';
+import 'package:shining_india_survey/modules/surveyor_home/ui/widgets/recent_survey_holder.dart';
 
 class AdminFilledSurveys extends StatefulWidget {
   const AdminFilledSurveys({super.key});
@@ -32,8 +34,8 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
     super.initState();
     context.read<FilledSurveyBloc>().add(FetchAllSurveys());
     scrollController.addListener(() {
-      if(scrollController.position.pixels == scrollController.position.maxScrollExtent) {
-        context.read<FilledSurveyBloc>().add(FetchMoreSurveys());
+      if(scrollController.position.atEdge && scrollController.position.pixels != 0) {
+        context.read<FilledSurveyBloc>().add(FetchAllSurveys());
       }
     });
   }
@@ -266,7 +268,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
               SizedBox(height: 10,),
               BlocBuilder<FilledSurveyBloc, FilledSurveyState>(
                 builder: (context, state) {
-                  if(state is FilledSurveyLoading) {
+                  if(state is FilledSurveyLoading && state.isFirstFetch) {
                     return Expanded(
                       child: Center(
                         child: Lottie.asset(
@@ -276,104 +278,118 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                         ),
                       ),
                     );
+                  }
+
+                  List<SurveyResponseModel> surveys = [];
+                  bool isLoading = false;
+                  if(state is FilledSurveyLoading) {
+                    surveys = state.oldList;
+                    isLoading  = true;
                   } else if(state is FilledSurveyFetched) {
-                    List<SurveyResponseModel> list = state.surveys;
-                    if(list.isEmpty) {
-                      return Expanded(
-                        child: Center(
-                          child: Text(
-                            'No surveys found',
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontFamily: 'Poppins',
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textBlack
-                            ),
-                          ),
-                        ),
-                      );
-                    }
+                    surveys = state.list;
+                  }
+
+                  // if(state is FilledSurveyFetched) {
+                  //   List<SurveyResponseModel> list = state.surveys;
+                  //   debugPrint('Length of list is ------ ${list.length}');
+                  //   if(list.isEmpty) {
+                  //     return Expanded(
+                  //       child: Center(
+                  //         child: Text(
+                  //           'No surveys found',
+                  //           style: TextStyle(
+                  //               fontSize: 14,
+                  //               fontFamily: 'Poppins',
+                  //               fontWeight: FontWeight.w600,
+                  //               color: AppColors.textBlack
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     );
+                  //   }
                     return Expanded(
                       child: ListView.builder(
                         controller: scrollController,
                         itemBuilder: (context, index) {
-                          if(index >= list.length) {
+                          if(index >= surveys.length) {
+                            Timer(Duration(milliseconds: 30), () {
+                              scrollController.jumpTo(scrollController.position.maxScrollExtent);
+                            });
                             return Center(child: CircularProgressIndicator());
                           } else {
-                            return FilledSurveyHolder(surveyResponseModel: list[index]);
+                            return FilledSurveyHolder(surveyResponseModel: surveys[index]);
                           }
                         },
-                        itemCount: list.length,
-                      ),
-                    );
-                  } else if(state is FilledSurveyError) {
-                    return Expanded(
-                      child: Container(
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            color: AppColors.dividerColor,
-                            borderRadius: BorderRadius.circular(12)
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(Icons.error_outline_outlined, color: AppColors.primaryBlue, size: 50),
-                            Text(
-                              state.message,
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w600,
-                                  color: AppColors.textBlack
-                              ),
-                            ),
-                            SizedBox(height: 10,),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    context.read<FilledSurveyBloc>().add(FetchAllSurveys());
-                                  },
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    padding: EdgeInsets.all(8),
-                                    decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                            begin: Alignment.bottomCenter,
-                                            end: Alignment.topCenter,
-                                            colors: [
-                                              AppColors.primaryBlue,
-                                              AppColors.primaryBlueLight,
-                                            ]
-                                        ),
-                                        borderRadius: BorderRadius.circular(12)
-                                    ),
-                                    child: Text(
-                                      'Try Again',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontFamily: 'Poppins',
-                                          color: AppColors.primary,
-                                          fontWeight: FontWeight.w600
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
+                        itemCount: surveys.length + (isLoading ? 1 : 0),
                       ),
                     );
                   }
-                  return SizedBox.shrink();
-                },
+                  // if(state is FilledSurveyError) {
+                  //   return Expanded(
+                  //     child: Container(
+                  //       alignment: Alignment.center,
+                  //       padding: EdgeInsets.all(10),
+                  //       decoration: BoxDecoration(
+                  //           color: AppColors.dividerColor,
+                  //           borderRadius: BorderRadius.circular(12)
+                  //       ),
+                  //       child: Column(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         crossAxisAlignment: CrossAxisAlignment.center,
+                  //         mainAxisSize: MainAxisSize.min,
+                  //         children: [
+                  //           Icon(Icons.error_outline_outlined, color: AppColors.primaryBlue, size: 50),
+                  //           Text(
+                  //             state.message,
+                  //             style: TextStyle(
+                  //                 fontSize: 14,
+                  //                 fontFamily: 'Poppins',
+                  //                 fontWeight: FontWeight.w600,
+                  //                 color: AppColors.textBlack
+                  //             ),
+                  //           ),
+                  //           SizedBox(height: 10,),
+                  //           Row(
+                  //             mainAxisSize: MainAxisSize.min,
+                  //             mainAxisAlignment: MainAxisAlignment.center,
+                  //             children: [
+                  //               GestureDetector(
+                  //                 onTap: () {
+                  //                   context.read<FilledSurveyBloc>().add(FetchAllSurveys());
+                  //                 },
+                  //                 child: Container(
+                  //                   alignment: Alignment.center,
+                  //                   padding: EdgeInsets.all(8),
+                  //                   decoration: BoxDecoration(
+                  //                       gradient: LinearGradient(
+                  //                           begin: Alignment.bottomCenter,
+                  //                           end: Alignment.topCenter,
+                  //                           colors: [
+                  //                             AppColors.primaryBlue,
+                  //                             AppColors.primaryBlueLight,
+                  //                           ]
+                  //                       ),
+                  //                       borderRadius: BorderRadius.circular(12)
+                  //                   ),
+                  //                   child: Text(
+                  //                     'Try Again',
+                  //                     textAlign: TextAlign.center,
+                  //                     style: TextStyle(
+                  //                         fontSize: 14,
+                  //                         fontFamily: 'Poppins',
+                  //                         color: AppColors.primary,
+                  //                         fontWeight: FontWeight.w600
+                  //                     ),
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           )
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   );
+                  //return SizedBox.shrink();
               )
             ],
           ),

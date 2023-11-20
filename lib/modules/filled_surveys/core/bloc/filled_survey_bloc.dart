@@ -11,38 +11,59 @@ part 'filled_survey_event.dart';
 part 'filled_survey_state.dart';
 
 class FilledSurveyBloc extends Bloc<FilledSurveyEvent, FilledSurveyState> {
-  FilledSurveyBloc() : super(FilledSurveyInitial(null)) {
+  FilledSurveyBloc() : super(FilledSurveyInitial()) {
 
     final FilledSurveyRepository filledSurveyRepository = FilledSurveyRepository();
-    int page = 1;
+    int page = 0;
 
     on<FetchAllSurveys>((event, emit) async {
-      emit(FilledSurveyLoading(null));
-      try {
-        final surveys = await filledSurveyRepository.getAllSurveys(page: page);
-        emit(FilledSurveyFetched(surveys: surveys));
-      } on AppExceptionDio catch(e) {
-        emit(FilledSurveyError(null, message: e.message));
-      } on DioException catch(e) {
-        emit(FilledSurveyError(null, message: e.message ?? 'Something went wrong'));
-      } catch(e) {
-        emit(const FilledSurveyError(null, message: 'Something went wrong'));
+      if(state is FilledSurveyLoading) {
+        return;
       }
+
+      final currentState = state;
+      var oldLists = <SurveyResponseModel>[];
+      if(currentState is FilledSurveyFetched) {
+        oldLists = currentState.list;
+      }
+
+      emit(FilledSurveyLoading(oldList: oldLists, isFirstFetch: page == 0));
+      
+      await filledSurveyRepository.getAllSurveys(page: page).then((value){
+        page++;
+        final newLists = (state as FilledSurveyLoading).oldList;
+        newLists.addAll(value);
+        emit(FilledSurveyFetched(list: newLists));
+      });
+
+      // emit(FilledSurveyLoading(null));
+      // try {
+      //   final surveys = await filledSurveyRepository.getAllSurveys(page: page);
+      //   emit(FilledSurveyFetched(surveys: surveys));
+      // } on AppExceptionDio catch(e) {
+      //   emit(FilledSurveyError(null, message: e.message));
+      // } on DioException catch(e) {
+      //   emit(FilledSurveyError(null, message: e.message ?? 'Something went wrong'));
+      // } catch(e) {
+      //   emit(const FilledSurveyError(null, message: 'Something went wrong'));
+      // }
     });
 
-    on<FetchMoreSurveys>((event, emit) async {
-      emit(FilledSurveyLoading(null));
-      try {
-        page++;
-        final surveys = await filledSurveyRepository.getAllSurveys(page: page);
-        emit(FilledSurveyFetched(surveys: [...state.surveys, ...surveys]));
-      } on AppExceptionDio catch(e) {
-        emit(FilledSurveyError(null, message: e.message));
-      } on DioException catch(e) {
-        emit(FilledSurveyError(null, message: e.message ?? 'Something went wrong'));
-      } catch(e) {
-        emit(const FilledSurveyError(null, message: 'Something went wrong'));
-      }
-    });
+
+    //
+    // on<FetchMoreSurveys>((event, emit) async {
+    //   emit(FilledSurveyLoading(null));
+    //   try {
+    //     page++;
+    //     final surveys = await filledSurveyRepository.getAllSurveys(page: page);
+    //     emit(FilledSurveyFetched(surveys: [...state.surveys, ...surveys]));
+    //   } on AppExceptionDio catch(e) {
+    //     emit(FilledSurveyError(null, message: e.message));
+    //   } on DioException catch(e) {
+    //     emit(FilledSurveyError(null, message: e.message ?? 'Something went wrong'));
+    //   } catch(e) {
+    //     emit(const FilledSurveyError(null, message: 'Something went wrong'));
+    //   }
+    // });
   }
 }

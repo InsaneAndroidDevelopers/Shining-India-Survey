@@ -81,3 +81,12 @@ class SkipAndFinishSurveyEvent extends SurveyEvent {
   @override
   List<Object?> get props => [];
 }
+
+class SkipQuestionEvent extends SurveyEvent {
+  final QuestionModel question;
+  final int index;
+
+  SkipQuestionEvent({required this.index, required this.question});
+  @override
+  List<Object?> get props => [];
+}

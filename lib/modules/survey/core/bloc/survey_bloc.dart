@@ -34,14 +34,18 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
             answers.add(e.otherText);
           }
         } else if(e.type == StringsConstants.QUES_TYPE_SINGLE) {
-          answers.add(e.options?[e.selectedIndex] ?? '');
-          if(e.otherText.isNotEmpty) {
-            answers.add(e.otherText);
+          if(e.selectedIndex != -1) {
+            answers.add(e.options?[e.selectedIndex] ?? '');
+            if(e.otherText.isNotEmpty) {
+              answers.add(e.otherText);
+            }
           }
         } else if(e.type == StringsConstants.QUES_TYPE_SLIDER) {
-          answers.add(e.options?[e.selectedIndex] ?? '');
-          if(e.otherText.isNotEmpty) {
-            answers.add(e.otherText);
+          if(e.selectedIndex != -1) {
+            answers.add(e.options?[e.selectedIndex] ?? '');
+            if(e.otherText.isNotEmpty) {
+              answers.add(e.otherText);
+            }
           }
         }
         return QuestionResponse(
@@ -52,7 +56,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
     }
 
     on<FetchLocationFromLatLngEvent>((event, emit) async {
-      emit(SurveyLoadingState());
+      emit(SurveyLocationLoadingState());
       try {
         final LocationModel locationModel = await surveyRepository.getAddressFromLatLng(event.latitude, event.longitude);
         emit(SurveyLocationFetchedState(
@@ -159,6 +163,15 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
           emit(SurveyMoveNextQuestionState(index: currentIndex++));
         }
       }
+    });
+
+    on<SkipQuestionEvent>((event, emit) {
+      int currentIndex = event.index;
+      if(currentIndex == quesList.length - 1) {
+        updateResponse();
+        emit(SurveyFinishState());
+      }
+      emit(SurveyMoveNextQuestionState(index: currentIndex++));
     });
 
     on<SubmitAdditionalDetailsAndFinishEvent>((event, emit) async {
