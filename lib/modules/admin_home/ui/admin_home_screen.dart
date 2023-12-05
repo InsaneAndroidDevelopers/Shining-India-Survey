@@ -140,8 +140,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             text: 'Analysis',
                             image: 'assets/analysis.png',
                             onTap: () {
-                              context.push(
-                                  RouteNames.adminSurveyAnalysisScreen);
+                              CustomFlushBar(
+                                  context: context,
+                                  message: 'Coming soon',
+                                  icon: null,
+                                  backgroundColor: AppColors.green
+                              ).show();
                             },
                           ),
                           SizedBox(height: 12,),
@@ -163,62 +167,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                     'isUpdate': 'false',
                                     'name': '',
                                     'surveyorId': '',
-                                    'teamId': ''
+                                    'teamId': '',
+                                    'email': ''
                                   },
                               );
                             },
                           ),
                           SizedBox(height: 20,),
-                          // Row(
-                          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          //   children: [
-                          //     Text(
-                          //       'Recents',
-                          //       style: TextStyle(
-                          //           fontFamily: 'Poppins',
-                          //           fontWeight: FontWeight.w800,
-                          //           color: AppColors.textBlack,
-                          //           fontSize: 26
-                          //       ),
-                          //     ),
-                          //     GestureDetector(
-                          //       onTap: (){
-                          //         context.push(RouteNames.adminFilledSurveys);
-                          //       },
-                          //       child: Container(
-                          //         alignment: Alignment.center,
-                          //         padding: EdgeInsets.all(8),
-                          //         decoration: BoxDecoration(
-                          //           gradient: LinearGradient(
-                          //             begin: Alignment.bottomCenter,
-                          //             end: Alignment.topCenter,
-                          //             colors: [
-                          //               AppColors.primaryBlue,
-                          //               AppColors.primaryBlueLight,
-                          //             ]
-                          //           ),
-                          //           borderRadius: BorderRadius.circular(12)
-                          //         ),
-                          //         child: Text(
-                          //           'View all',
-                          //           style: TextStyle(
-                          //             fontSize: 16,
-                          //             fontFamily: 'Poppins',
-                          //             color: AppColors.primary,
-                          //             fontWeight: FontWeight.w600
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     )
-                          //   ],
-                          // ),
-                          // SizedBox(height: 20,),
-                          // ListView.builder(
-                          //   physics: NeverScrollableScrollPhysics(),
-                          //   itemBuilder: (context, index) => RecentSurveyHolder(surveyorHomeResponseModel: SurveyorHomeResponseModel()),
-                          //   itemCount: 10,
-                          //   shrinkWrap: true,
-                          // ),
                         ],
                       ),
                     ),

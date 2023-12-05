@@ -12,9 +12,9 @@ class FilledSurveyInitial extends FilledSurveyState {
 }
 
 class FilledSurveyLoading extends FilledSurveyState {
-  final List<SurveyResponseModel> oldList;
-  final bool isFirstFetch;
-  const FilledSurveyLoading({required this.oldList, this.isFirstFetch = false});
+  // final List<SurveyResponseModel> oldList;
+  // final bool isFirstFetch;
+  // const FilledSurveyLoading({required this.oldList, this.isFirstFetch = false});
 
   @override
   List<Object> get props => [];
@@ -35,3 +35,18 @@ class FilledSurveyFetched extends FilledSurveyState {
   @override
   List<Object?> get props => [];
 }
+
+class FilterSurveysLoading extends FilledSurveyState {
+  @override
+  List<Object?> get props => [];
+}
+
+class FilterSurveysFetched extends FilledSurveyState {
+  final List<SurveyResponseModel> filterList;
+
+  const FilterSurveysFetched({required this.filterList});
+
+  @override
+  List<Object?> get props => [];
+}
+

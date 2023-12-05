@@ -42,7 +42,7 @@ class SurveyorHomeBloc extends Bloc<SurveyorHomeEvent, SurveyorHomeState> {
       } on AppExceptionDio catch(e) {
         emit(SurveyorLogoutErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(SurveyorLogoutErrorState(message: e.message ?? 'Something went wrong'));
+        emit(SurveyorLogoutErrorState(message: 'Something went wrong'));
       } catch(e) {
         emit(SurveyorLogoutErrorState(message: e.toString()));
       }

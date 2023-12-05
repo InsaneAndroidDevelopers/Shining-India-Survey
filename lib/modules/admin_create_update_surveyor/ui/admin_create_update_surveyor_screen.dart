@@ -159,7 +159,7 @@ class _AdminCreateUpdateSurveyorScreenState
                             Icon(Icons.cancel, color: AppColors.primaryBlue,),
                             SizedBox(width: 2,),
                             Text(
-                              'Remove from team',
+                              'Remove',
                               style: TextStyle(
                                   fontSize: 14,
                                   fontFamily: 'Poppins',

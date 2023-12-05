@@ -20,4 +20,30 @@ class FilledSurveyRepository {
     final List list = response.data['data']['content'];
     return list.map((e) => SurveyResponseModel.fromJson(e)).toList();
   }
+
+  Future<List<SurveyResponseModel>> getFilteredSurveys({
+    String? gender,
+    String? fromDate,
+    String? toDate,
+    String? teamId,
+    required int page
+  }) async {
+    final token = await SharedPreferencesHelper.getUserToken();
+    final Response response = await _networkService.post(
+      path: AppUrls.adminFilterSurveys,
+      data: {
+        'gender': gender,
+        'fromDate': fromDate,
+        'toDate': toDate,
+        'teamId': teamId
+      },
+      query: {
+        'page': page,
+        'size': 10
+      },
+      token: token
+    );
+    final List list = response.data['data'];
+    return list.map((e) => SurveyResponseModel.fromJson(e)).toList();
+  }
 }

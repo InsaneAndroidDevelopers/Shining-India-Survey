@@ -4,7 +4,7 @@ import 'package:shining_india_survey/utils/app_colors.dart';
 
 class CustomFlushBar {
   final String message;
-  final Icon icon;
+  final Icon? icon;
   final Color backgroundColor;
   final BuildContext context;
 

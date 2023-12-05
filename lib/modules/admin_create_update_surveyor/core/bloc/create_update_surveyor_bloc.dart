@@ -23,7 +23,7 @@ class CreateUpdateSurveyorBloc extends Bloc<CreateUpdateSurveyorEvent, CreateUpd
       } on AppExceptionDio catch(e) {
         emit(CreateUpdateSurveyorError(message: e.message));
       } on DioException catch(e) {
-        emit(CreateUpdateSurveyorError(message: e.message ?? 'Something went wrong'));
+        emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
       } catch(e) {
         emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
       }
@@ -42,7 +42,7 @@ class CreateUpdateSurveyorBloc extends Bloc<CreateUpdateSurveyorEvent, CreateUpd
       } on AppExceptionDio catch(e) {
         emit(CreateUpdateSurveyorError(message: e.message));
       } on DioException catch(e) {
-        emit(CreateUpdateSurveyorError(message: e.message ?? 'Something went wrong'));
+        emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
       } catch(e) {
         emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
       }
@@ -64,7 +64,7 @@ class CreateUpdateSurveyorBloc extends Bloc<CreateUpdateSurveyorEvent, CreateUpd
       } on AppExceptionDio catch(e) {
         emit(CreateUpdateSurveyorError(message: e.message));
       } on DioException catch(e) {
-        emit(CreateUpdateSurveyorError(message: e.message ?? 'Something went wrong'));
+        emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
       } catch(e) {
         emit(CreateUpdateSurveyorError(message: e.toString()));
       }
@@ -85,7 +85,7 @@ class CreateUpdateSurveyorBloc extends Bloc<CreateUpdateSurveyorEvent, CreateUpd
       } on AppExceptionDio catch(e) {
         emit(CreateUpdateSurveyorError(message: e.message));
       } on DioException catch(e) {
-        emit(CreateUpdateSurveyorError(message: e.message ?? 'Something went wrong'));
+        emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
       } catch(e) {
         emit(CreateUpdateSurveyorError(message: e.toString()));
       }
@@ -105,7 +105,7 @@ class CreateUpdateSurveyorBloc extends Bloc<CreateUpdateSurveyorEvent, CreateUpd
       } on AppExceptionDio catch(e) {
         emit(CreateUpdateSurveyorError(message: e.message));
       } on DioException catch(e) {
-        emit(CreateUpdateSurveyorError(message: e.message ?? 'Something went wrong'));
+        emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
       } catch(e) {
         emit(CreateUpdateSurveyorError(message: e.toString()));
       }

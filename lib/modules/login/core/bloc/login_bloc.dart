@@ -33,7 +33,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } on AppExceptionDio catch(e) {
         emit(ErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(ErrorState(message: e.message ?? 'Please try again'));
+        emit(ErrorState(message: 'Please try again'));
       } catch(e) {
         emit(const ErrorState(message: 'Some error occurred'));
       }
@@ -55,7 +55,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } on AppExceptionDio catch(e) {
         emit(ErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(ErrorState(message: e.message ?? 'Something went wrong'));
+        emit(ErrorState(message: 'Something went wrong'));
       } catch(e) {
         emit(const ErrorState(message: 'Something went wrong'));
       }

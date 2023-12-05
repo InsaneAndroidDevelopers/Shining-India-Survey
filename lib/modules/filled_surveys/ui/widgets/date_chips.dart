@@ -3,14 +3,14 @@ import 'package:shining_india_survey/utils/app_colors.dart';
 import 'package:shining_india_survey/utils/array_res.dart';
 
 class DateChips extends StatefulWidget {
-  const DateChips({super.key});
+  final ValueNotifier<int> dateSelector;
+  const DateChips({super.key, required this.dateSelector});
 
   @override
   State<DateChips> createState() => _DateChipsState();
 }
 
 class _DateChipsState extends State<DateChips> {
-  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -25,27 +25,30 @@ class _DateChipsState extends State<DateChips> {
   List<Widget> choiceChips() {
     List<Widget> chips = [];
     for (int i = 0; i <  ArrayResources.dates.length; i++) {
-      Widget item = Padding(
-        padding: const EdgeInsets.only(right: 8),
-        child: ChoiceChip(
-          label: Text(
-            ArrayResources.dates[i],
-            style: TextStyle(
-                fontFamily: 'Poppins',
-                fontSize: 14,
-                color: _selectedIndex == i ? AppColors.primary : AppColors.textBlack
+      Widget item = ValueListenableBuilder(
+        valueListenable: widget.dateSelector,
+        builder: (context, value, child) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: ChoiceChip(
+              label: Text(
+                ArrayResources.dates[i],
+                style: TextStyle(
+                    fontFamily: 'Poppins',
+                    fontSize: 14,
+                    color: widget.dateSelector.value == i ? AppColors.primary : AppColors.textBlack
+                ),
+              ),
+              labelStyle: const TextStyle(color: Colors.white),
+              backgroundColor: AppColors.primaryBlueBackground,
+              selected: widget.dateSelector.value == i,
+              selectedColor: AppColors.primaryBlue,
+              onSelected: (bool value) {
+                widget.dateSelector.value = i;
+              },
             ),
-          ),
-          labelStyle: const TextStyle(color: Colors.white),
-          backgroundColor: AppColors.primaryBlueBackground,
-          selected: _selectedIndex == i,
-          selectedColor: AppColors.primaryBlue,
-          onSelected: (bool value) {
-            setState(() {
-              _selectedIndex = i;
-            });
-          },
-        ),
+          );
+        },
       );
       chips.add(item);
     }

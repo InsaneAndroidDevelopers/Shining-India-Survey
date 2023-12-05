@@ -15,8 +15,8 @@ class RecentSurveyHolder extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.pushNamed(RouteNames.surveyorMapDetailsScreen, queryParameters: {
-          'latitude': '27.4554523',
-          'longitude': '77.43634643'
+          'latitude': recentSurveyHolder.latitude ?? '0.00',
+          'longitude': recentSurveyHolder.longitude ?? '0.00'
         });
       },
       child: Container(
