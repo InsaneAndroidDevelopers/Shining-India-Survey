@@ -6,9 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/survey_detail_holder.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/back_button.dart';
-import 'package:shining_india_survey/utils/custom_button.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/widgets/back_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_button.dart';
 
 class SurveyDetailScreen extends StatefulWidget {
   final SurveyResponseModel surveyResponseModel;
@@ -194,7 +194,15 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
                               extra: widget.surveyResponseModel.response
                           );
                         },
-                        text: 'View responses'
+                        child: const Text(
+                          'View Responses',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontFamily: 'Poppins',
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w600
+                          ),
+                        )
                       )
                     ],
                   ),

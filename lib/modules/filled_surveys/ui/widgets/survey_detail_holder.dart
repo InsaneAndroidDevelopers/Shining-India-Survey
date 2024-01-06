@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
 
 class SurveyDetailHolder extends StatelessWidget {
   final String name;

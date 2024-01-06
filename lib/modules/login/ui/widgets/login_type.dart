@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shining_india_survey/utils/custom_button.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/widgets/custom_button.dart';
 
 class LoginType extends StatelessWidget {
   final String image;
@@ -25,7 +26,15 @@ class LoginType extends StatelessWidget {
         ),
         CustomButton(
           onTap: onTap,
-          text: text
+          child: Text(
+            text,
+            style: TextStyle(
+                fontSize: 16,
+                fontFamily: 'Poppins',
+                color: AppColors.primary,
+                fontWeight: FontWeight.w600
+            ),
+          )
         )
       ],
     );

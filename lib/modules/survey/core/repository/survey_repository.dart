@@ -4,7 +4,7 @@ import 'package:shining_india_survey/modules/survey/core/models/location_model.d
 import 'package:shining_india_survey/modules/survey/core/models/question_model.dart';
 import 'package:shining_india_survey/modules/survey/core/models/survey_submit_model.dart';
 import 'package:shining_india_survey/services/network_service.dart';
-import 'package:shining_india_survey/values/app_urls.dart';
+import 'package:shining_india_survey/global/values/app_urls.dart';
 
 class SurveyRepository {
   final NetworkService _networkRequester = NetworkService();

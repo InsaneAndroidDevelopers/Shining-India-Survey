@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'app_colors.dart';
+import '../values/app_colors.dart';
 
 class CustomBackButton extends StatelessWidget {
   final VoidCallback onTap;

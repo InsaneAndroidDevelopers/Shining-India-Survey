@@ -6,6 +6,7 @@ import 'package:shining_india_survey/modules/filled_surveys/core/bloc/filled_sur
 import 'package:shining_india_survey/modules/login/core/bloc/login_bloc.dart';
 import 'package:shining_india_survey/modules/splash/core/bloc/splash_bloc.dart';
 import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
+import 'package:shining_india_survey/modules/survey_analysis/core/bloc/analysis_bloc.dart';
 import 'package:shining_india_survey/modules/surveyor_home/core/bloc/surveyor_home_bloc.dart';
 import 'package:shining_india_survey/routes/app_router.dart';
 import 'package:shining_india_survey/modules/splash/ui/splash_screen.dart';
@@ -43,6 +44,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => FilledSurveyBloc(),
+        ),
+        BlocProvider(
+          create: (context) => AnalysisBloc(),
         )
       ],
       child: MaterialApp.router(

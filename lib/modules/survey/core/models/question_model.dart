@@ -1,4 +1,4 @@
-import 'package:shining_india_survey/utils/string_constants.dart';
+import 'package:shining_india_survey/global/values/string_constants.dart';
 
 class QuestionModel {
   String? id;

@@ -6,13 +6,11 @@ import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/modules/survey/ui/survey_screen.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/array_res.dart';
-import 'package:shining_india_survey/utils/back_button.dart';
-import 'package:shining_india_survey/utils/custom_button.dart';
-import 'package:shining_india_survey/utils/custom_flushbar.dart';
-import 'package:shining_india_survey/utils/loading_indicator.dart';
-
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/values/array_res.dart';
+import 'package:shining_india_survey/global/widgets/back_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_flushbar.dart';
 import '../core/models/location_model.dart';
 
 class DetailsScreen extends StatefulWidget {
@@ -715,7 +713,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   dateTime: DateTime.now().toIso8601String(),
                                 ));
                               },
-                              text: 'Start Survey',
+                              child: const Text(
+                                'Start Survey',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Poppins',
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w600
+                                ),
+                              ),
                             ),
                             SizedBox(height: 10,)
                           ],

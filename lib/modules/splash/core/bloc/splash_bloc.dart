@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
-import 'package:shining_india_survey/utils/string_constants.dart';
+import 'package:shining_india_survey/global/values/string_constants.dart';
 
 part 'splash_event.dart';
 part 'splash_state.dart';

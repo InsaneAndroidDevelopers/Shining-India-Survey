@@ -4,9 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
 import 'package:shining_india_survey/modules/survey/ui/widgets/question_widget.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/custom_button.dart';
-import 'package:shining_india_survey/utils/custom_flushbar.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/widgets/custom_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_flushbar.dart';
 
 class SurveyScreen extends StatefulWidget {
   const SurveyScreen({super.key});
@@ -201,7 +201,15 @@ class _SurveyScreenState extends State<SurveyScreen> {
                                               )
                                             );
                                           },
-                                          text: (_pageController.page ?? 0).toInt() == state.questions.length - 1 ? 'Finish' : 'Next',
+                                          child: Text(
+                                            (_pageController.page ?? 0).toInt() == state.questions.length - 1 ? 'Finish' : 'Next',
+                                            style: const TextStyle(
+                                                fontSize: 16,
+                                                fontFamily: 'Poppins',
+                                                color: AppColors.primary,
+                                                fontWeight: FontWeight.w600
+                                            ),
+                                          ),
                                         ),
                                       ),
                                       SizedBox(width: 10,),

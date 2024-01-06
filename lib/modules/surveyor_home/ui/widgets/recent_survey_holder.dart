@@ -3,8 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-
-import '../../../../utils/app_colors.dart';
+import '../../../../global/values/app_colors.dart';
 
 class RecentSurveyHolder extends StatelessWidget {
   final RecentSurveyModel recentSurveyHolder;

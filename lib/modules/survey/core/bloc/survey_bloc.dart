@@ -8,7 +8,7 @@ import 'package:shining_india_survey/modules/survey/core/models/question_model.d
 import 'package:shining_india_survey/modules/survey/core/models/survey_submit_model.dart';
 import 'package:shining_india_survey/modules/survey/core/repository/survey_repository.dart';
 import 'package:shining_india_survey/utils/exceptions.dart';
-import 'package:shining_india_survey/utils/string_constants.dart';
+import 'package:shining_india_survey/global/values/string_constants.dart';
 
 part 'survey_event.dart';
 part 'survey_state.dart';

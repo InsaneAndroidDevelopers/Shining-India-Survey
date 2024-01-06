@@ -4,13 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:open_document/open_document.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
+import 'package:shining_india_survey/modules/survey_analysis/core/models/analysis_response_model.dart';
 import '../modules/survey_analysis/ui/admin_survey_analysis_screen.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:share_plus/share_plus.dart';
 
 class PdfService {
 
-  Future<Uint8List> createPdf(List<ChartData> data, Uint8List image) async {
+  Future<Uint8List> createPdf(List<AnalysisResponseModel> data, List<Uint8List> image) async {
     final font = await rootBundle.load("assets/fonts/OpenSans-Medium.ttf");
     final ttf = pw.Font.ttf(font);
     final fontBold = await rootBundle.load("assets/fonts/OpenSans-Bold.ttf");
@@ -69,18 +70,21 @@ class PdfService {
           );
         },
         build: (context) {
-          return List.generate(10, (index) => pw.Container(
+          return List.generate(data.length, (index) => pw.Container(
             margin: pw.EdgeInsets.symmetric(vertical: 10),
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.center,
               children: [
                 pw.Text(
-                  'Which candidate would you like to support in your area from your Assembly Constituency?',
+                  data[index].sId ?? '-',
                 ),
                 pw.Container(
-                  child: pw.Image(pw.MemoryImage(image), width: pageTheme.pageFormat.availableWidth, height: pageTheme.pageFormat.height / 4)
+                  child: pw.Image(
+                    pw.MemoryImage(image[index]),
+                    width: pageTheme.pageFormat.availableWidth,
+                    height: pageTheme.pageFormat.height / 4
+                  )
                 )
-
               ]
             )
           ));

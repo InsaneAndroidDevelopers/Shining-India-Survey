@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
 import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
 import 'package:shining_india_survey/services/network_service.dart';
-import 'package:shining_india_survey/values/app_urls.dart';
+import 'package:shining_india_survey/global/values/app_urls.dart';
 
 class SurveyorHomeRepository {
   final NetworkService _networkService = NetworkService();

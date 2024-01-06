@@ -5,10 +5,10 @@ import 'package:lottie/lottie.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/widgets/admin_team_widget.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/utils/custom_flushbar.dart';
+import 'package:shining_india_survey/global/widgets/custom_flushbar.dart';
 
-import '../../../utils/app_colors.dart';
-import '../../../utils/back_button.dart';
+import '../../../global/values/app_colors.dart';
+import '../../../global/widgets/back_button.dart';
 
 class AdminTeamsScreen extends StatefulWidget {
   const AdminTeamsScreen({super.key});

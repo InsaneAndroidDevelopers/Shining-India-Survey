@@ -8,10 +8,9 @@ import 'package:shining_india_survey/modules/surveyor_home/core/bloc/surveyor_ho
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/modules/survey/ui/details_screen.dart';
 import 'package:shining_india_survey/modules/survey/ui/survey_screen.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/custom_card.dart';
-import 'package:shining_india_survey/utils/custom_flushbar.dart';
-import 'package:shining_india_survey/utils/custom_loader.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/widgets/custom_card.dart';
+import 'package:shining_india_survey/global/widgets/custom_flushbar.dart';
 import 'package:shining_india_survey/modules/surveyor_home/ui/widgets/recent_survey_holder.dart';
 
 class SurveyorHomeScreen extends StatefulWidget {
@@ -37,16 +36,8 @@ class _SurveyorHomeScreenState extends State<SurveyorHomeScreen> {
       child: Scaffold(
         backgroundColor: AppColors.primaryBlue,
         body: BlocListener<SurveyorHomeBloc, SurveyorHomeState>(
-          listenWhen: (previous, current) {
-            if(previous is SurveyorLogoutLoadingState) {
-              context.pop();
-            }
-            return true;
-          },
           listener: (context, state) {
-            if(state is SurveyorLogoutLoadingState) {
-              CustomLoader(context: context).show();
-            } else if(state is SurveyorLogoutSuccessState) {
+            if(state is SurveyorLogoutSuccessState) {
               context.go(RouteNames.loginScreen);
             } else if(state is SurveyorLogoutErrorState) {
               CustomFlushBar(

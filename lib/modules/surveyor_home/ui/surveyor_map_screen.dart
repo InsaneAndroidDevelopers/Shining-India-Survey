@@ -1,8 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
 
 class SurveyorMapScreen extends StatefulWidget {
   final double latitude;

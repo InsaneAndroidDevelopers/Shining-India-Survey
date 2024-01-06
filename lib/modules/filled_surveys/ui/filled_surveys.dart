@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shining_india_survey/global/methods/get_timestamp_from_date.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/bloc/filled_survey_bloc.dart';
@@ -10,10 +11,10 @@ import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_r
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/date_chips.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/filled_survey_holder.dart';
 import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/array_res.dart';
-import 'package:shining_india_survey/utils/back_button.dart';
-import 'package:shining_india_survey/utils/custom_button.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/values/array_res.dart';
+import 'package:shining_india_survey/global/widgets/back_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_button.dart';
 import 'package:shining_india_survey/modules/surveyor_home/ui/widgets/recent_survey_holder.dart';
 
 class AdminFilledSurveys extends StatefulWidget {
@@ -80,7 +81,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
       child: Scaffold(
         backgroundColor: AppColors.primary,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -95,10 +96,10 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                         context.pop();
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
-                    Expanded(
+                    const Expanded(
                       child: Text(
                         'All Surveys',
                         style: TextStyle(
@@ -113,7 +114,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
               ),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     'Filters',
                     style: TextStyle(
                         color: AppColors.textBlack,
@@ -121,14 +122,14 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                         fontWeight: FontWeight.w600,
                         fontFamily: 'Poppins'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   ValueListenableBuilder(
                     valueListenable: isFilterApplied,
                     builder: (context, value, child) {
                       return ValueListenableBuilder(
-                        key: Key('uniqueKey'),
+                        key: const Key('uniqueKey'),
                         valueListenable: isVisible,
                         builder: (context, value, child) {
                           return Badge(
@@ -157,8 +158,8 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                     builder: (context, value, child) {
                       return isFilterApplied.value
                           ? Container(
-                              margin: EdgeInsets.only(bottom: 10),
-                              padding: EdgeInsets.all(4),
+                              margin: const EdgeInsets.only(bottom: 10),
+                              padding: const EdgeInsets.all(4),
                               decoration: BoxDecoration(
                                   border:
                                       Border.all(color: AppColors.primaryBlue),
@@ -167,7 +168,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                 onTap: () {
                                   isFilterApplied.value = false;
                                 },
-                                child: Row(
+                                child: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Icon(
@@ -188,19 +189,19 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                 ),
                               ),
                             )
-                          : SizedBox.shrink();
+                          : const SizedBox.shrink();
                     },
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               ValueListenableBuilder(
                 valueListenable: isVisible,
                 builder: (context, value, child) {
                   return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(
                         color: AppColors.dividerColor,
                         borderRadius: BorderRadius.circular(14)),
@@ -208,14 +209,13 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                         ? BlocBuilder<CreateUpdateSurveyorBloc, CreateUpdateSurveyorState>(
                           builder: (context, state) {
                             if(state is AllTeamsFetchedState) {
-                              teamId = state.teams[0].id;
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 8,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Teams',
                                     style: TextStyle(
                                         fontFamily: 'Poppins',
@@ -226,7 +226,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                   DropdownButtonFormField(
                                     isExpanded: true,
                                     decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
+                                      contentPadding: const EdgeInsets.symmetric(
                                           horizontal: 10, vertical: 8),
                                       fillColor: Colors.white,
                                       filled: true,
@@ -258,14 +258,14 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                     onChanged: (value) {
                                       setState(() {
                                         teamId = value;
-                                        print(value);
+                                        print(teamId);
                                       });
                                     },
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 8,
                                   ),
-                                  Text(
+                                  const Text(
                                     'State',
                                     style: TextStyle(
                                         fontFamily: 'Poppins',
@@ -276,7 +276,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                   DropdownButtonFormField(
                                     isExpanded: true,
                                     decoration: InputDecoration(
-                                      contentPadding: EdgeInsets.symmetric(
+                                      contentPadding: const EdgeInsets.symmetric(
                                           horizontal: 10, vertical: 8),
                                       fillColor: Colors.white,
                                       filled: true,
@@ -312,10 +312,10 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                       });
                                     },
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 8,
                                   ),
-                                  Text(
+                                  const Text(
                                     'Days',
                                     style: TextStyle(
                                         fontFamily: 'Poppins',
@@ -326,7 +326,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                   DateChips(
                                     dateSelector: dateSelector,
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 8,
                                   ),
                                   GestureDetector(
@@ -348,12 +348,12 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                       height: 40,
                                       width: double.maxFinite,
                                       alignment: Alignment.center,
-                                      padding: EdgeInsets.all(8),
+                                      padding: const EdgeInsets.all(8),
                                       decoration: BoxDecoration(
                                           color: AppColors.primaryBlue,
                                           borderRadius:
                                           BorderRadius.circular(12)),
-                                      child: Text(
+                                      child: const Text(
                                         'Apply',
                                         style: TextStyle(
                                             fontSize: 14,
@@ -363,13 +363,13 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                 ],
                               );
                             } else if(state is CreateUpdateSurveyorError) {
-                              return Text(
+                              return const Text(
                                 'Unable to fetech'
                               );
                             }
@@ -385,11 +385,11 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                             );
                           },
                         )
-                        : SizedBox.shrink(),
+                        : const SizedBox.shrink(),
                   );
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               ValueListenableBuilder(
@@ -424,7 +424,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                               return Expanded(
                                 child: Container(
                                   alignment: Alignment.center,
-                                  padding: EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                       color: AppColors.dividerColor,
                                       borderRadius: BorderRadius.circular(12)),
@@ -434,18 +434,18 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                         CrossAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Icon(Icons.error_outline_outlined,
+                                      const Icon(Icons.error_outline_outlined,
                                           color: AppColors.primaryBlue,
                                           size: 50),
                                       Text(
                                         state.message,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 14,
                                             fontFamily: 'Poppins',
                                             fontWeight: FontWeight.w600,
                                             color: AppColors.textBlack),
                                       ),
-                                      SizedBox(
+                                      const SizedBox(
                                         height: 10,
                                       ),
                                       Row(
@@ -466,9 +466,9 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                             },
                                             child: Container(
                                               alignment: Alignment.center,
-                                              padding: EdgeInsets.all(8),
+                                              padding: const EdgeInsets.all(8),
                                               decoration: BoxDecoration(
-                                                  gradient: LinearGradient(
+                                                  gradient: const LinearGradient(
                                                       begin: Alignment
                                                           .bottomCenter,
                                                       end: Alignment.topCenter,
@@ -480,7 +480,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           12)),
-                                              child: Text(
+                                              child: const Text(
                                                 'Try Again',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
@@ -561,7 +561,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                             return Expanded(
                               child: Container(
                                 alignment: Alignment.center,
-                                padding: EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
                                     color: AppColors.dividerColor,
                                     borderRadius: BorderRadius.circular(12)),
@@ -570,17 +570,17 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(Icons.error_outline_outlined,
+                                    const Icon(Icons.error_outline_outlined,
                                         color: AppColors.primaryBlue, size: 50),
                                     Text(
                                       state.message,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                           fontSize: 14,
                                           fontFamily: 'Poppins',
                                           fontWeight: FontWeight.w600,
                                           color: AppColors.textBlack),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
                                     Row(
@@ -597,9 +597,9 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                           },
                                           child: Container(
                                             alignment: Alignment.center,
-                                            padding: EdgeInsets.all(8),
+                                            padding: const EdgeInsets.all(8),
                                             decoration: BoxDecoration(
-                                                gradient: LinearGradient(
+                                                gradient: const LinearGradient(
                                                     begin:
                                                         Alignment.bottomCenter,
                                                     end: Alignment.topCenter,
@@ -610,7 +610,7 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
                                                     ]),
                                                 borderRadius:
                                                     BorderRadius.circular(12)),
-                                            child: Text(
+                                            child: const Text(
                                               'Try Again',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
@@ -667,31 +667,5 @@ class _AdminFilledSurveysState extends State<AdminFilledSurveys> {
         ),
       ),
     );
-  }
-
-  String getTimeStampFromDate(int index) {
-    final currentDate = DateTime.now();
-    switch(index) {
-      case 0: {
-        return '';
-      }
-      case 1: {
-        final date = currentDate.subtract(const Duration(days: 30));
-        return date.toIso8601String();
-      }
-      case 2: {
-        final date = currentDate.subtract(const Duration(days: 14));
-        return date.toIso8601String();
-      }
-      case 3: {
-        final date = currentDate.subtract(const Duration(days: 7));
-        return date.toIso8601String();
-      }
-      case 4: {
-        final date = currentDate.subtract(const Duration(days: 5));
-        return date.toIso8601String();
-      }
-    }
-    return '';
   }
 }

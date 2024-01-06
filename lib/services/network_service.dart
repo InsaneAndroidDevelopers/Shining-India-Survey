@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:shining_india_survey/utils/exceptions.dart';
-import 'package:shining_india_survey/values/app_urls.dart';
+import 'package:shining_india_survey/global/values/app_urls.dart';
 
 class NetworkService {
   late final Dio _dio;

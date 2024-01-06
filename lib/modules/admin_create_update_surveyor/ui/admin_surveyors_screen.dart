@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/widgets/admin_surveyor_widget.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/back_button.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/widgets/back_button.dart';
 
 class AdminSurveyorScreen extends StatefulWidget {
   final List<Members> surveyors;

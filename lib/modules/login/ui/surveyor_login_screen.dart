@@ -5,11 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/login/core/bloc/login_bloc.dart';
 import 'package:shining_india_survey/modules/login/ui/admin_login_screen.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/back_button.dart';
-import 'package:shining_india_survey/utils/custom_button.dart';
-import 'package:shining_india_survey/utils/custom_flushbar.dart';
-import 'package:shining_india_survey/utils/custom_loader.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/widgets/back_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_flushbar.dart';
+import 'package:shining_india_survey/global/widgets/loader.dart';
 
 class SurveyorLoginScreen extends StatefulWidget {
   const SurveyorLoginScreen({super.key});
@@ -71,16 +71,8 @@ class _SurveyorLoginScreenState extends State<SurveyorLoginScreen> {
       child: Scaffold(
         backgroundColor: AppColors.primary,
         body: BlocConsumer<LoginBloc, LoginState>(
-          listenWhen: (previous, current) {
-            if(previous is LoadingState) {
-              context.pop();
-            }
-            return true;
-          },
           listener: (context, state) {
-            if (state is LoadingState) {
-              CustomLoader(context: context).show();
-            } else if (state is ErrorState) {
+           if (state is ErrorState) {
               CustomFlushBar(
                 context: context,
                 message: state.message,
@@ -223,7 +215,17 @@ class _SurveyorLoginScreenState extends State<SurveyorLoginScreen> {
                                       ));
                                     }
                                   },
-                                  text: 'Login'
+                                  child: state is LoadingState
+                                    ? const Loader()
+                                    : const Text(
+                                    'Login',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'Poppins',
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.w600
+                                    ),
+                                  )
                               ),
                               const SizedBox(height: 10,),
                             ],

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
 
 class CustomButton extends StatelessWidget {
   final VoidCallback onTap;
-  final String text;
-  const CustomButton({super.key, required this.onTap, required this.text});
+  final Widget child;
+  const CustomButton({super.key, required this.onTap, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +26,7 @@ class CustomButton extends StatelessWidget {
           ),
           borderRadius: BorderRadius.circular(12)
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontSize: 16,
-            fontFamily: 'Poppins',
-            color: AppColors.primary,
-            fontWeight: FontWeight.w600
-          ),
-        ),
+        child: child,
       ),
     );
   }

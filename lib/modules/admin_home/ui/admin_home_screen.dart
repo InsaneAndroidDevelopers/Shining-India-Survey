@@ -5,11 +5,10 @@ import 'package:shining_india_survey/modules/admin_home/core/bloc/admin_home_blo
 import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
 import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/custom_button.dart';
-import 'package:shining_india_survey/utils/custom_card.dart';
-import 'package:shining_india_survey/utils/custom_flushbar.dart';
-import 'package:shining_india_survey/utils/custom_loader.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/widgets/custom_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_card.dart';
+import 'package:shining_india_survey/global/widgets/custom_flushbar.dart';
 import 'package:shining_india_survey/modules/surveyor_home/ui/widgets/recent_survey_holder.dart';
 
 class AdminHomeScreen extends StatefulWidget {
@@ -35,20 +34,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
       child: Scaffold(
           backgroundColor: AppColors.primaryBlue,
           body: BlocListener<AdminHomeBloc, AdminHomeState>(
-            listenWhen: (previous, current) {
-              if(previous is AdminHomeLogoutLoading) {
-                context.pop();
-              }
-              return true;
-            },
             listener: (context, state) {
               if(state is AdminHomeInfoFetchedState) {
                 username.value = state.name;
               } else if(state is AdminHomeLogoutSuccess) {
                 context.go(RouteNames.loginScreen);
-              } else if(state is AdminHomeLogoutLoading) {
-                CustomLoader(context: context).show();
-              } else if(state is AdminHomeLogoutError) {
+              } if(state is AdminHomeLogoutError) {
                 CustomFlushBar(
                   context: context,
                   message: state.message,
@@ -140,12 +131,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             text: 'Analysis',
                             image: 'assets/analysis.png',
                             onTap: () {
-                              CustomFlushBar(
-                                  context: context,
-                                  message: 'Coming soon',
-                                  icon: null,
-                                  backgroundColor: AppColors.green
-                              ).show();
+                              // CustomFlushBar(
+                              //     context: context,
+                              //     message: 'Coming soon',
+                              //     icon: null,
+                              //     backgroundColor: AppColors.green
+                              // ).show();
+                              context.push(RouteNames.adminSurveyAnalysisScreen);
                             },
                           ),
                           SizedBox(height: 12,),

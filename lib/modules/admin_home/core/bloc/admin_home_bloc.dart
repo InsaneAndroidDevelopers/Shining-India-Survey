@@ -16,7 +16,6 @@ class AdminHomeBloc extends Bloc<AdminHomeEvent, AdminHomeState> {
     final AdminHomeRepository adminHomeRepository = AdminHomeRepository();
 
     on<AdminLogout>((event, emit) async {
-      emit(AdminHomeLogoutLoading());
       try{
         final bool isLoggedOut = await adminHomeRepository.adminLogout();
         if(isLoggedOut) {

@@ -5,12 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/array_res.dart';
-import 'package:shining_india_survey/utils/back_button.dart';
-import 'package:shining_india_survey/utils/custom_button.dart';
-import 'package:shining_india_survey/utils/custom_flushbar.dart';
-import 'package:shining_india_survey/utils/custom_loader.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/values/array_res.dart';
+import 'package:shining_india_survey/global/widgets/back_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_flushbar.dart';
+import 'package:shining_india_survey/global/widgets/loader.dart';
 
 class AdminCreateUpdateSurveyorScreen extends StatefulWidget {
   final bool isUpdate;
@@ -90,10 +90,6 @@ class _AdminCreateUpdateSurveyorScreenState
           listener: (context, state) {
             if(state is SurveyorAddedState) {
               context.go(RouteNames.adminHomeScreen);
-            } else if(state is CreateUpdateSurveyorLoading) {
-              CustomLoader(
-                context: context
-              ).show();
             } else if(state is CreateUpdateSurveyorError) {
               CustomFlushBar(
                 message: state.message,
@@ -109,6 +105,9 @@ class _AdminCreateUpdateSurveyorScreenState
             }
           },
           builder: (context, state) {
+            if(state is CreateUpdateSurveyorLoading) {
+              return Loader();
+            }
             return Padding(
               padding: EdgeInsets.symmetric(horizontal: 14),
               child: Column(
@@ -414,7 +413,15 @@ class _AdminCreateUpdateSurveyorScreenState
                                   );
                                 }
                               },
-                              text: 'Create',
+                              child: const Text(
+                                'Create',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Poppins',
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w600
+                                ),
+                              ),
                             ) : SizedBox.shrink()
                           ],
                         ),

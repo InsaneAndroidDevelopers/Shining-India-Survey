@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
 
 class AdminSurveyorWidget extends StatefulWidget {
   final Members member;

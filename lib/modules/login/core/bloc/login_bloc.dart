@@ -8,7 +8,7 @@ import 'package:shining_india_survey/modules/login/core/models/admin_response_mo
 import 'package:shining_india_survey/modules/login/core/models/surveyor_response_model.dart';
 import 'package:shining_india_survey/modules/login/core/repository/login_repository.dart';
 import 'package:shining_india_survey/utils/exceptions.dart';
-import 'package:shining_india_survey/utils/string_constants.dart';
+import 'package:shining_india_survey/global/values/string_constants.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';

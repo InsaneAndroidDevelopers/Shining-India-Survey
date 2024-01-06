@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
 
 class AdminTeamWidget extends StatelessWidget {
   final TeamModel teamModel;

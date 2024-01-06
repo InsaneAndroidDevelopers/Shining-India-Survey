@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shining_india_survey/modules/survey/core/models/question_model.dart';
 import 'package:shining_india_survey/modules/survey/ui/widgets/option_widget.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
 
 class QuestionWidget extends StatefulWidget {
   final QuestionModel question;

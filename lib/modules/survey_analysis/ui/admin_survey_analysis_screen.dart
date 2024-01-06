@@ -1,44 +1,61 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:shining_india_survey/global/methods/get_gender.dart';
+import 'package:shining_india_survey/global/methods/get_min_max_age.dart';
+import 'package:shining_india_survey/global/methods/get_timestamp_from_date.dart';
+import 'package:shining_india_survey/global/widgets/drop_down_text_form_field.dart';
+import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
+import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/date_chips.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/gender_chips.dart';
+import 'package:shining_india_survey/modules/survey_analysis/core/bloc/analysis_bloc.dart';
 import 'package:shining_india_survey/modules/survey_analysis/ui/widgets/age_chips.dart';
+import 'package:shining_india_survey/modules/survey_analysis/ui/widgets/analysis_detail.dart';
+import 'package:shining_india_survey/modules/survey_analysis/utils/convert_pdf.dart';
 import 'package:shining_india_survey/services/pdf_service.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/array_res.dart';
-import 'package:shining_india_survey/utils/back_button.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/values/array_res.dart';
+import 'package:shining_india_survey/global/widgets/back_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_flushbar.dart';
+import 'package:shining_india_survey/global/widgets/loader.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class AdminSurveyAnalysisScreen extends StatefulWidget {
   const AdminSurveyAnalysisScreen({super.key});
 
   @override
-  State<AdminSurveyAnalysisScreen> createState() => _AdminSurveyAnalysisScreenState();
+  State<AdminSurveyAnalysisScreen> createState() =>
+      _AdminSurveyAnalysisScreenState();
 }
 
 class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
 
-  ValueNotifier<bool> isVisible = ValueNotifier<bool>(true);
-  String _dropDownUserValue = ArrayResources.users[0];
+  ValueNotifier<bool> isVisible = ValueNotifier<bool>(false);
+  ValueNotifier<int> genderIndex = ValueNotifier<int>(0);
+  ValueNotifier<int> ageIndex = ValueNotifier<int>(0);
+  String? teamId;
+  ValueNotifier<int> dateIndex = ValueNotifier(0);
 
   final PdfService service = PdfService();
   final screenshotController = ScreenshotController();
 
   @override
-  Widget build(BuildContext context) {
-    final outlineBorder = OutlineInputBorder(
-        borderSide: const BorderSide(
-            color: AppColors.lightBlack
-        ),
-        borderRadius: BorderRadius.circular(16)
-    );
+  void initState() {
+    super.initState();
+    BlocProvider.of<AnalysisBloc>(context).add(GetAllAnalysis());
+    context.read<CreateUpdateSurveyorBloc>().add(GetAllTeamsData());
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: AppColors.primary,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Column(
             children: [
               Padding(
@@ -48,7 +65,7 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     CustomBackButton(
-                      onTap: (){
+                      onTap: () {
                         context.pop();
                       },
                     ),
@@ -78,20 +95,27 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
                         fontFamily: 'Poppins'
                     ),
                   ),
-                  IconButton(
-                      onPressed: (){
-                        if(isVisible.value == true) {
-                          isVisible.value = false;
-                        } else {
-                          isVisible.value = true;
-                        }
-                        setState(() {});
-                      },
-                      icon: Icon(isVisible.value==true ? Icons.keyboard_arrow_down_rounded : Icons.keyboard_arrow_up_rounded)
-                  )
+                  ValueListenableBuilder(
+                    valueListenable: isVisible,
+                    builder: (context, value, child) {
+                      return IconButton(
+                          onPressed: () {
+                            if (isVisible.value == true) {
+                              isVisible.value = false;
+                            } else {
+                              isVisible.value = true;
+                            }
+                          },
+                          icon: Icon(isVisible.value == true ? Icons
+                              .keyboard_arrow_down_rounded : Icons
+                              .keyboard_arrow_up_rounded)
+                      );
+                    },
+                  ),
                 ],
               ),
               ValueListenableBuilder(
+                key: Key('container'),
                 valueListenable: isVisible,
                 builder: (context, value, child) {
                   return Container(
@@ -100,7 +124,8 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
                         color: AppColors.dividerColor,
                         borderRadius: BorderRadius.circular(14)
                     ),
-                    child: isVisible.value == true ? Column(
+                    child: isVisible.value == true
+                    ? Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         SizedBox(height: 8,),
@@ -113,50 +138,43 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
                               fontWeight: FontWeight.w500
                           ),
                         ),
-                        GenderChips(),
+                        GenderChips(selectedIndex: genderIndex),
                         SizedBox(height: 8,),
-                        Text(
-                          'User',
+                        const Text(
+                          'Teams',
                           style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 16,
-                              color: AppColors.black,
-                              fontWeight: FontWeight.w500
-                          ),
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                            color: AppColors.black,
+                            fontWeight: FontWeight.w500),
                         ),
-                        DropdownButtonFormField(
-                          isExpanded: true,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                            fillColor: Colors.white,
-                            filled: true,
-                            prefixIcon: const Icon(Icons.person_2_rounded, color: AppColors.textBlack,),
-                            border: outlineBorder,
-                            disabledBorder: outlineBorder,
-                            errorBorder: outlineBorder,
-                            focusedBorder: outlineBorder,
-                            focusedErrorBorder: outlineBorder,
-                            enabledBorder: outlineBorder,
-                          ),
-                          value: _dropDownUserValue,
-                          items: ArrayResources.users
-                              .map<DropdownMenuItem<String>>((String item) {
-                            return DropdownMenuItem<String>(
-                                child: Text(
-                                  item,
-                                  style: const TextStyle(
-                                      fontFamily: 'Poppins',
-                                      fontSize: 14,
-                                      color: AppColors.textBlack
-                                  ),
+                        BlocBuilder<CreateUpdateSurveyorBloc, CreateUpdateSurveyorState>(
+                          builder: (context, state) {
+                            if(state is AllTeamsFetchedState) {
+                              return DropDownTextField(
+                                prefixIcon: const Icon(
+                                  Icons.person_2_rounded,
+                                  color: AppColors.textBlack,
                                 ),
-                                value: item);
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _dropDownUserValue = value ?? '';
-                              print(value);
-                            });
+                                value: teamId,
+                                items: state.teams.map<DropdownMenuItem<String>>((item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item.id,
+                                    child: Text(
+                                      item.teamName ??
+                                          'Unable to fetch team name',
+                                      style: const TextStyle(
+                                          fontFamily: 'Poppins',
+                                          fontSize: 14,
+                                          color: AppColors.textBlack),
+                                    ));
+                                }).toList(),
+                                onChanged: (val) {
+                                  teamId = val;
+                                },
+                              );
+                            }
+                            return const SizedBox.shrink();
                           },
                         ),
                         SizedBox(height: 8,),
@@ -169,12 +187,32 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
                               fontWeight: FontWeight.w500
                           ),
                         ),
-                        AgeChips(),
+                        AgeChips(ageIndex: ageIndex),
+                        SizedBox(height: 8,),
+                        const Text(
+                          'Days',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                            color: AppColors.black,
+                            fontWeight: FontWeight.w500
+                          ),
+                        ),
+                        DateChips(dateSelector: dateIndex),
                         SizedBox(height: 8,),
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
+                            BlocProvider.of<AnalysisBloc>(context).add(
+                              GetFilteredAnalysis(
+                                maxAge: getMinMaxAgeFromIndex(ageIndex.value).maxAge,
+                                minAge: getMinMaxAgeFromIndex(ageIndex.value).minAge,
+                                toDate: DateTime.now().toIso8601String(),
+                                fromDate: getTimeStampFromDate(dateIndex.value),
+                                gender: getGenderFromIndex(genderIndex.value),
+                                teamId: teamId ?? ''
+                              )
+                            );
                             isVisible.value = false;
-                            setState(() {});
                           },
                           child: Container(
                             height: 40,
@@ -182,7 +220,7 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
                             alignment: Alignment.center,
                             padding: EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                                color:  AppColors.primaryBlue,
+                                color: AppColors.primaryBlue,
                                 borderRadius: BorderRadius.circular(12)
                             ),
                             child: Text(
@@ -204,117 +242,71 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
               ),
               SizedBox(height: 10,),
               Expanded(
-                child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      padding: EdgeInsets.all(10),
-                      margin: EdgeInsets.symmetric(vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(12)
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Which candidate would you like to support in your area from your Assembly Constituency?',
+                child: BlocBuilder<AnalysisBloc, AnalysisState>(
+                  builder: (context, state) {
+                    if (state is AnalysisLoading) {
+                      return Center(
+                        child: Lottie.asset(
+                          'assets/loading.json',
+                          width: 150,
+                          height: 150,
+                        ),
+                      );
+                    } else if (state is AnalysisError) {
+                      CustomFlushBar(
+                        context: context,
+                        message: state.message,
+                        icon: Icon(Icons.cancel_outlined, color: AppColors.primary,),
+                        backgroundColor: Colors.red
+                      ).show();
+                    } else if (state is AnalysisSuccess) {
+                      if (state.analysisList.isEmpty) {
+                        return Center(
+                          child: Text(
+                            'No questions',
                             style: TextStyle(
-                              fontSize: 16
-                            ),
-                          ),
-                          SizedBox(height: 6,),
-                          SfCircularChart(
-                            series: <CircularSeries>[
-                              PieSeries(
-                                dataSource: chartData,
-                                xValueMapper: (data, _) => data.x,
-                                yValueMapper: (data, _) => data.y,
-                                dataLabelSettings: DataLabelSettings(isVisible: true),
-                                legendIconType: LegendIconType.rectangle,
-                                animationDuration: 0,
-                                radius: '80%'
-                              )
-                            ],
-                            legend: Legend(
-                              toggleSeriesVisibility: false,
-                              isVisible: true,
-                              itemPadding: 1,
-                              overflowMode: LegendItemOverflowMode.scroll,
-                              shouldAlwaysShowScrollbar: true,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
+                              fontFamily: 'Poppins',
+                              fontSize: 16,
+                              color: AppColors.black,
+                              fontWeight: FontWeight.w500
+                            )
+                          )
+                        );
+                      } else {
+                        return ListView.builder(
+                          itemCount: state.analysisList.length,
+                          itemBuilder: (context, index) {
+                            return AnalysisDetail(
+                              question: state.analysisList[index].sId ?? '-',
+                              chartData: state.analysisList[index].answers ?? [],
+                            );
+                          },
+                        );
+                      }
+                    }
+                    return const SizedBox.shrink();
                   },
                 ),
-              )
+              ),
             ],
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            final Uint8List image = await screenshotController.captureFromWidget(
-              MediaQuery(
-                    data: MediaQueryData(),
-                    child: Wrap(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          child: SfCircularChart(
-                            series: <CircularSeries>[
-                              PieSeries(
-                                radius: '70%',
-                                dataSource: chartData,
-                                xValueMapper: (data, _) => data.x,
-                                yValueMapper: (data, _) => data.y,
-                                dataLabelSettings: DataLabelSettings(isVisible: true),
-                                legendIconType: LegendIconType.rectangle,
-                                animationDuration: 0,
-                              )
-                            ],
-                            legend: Legend(
-                              position: LegendPosition.auto,
-                              toggleSeriesVisibility: false,
-                              isVisible: true,
-                              overflowMode: LegendItemOverflowMode.none,
-                              itemPadding: 1,
-                              iconHeight: 6,
-                              iconWidth: 6,
-                              textStyle: TextStyle(
-                                fontSize: 10
-                              )
-                            ),
-                          ),
-                        ),
-                      ]
-                    ),
-                  )
-            );
-
-            final file = await service.createPdf(chartData, image);
-            service.savePdfFile('Filename', file);
+        floatingActionButton: BlocBuilder<AnalysisBloc, AnalysisState>(
+          builder: (context, state) {
+            if (state is AnalysisSuccess) {
+              if (state.analysisList.isNotEmpty) {
+                return FloatingActionButton(
+                  onPressed: () async {
+                    convertPdf(state.analysisList, screenshotController, service);
+                  },
+                  child: Icon(Icons.save_alt),
+                );
+              }
+            }
+            return const SizedBox.shrink();
           },
-          child: Icon(Icons.save_alt),
         ),
       ),
     );
   }
-
-  final List<ChartData> chartData = [
-    ChartData('David', 25),
-    ChartData('Steve', 38),
-    ChartData('Jack', 34),
-    ChartData('Daveryheid', 25),
-    ChartData('Stherheve', 38),
-    ChartData('Jachererk', 34),
-  ];
-}
-
-class ChartData {
-  ChartData(this.x, this.y, [this.color]);
-  final String x;
-  final double y;
-  final Color? color;
 }

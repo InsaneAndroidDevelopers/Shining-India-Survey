@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
 import 'package:shining_india_survey/modules/survey/core/models/question_model.dart';
 import 'package:shining_india_survey/modules/survey/ui/widgets/build_option.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/array_res.dart';
-import 'package:shining_india_survey/utils/string_constants.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/values/array_res.dart';
+import 'package:shining_india_survey/global/values/string_constants.dart';
 
 class OptionWidget extends StatefulWidget {
   final QuestionModel question;

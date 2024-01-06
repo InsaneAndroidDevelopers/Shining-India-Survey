@@ -2,14 +2,13 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
 import 'package:shining_india_survey/modules/login/core/bloc/login_bloc.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/back_button.dart';
-import 'package:shining_india_survey/utils/custom_button.dart';
-import 'package:shining_india_survey/utils/custom_flushbar.dart';
-import 'package:shining_india_survey/utils/custom_loader.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/widgets/back_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_button.dart';
+import 'package:shining_india_survey/global/widgets/custom_flushbar.dart';
+import 'package:shining_india_survey/global/widgets/loader.dart';
 
 class AdminLoginScreen extends StatefulWidget {
   const AdminLoginScreen({super.key});
@@ -68,16 +67,8 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
       child: Scaffold(
         backgroundColor: AppColors.primary,
         body: BlocConsumer<LoginBloc, LoginState>(
-          listenWhen: (previous, current) {
-            if(previous is LoadingState) {
-              context.pop();
-            }
-            return true;
-          },
           listener: (context, state) {
-            if (state is LoadingState) {
-              CustomLoader(context: context).show();
-            } else if (state is ErrorState) {
+            if (state is ErrorState) {
               CustomFlushBar(
                 context: context,
                 message: state.message,
@@ -89,15 +80,6 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
             }
           },
           builder: (context, state) {
-            // if(state is LoadingState) {
-            //   return Center(
-            //     child: Lottie.asset(
-            //       'assets/loading.json',
-            //       width: 150,
-            //       height: 150,
-            //     ),
-            //   );
-            // }
             return SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,7 +140,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                                 keyboardType: TextInputType.emailAddress,
                                 cursorColor: AppColors.lightBlack,
                                 decoration: InputDecoration(
-                                  fillColor: Colors.white,
+                                  fillColor: AppColors.white,
                                   filled: true,
                                   labelText: 'E-mail',
                                   prefixIcon: const Icon(Icons.email_rounded, color: AppColors.textBlack,),
@@ -229,7 +211,17 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                                     ));
                                   }
                                 },
-                                text: 'Login'
+                                child: state is LoadingState
+                                ? const Loader()
+                                : const Text(
+                                  'Login',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'Poppins',
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.w600
+                                  ),
+                                )
                               ),
                               const SizedBox(height: 10,),
                             ],

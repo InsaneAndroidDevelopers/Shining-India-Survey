@@ -32,7 +32,6 @@ class SurveyorHomeBloc extends Bloc<SurveyorHomeEvent, SurveyorHomeState> {
     });
 
     on<SurveyorLogout>((event, emit) async {
-      emit(SurveyorLogoutLoadingState());
       try{
         final bool isLoggedOut = await surveyorHomeRepository.surveyorLogout();
         if(isLoggedOut) {

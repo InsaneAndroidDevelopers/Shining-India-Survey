@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
-import 'package:shining_india_survey/utils/custom_button.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/global/widgets/custom_button.dart';
 
 class AnimatedPrompt extends StatefulWidget {
   final String title;
@@ -124,7 +124,15 @@ class _AnimatedPromptState extends State<AnimatedPrompt>
                       onTap: (){
                         widget.onTap();
                       },
-                      text: 'Return to home'
+                      child: const Text(
+                        'Return to home',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'Poppins',
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600
+                        ),
+                      )
                     ),
                   ],
                 ),

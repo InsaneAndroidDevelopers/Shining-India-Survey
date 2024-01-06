@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/survey_detail_screen.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/utils/app_colors.dart';
+import 'package:shining_india_survey/global/values/app_colors.dart';
 
 class FilledSurveyHolder extends StatelessWidget {
   final SurveyResponseModel surveyResponseModel;
