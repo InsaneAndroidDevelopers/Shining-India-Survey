@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:shining_india_survey/helpers/hive_db_helper.dart';
 import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
 import 'package:shining_india_survey/modules/splash/core/bloc/splash_bloc.dart';
 import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
@@ -36,6 +37,7 @@ class SurveyorHomeBloc extends Bloc<SurveyorHomeEvent, SurveyorHomeState> {
         final bool isLoggedOut = await surveyorHomeRepository.surveyorLogout();
         if(isLoggedOut) {
           await SharedPreferencesHelper.clearAll();
+          await HiveDbHelper.deleteBox();
           emit(SurveyorLogoutSuccessState());
         }
       } on AppExceptionDio catch(e) {

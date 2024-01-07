@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:shining_india_survey/helpers/hive_db_helper.dart';
 import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
 import 'package:shining_india_survey/modules/login/core/models/admin_response_model.dart';
 import 'package:shining_india_survey/modules/login/core/models/surveyor_response_model.dart';
 import 'package:shining_india_survey/modules/login/core/repository/login_repository.dart';
+import 'package:shining_india_survey/modules/survey/core/models/question_model.dart';
 import 'package:shining_india_survey/utils/exceptions.dart';
 import 'package:shining_india_survey/global/values/string_constants.dart';
 
@@ -29,6 +31,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await SharedPreferencesHelper.setUserId(adminResponseModel.id ?? '');
         await SharedPreferencesHelper.setUserName(adminResponseModel.name ?? '');
         await SharedPreferencesHelper.setUserLevel(StringsConstants.ADMIN);
+
+        add(GetAndSaveQuestions());
+
         emit(AdminLoginSuccessState());
       } on AppExceptionDio catch(e) {
         emit(ErrorState(message: e.message));
@@ -51,7 +56,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await SharedPreferencesHelper.setUserName(surveyorResponseModel.name ?? '');
         await SharedPreferencesHelper.setUserTeamId(surveyorResponseModel.teamId ?? '');
         await SharedPreferencesHelper.setUserLevel(StringsConstants.SURVEYOR);
+
+        add(GetAndSaveQuestions());
+
         emit(SurveyorLoginSuccessState());
+      } on AppExceptionDio catch(e) {
+        emit(ErrorState(message: e.message));
+      } on DioException catch(e) {
+        emit(ErrorState(message: 'Something went wrong'));
+      } catch(e) {
+        emit(const ErrorState(message: 'Something went wrong'));
+      }
+    });
+
+    on<GetAndSaveQuestions>((event, emit) async {
+      List<QuestionModel> list = [];
+      try {
+        list = await loginRepository.getSurveyQuestions(placeType: 'rural');
+        Map<String, String> questionWithIds = {};
+        for(var item in list) {
+          questionWithIds[item.id ?? ''] = item.question ?? '';
+        }
       } on AppExceptionDio catch(e) {
         emit(ErrorState(message: e.message));
       } on DioException catch(e) {

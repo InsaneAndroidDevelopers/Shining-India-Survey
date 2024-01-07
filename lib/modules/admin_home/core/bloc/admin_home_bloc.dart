@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:shining_india_survey/helpers/hive_db_helper.dart';
 import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
 import 'package:shining_india_survey/modules/admin_home/core/repository/admin_home_repository.dart';
 import 'package:shining_india_survey/utils/exceptions.dart';
@@ -20,6 +21,7 @@ class AdminHomeBloc extends Bloc<AdminHomeEvent, AdminHomeState> {
         final bool isLoggedOut = await adminHomeRepository.adminLogout();
         if(isLoggedOut) {
           await SharedPreferencesHelper.clearAll();
+          await HiveDbHelper.deleteBox();
           emit(AdminHomeLogoutSuccess());
         }
       } on AppExceptionDio catch(e) {

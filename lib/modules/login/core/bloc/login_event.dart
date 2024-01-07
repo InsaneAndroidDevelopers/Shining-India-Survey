@@ -21,3 +21,9 @@ class SurveyorLoginEvent extends LoginEvent {
   @override
   List<Object?> get props => [];
 }
+
+class GetAndSaveQuestions extends LoginEvent {
+  @override
+  List<Object> get props => [];
+}
+

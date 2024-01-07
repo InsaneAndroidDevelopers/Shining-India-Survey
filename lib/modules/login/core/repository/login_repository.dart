@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
 import 'package:shining_india_survey/modules/login/core/models/admin_response_model.dart';
 import 'package:shining_india_survey/modules/login/core/models/surveyor_response_model.dart';
+import 'package:shining_india_survey/modules/survey/core/models/question_model.dart';
 import 'package:shining_india_survey/services/network_service.dart';
 import 'package:shining_india_survey/global/values/app_urls.dart';
 
@@ -44,5 +45,18 @@ class LoginRepository {
       await SharedPreferencesHelper.setUserToken(response.data['jwt']);
     }
     return SurveyorResponseModel.fromJson(response.data['data']);
+  }
+
+  Future<List<QuestionModel>> getSurveyQuestions({required String placeType}) async {
+    final userId = await SharedPreferencesHelper.getUserId();
+    final token = await SharedPreferencesHelper.getUserToken();
+    final Response response = await _networkService.get(
+        path: '${AppUrls.surveyorGetSurveyQuestions}/${placeType.toLowerCase()}/$userId',
+        token: token
+    );
+    final List questionList = response.data['data'];
+    return questionList
+        .map((e) => QuestionModel.fromJson(e))
+        .toList();
   }
 }

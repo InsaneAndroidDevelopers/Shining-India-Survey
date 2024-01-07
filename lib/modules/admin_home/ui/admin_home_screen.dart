@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hive/hive.dart';
+import 'package:shining_india_survey/global/values/string_constants.dart';
+import 'package:shining_india_survey/helpers/hive_db_helper.dart';
 import 'package:shining_india_survey/modules/admin_home/core/bloc/admin_home_bloc.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
 import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
@@ -30,6 +33,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(HiveDbHelper.getBox().get('659054dfcf111b03a0d182ed'));
     return SafeArea(
       child: Scaffold(
           backgroundColor: AppColors.primaryBlue,
@@ -131,12 +135,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             text: 'Analysis',
                             image: 'assets/analysis.png',
                             onTap: () {
-                              // CustomFlushBar(
-                              //     context: context,
-                              //     message: 'Coming soon',
-                              //     icon: null,
-                              //     backgroundColor: AppColors.green
-                              // ).show();
                               context.push(RouteNames.adminSurveyAnalysisScreen);
                             },
                           ),

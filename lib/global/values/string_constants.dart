@@ -11,4 +11,6 @@ class StringsConstants {
   static const String QUES_TYPE_MULTI = "multi";
   static const String QUES_TYPE_SINGLE = "single";
   static const String QUES_TYPE_SLIDER = "slider";
+
+  static const String QUESTION_COLLECTION = 'questions';
 }

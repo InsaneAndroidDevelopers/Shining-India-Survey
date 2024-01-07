@@ -1,5 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
+import 'package:shining_india_survey/helpers/hive_db_helper.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
 import 'package:shining_india_survey/modules/admin_home/core/bloc/admin_home_bloc.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/bloc/filled_survey_bloc.dart';
@@ -9,11 +12,16 @@ import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
 import 'package:shining_india_survey/modules/survey_analysis/core/bloc/analysis_bloc.dart';
 import 'package:shining_india_survey/modules/surveyor_home/core/bloc/surveyor_home_bloc.dart';
 import 'package:shining_india_survey/routes/app_router.dart';
+import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'package:shining_india_survey/modules/splash/ui/splash_screen.dart';
 import 'package:shining_india_survey/modules/survey/ui/survey_screen.dart';
 import 'package:shining_india_survey/modules/surveyor_home/ui/surveyor_home_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Directory directory = await pathProvider.getApplicationDocumentsDirectory();
+  Hive.init(directory.path);
+  await HiveDbHelper.openBox();
   runApp(const MyApp());
 }
 
