@@ -11,7 +11,7 @@ part 'filled_survey_state.dart';
 class FilledSurveyBloc extends Bloc<FilledSurveyEvent, FilledSurveyState> {
   bool isFetchingAll = false;
   bool isFetchingFilter = false;
-  FilledSurveyBloc() : super(FilledSurveyInitial()) {
+  FilledSurveyBloc() : super(const FilledSurveyInitial()) {
 
     final FilledSurveyRepository filledSurveyRepository = FilledSurveyRepository();
     int pageAll = 0;
@@ -24,6 +24,7 @@ class FilledSurveyBloc extends Bloc<FilledSurveyEvent, FilledSurveyState> {
       try {
         if(event.isFirstFetch == true) {
           pageAll = 0;
+          hasMorePagesAll = true;
         }
 
         List<SurveyResponseModel> list = [];
@@ -52,6 +53,7 @@ class FilledSurveyBloc extends Bloc<FilledSurveyEvent, FilledSurveyState> {
       try {
         if(event.isFirstFetch == true) {
           pageFilter = 0;
+          hasMorePagesFilter = true;
         }
 
         List<SurveyResponseModel> list = [];
@@ -59,9 +61,12 @@ class FilledSurveyBloc extends Bloc<FilledSurveyEvent, FilledSurveyState> {
           list = await filledSurveyRepository.getFilteredSurveys(
               teamId: event.teamId,
               gender: event.gender,
+              minAge: event.minAge,
+              maxAge: event.maxAge,
               fromDate: event.fromDate,
               toDate: event.toDate,
-              page: pageFilter
+              page: pageFilter,
+              state: event.state
           );
         }
 
@@ -71,7 +76,7 @@ class FilledSurveyBloc extends Bloc<FilledSurveyEvent, FilledSurveyState> {
           pageFilter++;
         }
 
-        emit(FilterSurveysFetched(filterList: list));
+        emit(FilterSurveysFetched(filterList: list, isFirstFetch: event.isFirstFetch));
       } on AppExceptionDio catch(e) {
         emit(FilledSurveyError(message: e.message));
       } on DioException catch(e) {

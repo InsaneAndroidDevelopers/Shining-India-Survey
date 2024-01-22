@@ -81,12 +81,6 @@ class _AdminCreateUpdateSurveyorScreenState
       child: Scaffold(
         backgroundColor: AppColors.primary,
         body: BlocConsumer<CreateUpdateSurveyorBloc, CreateUpdateSurveyorState>(
-          listenWhen: (previous, current) {
-            if(previous is CreateUpdateSurveyorLoading) {
-              context.pop();
-            }
-            return true;
-          },
           listener: (context, state) {
             if(state is SurveyorAddedState) {
               context.go(RouteNames.adminHomeScreen);

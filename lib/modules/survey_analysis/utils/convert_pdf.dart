@@ -5,8 +5,11 @@ import 'package:shining_india_survey/modules/survey_analysis/core/models/analysi
 import 'package:shining_india_survey/services/pdf_service.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-Future convertPdf(List<AnalysisResponseModel> analysisList, ScreenshotController screenshotController, PdfService service) async {
+Future convertPdf(List<AnalysisResponseModel> analysisList) async {
   List<Uint8List> analysisImages = [];
+  final PdfService service = PdfService();
+  final screenshotController = ScreenshotController();
+
   for (var item in analysisList) {
     final Uint8List image = await screenshotController
         .captureFromWidget(

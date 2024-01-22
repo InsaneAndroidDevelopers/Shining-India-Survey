@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
 import 'package:shining_india_survey/services/network_service.dart';
@@ -13,7 +14,7 @@ class FilledSurveyRepository {
       path: AppUrls.adminGetAllSurveys,
       query: {
         'page': page,
-        'size': 10
+        'size': 20
       },
       token: token
     );
@@ -26,6 +27,9 @@ class FilledSurveyRepository {
     String? fromDate,
     String? toDate,
     String? teamId,
+    String? state,
+    int? minAge,
+    int? maxAge,
     required int page
   }) async {
     final token = await SharedPreferencesHelper.getUserToken();
@@ -35,7 +39,10 @@ class FilledSurveyRepository {
         'gender': gender,
         'fromDate': fromDate,
         'toDate': toDate,
-        'teamId': teamId
+        'teamId': teamId,
+        'minAge': minAge,
+        'maxAge': maxAge,
+        'state': state
       },
       query: {
         'page': page,

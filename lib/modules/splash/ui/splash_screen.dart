@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                 FadeTransition(
                   opacity: animation2,
                   child: const Text(
-                    'SHINING INIDA\nRESEARCH AND ANALYSIS',
+                    'SHINING INDIA\nRESEARCH AND ANALYSIS',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontFamily: 'Poppins',

@@ -40,7 +40,7 @@ class _AnalysisDetailState extends State<AnalysisDetail> {
         children: [
           Text(
             widget.question,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,
               color: AppColors.textBlack

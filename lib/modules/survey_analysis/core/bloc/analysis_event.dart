@@ -16,6 +16,7 @@ class GetFilteredAnalysis extends AnalysisEvent {
   final int minAge;
   final int maxAge;
   final String teamId;
+  final String state;
 
   const GetFilteredAnalysis({
     required this.toDate,
@@ -23,7 +24,8 @@ class GetFilteredAnalysis extends AnalysisEvent {
     required this.maxAge,
     required this.minAge,
     required this.teamId,
-    required this.gender
+    required this.gender,
+    required this.state
   });
 
   @override

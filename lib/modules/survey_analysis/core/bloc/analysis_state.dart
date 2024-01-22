@@ -19,7 +19,7 @@ class AnalysisSuccess extends AnalysisState {
   const AnalysisSuccess({required this.analysisList});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [analysisList];
 }
 
 class AnalysisError extends AnalysisState {

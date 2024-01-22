@@ -43,8 +43,9 @@ class FilterSurveysLoading extends FilledSurveyState {
 
 class FilterSurveysFetched extends FilledSurveyState {
   final List<SurveyResponseModel> filterList;
+  final bool isFirstFetch;
 
-  const FilterSurveysFetched({required this.filterList});
+  const FilterSurveysFetched({required this.filterList, required this.isFirstFetch});
 
   @override
   List<Object?> get props => [];

@@ -21,11 +21,14 @@ class FilterSurveys extends FilledSurveyEvent {
   final String teamId;
   final String fromDate;
   final String toDate;
+  final int minAge;
+  final int maxAge;
   final String gender;
+  final String state;
   final bool isFirstFetch;
 
-  const FilterSurveys({required this.gender, required this.teamId, required this.fromDate, required this.toDate, required this.isFirstFetch});
+  const FilterSurveys({required this.gender,required this.state, required this.teamId, required this.fromDate, required this.toDate, required this.isFirstFetch, required this.maxAge, required this.minAge});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [teamId, fromDate, toDate, minAge, maxAge, isFirstFetch];
 }

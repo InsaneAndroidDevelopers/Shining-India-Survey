@@ -26,7 +26,8 @@ class AnalysisRepository {
    int? minAge,
    int? maxAge,
    String? fromDate,
-   String? toDate
+   String? toDate,
+   String? state
   }) async {
     final token = await SharedPreferencesHelper.getUserToken();
     final Response response = await _networkService.post(
@@ -38,7 +39,8 @@ class AnalysisRepository {
           'minAge': minAge,
           'maxAge': maxAge,
           'fromDate': fromDate,
-          'toDate': toDate
+          'toDate': toDate,
+          'state': state
         }
     );
     final List list = response.data['data'];

@@ -115,6 +115,11 @@ class _OptionWidgetState extends State<OptionWidget> {
           if (widget.question.other == true)
             TextField(
                 controller: othersController,
+                onChanged: (value){
+                  if(othersController.text != value){
+                    widget.question.otherText = value;
+                  }
+                },
                 keyboardType: TextInputType.text,
                 style: const TextStyle(
                   fontSize: 14,

@@ -1,5 +1,8 @@
+import 'dart:isolate';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
@@ -12,6 +15,7 @@ import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/b
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/date_chips.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/gender_chips.dart';
 import 'package:shining_india_survey/modules/survey_analysis/core/bloc/analysis_bloc.dart';
+import 'package:shining_india_survey/modules/survey_analysis/core/models/analysis_response_model.dart';
 import 'package:shining_india_survey/modules/survey_analysis/ui/widgets/age_chips.dart';
 import 'package:shining_india_survey/modules/survey_analysis/ui/widgets/analysis_detail.dart';
 import 'package:shining_india_survey/modules/survey_analysis/utils/convert_pdf.dart';
@@ -27,26 +31,34 @@ class AdminSurveyAnalysisScreen extends StatefulWidget {
   const AdminSurveyAnalysisScreen({super.key});
 
   @override
-  State<AdminSurveyAnalysisScreen> createState() =>
-      _AdminSurveyAnalysisScreenState();
+  State<AdminSurveyAnalysisScreen> createState() => _AdminSurveyAnalysisScreenState();
 }
 
-class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
+class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> with WidgetsBindingObserver{
 
-  ValueNotifier<bool> isVisible = ValueNotifier<bool>(false);
+  ValueNotifier<bool> isFilterApplied = ValueNotifier<bool>(false);
   ValueNotifier<int> genderIndex = ValueNotifier<int>(0);
   ValueNotifier<int> ageIndex = ValueNotifier<int>(0);
   String? teamId;
+  String? _dropDownStateValue;
   ValueNotifier<int> dateIndex = ValueNotifier(0);
-
-  final PdfService service = PdfService();
-  final screenshotController = ScreenshotController();
+  List<GlobalKey>? _keys;
 
   @override
   void initState() {
     super.initState();
+
     BlocProvider.of<AnalysisBloc>(context).add(GetAllAnalysis());
     context.read<CreateUpdateSurveyorBloc>().add(GetAllTeamsData());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    genderIndex.dispose();
+    ageIndex.dispose();
+    dateIndex.dispose();
+    isFilterApplied.dispose();
   }
 
   @override
@@ -69,8 +81,8 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
                         context.pop();
                       },
                     ),
-                    SizedBox(width: 16,),
-                    Expanded(
+                    const SizedBox(width: 16,),
+                    const Expanded(
                       child: Text(
                         'Analysis',
                         style: TextStyle(
@@ -86,7 +98,7 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
               ),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     'Filters',
                     style: TextStyle(
                         color: AppColors.textBlack,
@@ -96,153 +108,206 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
                     ),
                   ),
                   ValueListenableBuilder(
-                    valueListenable: isVisible,
+                    valueListenable: isFilterApplied,
                     builder: (context, value, child) {
                       return IconButton(
                           onPressed: () {
-                            if (isVisible.value == true) {
-                              isVisible.value = false;
-                            } else {
-                              isVisible.value = true;
-                            }
+                            showModalBottomSheet(
+                              context: context,
+                              useSafeArea: true,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)
+                              ),
+                              showDragHandle: true,
+                              isScrollControlled: true,
+                              builder: (context) {
+                                return SingleChildScrollView(
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: TextButton(
+                                            onPressed: (){
+                                              BlocProvider.of<AnalysisBloc>(context).add(GetAllAnalysis());
+                                              isFilterApplied.value = false;
+                                              context.pop();
+                                            },
+                                            child: const Text(
+                                              'Clear All',
+                                              style: TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 16,
+                                                color: AppColors.primaryBlue,
+                                                fontWeight: FontWeight.w500
+                                              ),
+                                            )
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4,),
+                                        const Text(
+                                          'Gender',
+                                          style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 16,
+                                              color: AppColors.black,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                        ),
+                                        GenderChips(selectedIndex: genderIndex),
+                                        const SizedBox(height: 8,),
+                                        const Text(
+                                          'Teams',
+                                          style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 16,
+                                              color: AppColors.black,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        BlocBuilder<CreateUpdateSurveyorBloc, CreateUpdateSurveyorState>(
+                                          builder: (context, state) {
+                                            if(state is AllTeamsFetchedState) {
+                                              return DropDownTextField(
+                                                prefixIcon: const Icon(
+                                                  Icons.person_2_rounded,
+                                                  color: AppColors.textBlack,
+                                                ),
+                                                value: teamId,
+                                                items: state.teams.map<DropdownMenuItem<String>>((item) {
+                                                  return DropdownMenuItem<String>(
+                                                      value: item.id,
+                                                      child: Text(
+                                                        item.teamName ??
+                                                            'Unable to fetch team name',
+                                                        style: const TextStyle(
+                                                            fontFamily: 'Poppins',
+                                                            fontSize: 14,
+                                                            color: AppColors.textBlack),
+                                                      ));
+                                                }).toList(),
+                                                onChanged: (val) {
+                                                  teamId = val;
+                                                },
+                                              );
+                                            }
+                                            return const SizedBox.shrink();
+                                          },
+                                        ),
+                                        const SizedBox(height: 8,),
+                                        DropDownTextField(
+                                          prefixIcon: const Icon(Icons.location_city_rounded, color: AppColors.textBlack,),
+                                          value: _dropDownStateValue,
+                                          items: ArrayResources.states
+                                              .map<DropdownMenuItem<String>>((String item) {
+                                            return DropdownMenuItem<String>(
+                                                value: item,
+                                                child: Text(
+                                                  item,
+                                                  style: const TextStyle(
+                                                      fontFamily: 'Poppins',
+                                                      fontSize: 14,
+                                                      color: AppColors.textBlack
+                                                  ),
+                                                ));
+                                          }).toList(),
+                                          onChanged: (value) {
+                                            _dropDownStateValue = value ?? '';
+                                          },
+                                        ),
+                                        const SizedBox(height: 8,),
+                                        const Text(
+                                          'Age',
+                                          style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 16,
+                                              color: AppColors.black,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                        ),
+                                        AgeChips(ageIndex: ageIndex),
+                                        const SizedBox(height: 8,),
+                                        const Text(
+                                          'Days',
+                                          style: TextStyle(
+                                              fontFamily: 'Poppins',
+                                              fontSize: 16,
+                                              color: AppColors.black,
+                                              fontWeight: FontWeight.w500
+                                          ),
+                                        ),
+                                        DateChips(dateSelector: dateIndex),
+                                        const SizedBox(height: 8,),
+                                        GestureDetector(
+                                          onTap: () {
+                                            BlocProvider.of<AnalysisBloc>(context).add(
+                                                GetFilteredAnalysis(
+                                                    maxAge: getMinMaxAgeFromIndex(ageIndex.value).maxAge,
+                                                    minAge: getMinMaxAgeFromIndex(ageIndex.value).minAge,
+                                                    toDate: DateTime.now().toIso8601String(),
+                                                    fromDate: getTimeStampFromDate(dateIndex.value),
+                                                    gender: getGenderFromIndex(genderIndex.value),
+                                                    teamId: teamId ?? '',
+                                                    state: _dropDownStateValue ?? ''
+                                                )
+                                            );
+                                            isFilterApplied.value = true;
+                                            context.pop();
+                                          },
+                                          child: Container(
+                                            height: 40,
+                                            width: double.maxFinite,
+                                            alignment: Alignment.center,
+                                            padding: const EdgeInsets.all(8),
+                                            decoration: BoxDecoration(
+                                                color: AppColors.primaryBlue,
+                                                borderRadius: BorderRadius.circular(12)
+                                            ),
+                                            child: const Text(
+                                              'Apply',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontFamily: 'Poppins',
+                                                  color: AppColors.primary,
+                                                  fontWeight: FontWeight.w600
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10,),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
                           },
-                          icon: Icon(isVisible.value == true ? Icons
-                              .keyboard_arrow_down_rounded : Icons
-                              .keyboard_arrow_up_rounded)
+                          icon: Badge(
+                            backgroundColor: isFilterApplied.value == true
+                                ? Colors.red
+                                : Colors.transparent,
+                            child: const Icon(Icons.filter_alt),
+                          )
                       );
                     },
                   ),
                 ],
               ),
-              ValueListenableBuilder(
-                key: Key('container'),
-                valueListenable: isVisible,
-                builder: (context, value, child) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    decoration: BoxDecoration(
-                        color: AppColors.dividerColor,
-                        borderRadius: BorderRadius.circular(14)
-                    ),
-                    child: isVisible.value == true
-                    ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 8,),
-                        Text(
-                          'Gender',
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 16,
-                              color: AppColors.black,
-                              fontWeight: FontWeight.w500
-                          ),
-                        ),
-                        GenderChips(selectedIndex: genderIndex),
-                        SizedBox(height: 8,),
-                        const Text(
-                          'Teams',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w500),
-                        ),
-                        BlocBuilder<CreateUpdateSurveyorBloc, CreateUpdateSurveyorState>(
-                          builder: (context, state) {
-                            if(state is AllTeamsFetchedState) {
-                              return DropDownTextField(
-                                prefixIcon: const Icon(
-                                  Icons.person_2_rounded,
-                                  color: AppColors.textBlack,
-                                ),
-                                value: teamId,
-                                items: state.teams.map<DropdownMenuItem<String>>((item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item.id,
-                                    child: Text(
-                                      item.teamName ??
-                                          'Unable to fetch team name',
-                                      style: const TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 14,
-                                          color: AppColors.textBlack),
-                                    ));
-                                }).toList(),
-                                onChanged: (val) {
-                                  teamId = val;
-                                },
-                              );
-                            }
-                            return const SizedBox.shrink();
-                          },
-                        ),
-                        SizedBox(height: 8,),
-                        Text(
-                          'Age',
-                          style: TextStyle(
-                              fontFamily: 'Poppins',
-                              fontSize: 16,
-                              color: AppColors.black,
-                              fontWeight: FontWeight.w500
-                          ),
-                        ),
-                        AgeChips(ageIndex: ageIndex),
-                        SizedBox(height: 8,),
-                        const Text(
-                          'Days',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            fontSize: 16,
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w500
-                          ),
-                        ),
-                        DateChips(dateSelector: dateIndex),
-                        SizedBox(height: 8,),
-                        GestureDetector(
-                          onTap: () {
-                            BlocProvider.of<AnalysisBloc>(context).add(
-                              GetFilteredAnalysis(
-                                maxAge: getMinMaxAgeFromIndex(ageIndex.value).maxAge,
-                                minAge: getMinMaxAgeFromIndex(ageIndex.value).minAge,
-                                toDate: DateTime.now().toIso8601String(),
-                                fromDate: getTimeStampFromDate(dateIndex.value),
-                                gender: getGenderFromIndex(genderIndex.value),
-                                teamId: teamId ?? ''
-                              )
-                            );
-                            isVisible.value = false;
-                          },
-                          child: Container(
-                            height: 40,
-                            width: double.maxFinite,
-                            alignment: Alignment.center,
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: AppColors.primaryBlue,
-                                borderRadius: BorderRadius.circular(12)
-                            ),
-                            child: Text(
-                              'Apply',
-                              style: TextStyle(
-                                  fontSize: 14,
-                                  fontFamily: 'Poppins',
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w600
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10,),
-                      ],
-                    ) : SizedBox.shrink(),
-                  );
-                },
-              ),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               Expanded(
-                child: BlocBuilder<AnalysisBloc, AnalysisState>(
+                child: BlocConsumer<AnalysisBloc, AnalysisState>(
+                  listener: (context, state) {
+                    if (state is AnalysisError) {
+                      CustomFlushBar(
+                          context: context,
+                          message: state.message,
+                          icon: const Icon(Icons.cancel_outlined, color: AppColors.primary,),
+                          backgroundColor: Colors.red
+                      ).show();
+                    }
+                  },
                   builder: (context, state) {
                     if (state is AnalysisLoading) {
                       return Center(
@@ -252,16 +317,9 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
                           height: 150,
                         ),
                       );
-                    } else if (state is AnalysisError) {
-                      CustomFlushBar(
-                        context: context,
-                        message: state.message,
-                        icon: Icon(Icons.cancel_outlined, color: AppColors.primary,),
-                        backgroundColor: Colors.red
-                      ).show();
                     } else if (state is AnalysisSuccess) {
                       if (state.analysisList.isEmpty) {
-                        return Center(
+                        return const Center(
                           child: Text(
                             'No questions',
                             style: TextStyle(
@@ -297,7 +355,7 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> {
               if (state.analysisList.isNotEmpty) {
                 return FloatingActionButton(
                   onPressed: () async {
-                    convertPdf(state.analysisList, screenshotController, service);
+                    convertPdf(state.analysisList);
                   },
                   child: Icon(Icons.save_alt),
                 );

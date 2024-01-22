@@ -39,7 +39,8 @@ class AnalysisBloc extends Bloc<AnalysisEvent, AnalysisState> {
           fromDate: event.fromDate,
           toDate: event.toDate,
           minAge: event.minAge,
-          maxAge: event.maxAge
+          maxAge: event.maxAge,
+          state: event.state
         );
         emit(AnalysisSuccess(analysisList: analysisList));
       } on AppExceptionDio catch(e) {
