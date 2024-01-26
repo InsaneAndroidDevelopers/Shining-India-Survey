@@ -1,9 +1,12 @@
+import 'dart:typed_data';
+
 class AnalysisResponseModel {
   String? sId;
   List<Answers>? answers;
   int? totalCount;
+  Uint8List? unit8Image;
 
-  AnalysisResponseModel({this.sId, this.answers, this.totalCount});
+  AnalysisResponseModel({this.sId, this.answers, this.totalCount, this.unit8Image});
 
   AnalysisResponseModel.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];

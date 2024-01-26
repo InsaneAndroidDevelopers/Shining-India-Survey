@@ -18,7 +18,6 @@ import 'package:shining_india_survey/modules/survey_analysis/core/bloc/analysis_
 import 'package:shining_india_survey/modules/survey_analysis/core/models/analysis_response_model.dart';
 import 'package:shining_india_survey/modules/survey_analysis/ui/widgets/age_chips.dart';
 import 'package:shining_india_survey/modules/survey_analysis/ui/widgets/analysis_detail.dart';
-import 'package:shining_india_survey/modules/survey_analysis/utils/convert_pdf.dart';
 import 'package:shining_india_survey/services/pdf_service.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
 import 'package:shining_india_survey/global/values/array_res.dart';
@@ -331,14 +330,17 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> w
                           )
                         );
                       } else {
-                        return ListView.builder(
-                          itemCount: state.analysisList.length,
-                          itemBuilder: (context, index) {
-                            return AnalysisDetail(
-                              question: state.analysisList[index].sId ?? '-',
-                              chartData: state.analysisList[index].answers ?? [],
-                            );
-                          },
+                        return SingleChildScrollView(
+                          child: ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: state.analysisList.length,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              return AnalysisDetail(
+                                analysisResponseModel: state.analysisList[index],
+                              );
+                            },
+                          ),
                         );
                       }
                     }
@@ -355,7 +357,8 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> w
               if (state.analysisList.isNotEmpty) {
                 return FloatingActionButton(
                   onPressed: () async {
-                    convertPdf(state.analysisList);
+                    final file = await PdfService().createPdf(state.analysisList);
+                    await PdfService().savePdfFile('Filename', file);
                   },
                   child: Icon(Icons.save_alt),
                 );

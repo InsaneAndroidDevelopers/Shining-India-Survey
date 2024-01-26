@@ -11,7 +11,7 @@ import 'package:share_plus/share_plus.dart';
 
 class PdfService {
 
-  Future<Uint8List> createPdf(List<AnalysisResponseModel> data, List<Uint8List> image) async {
+  Future<Uint8List> createPdf(List<AnalysisResponseModel> data) async {
     final font = await rootBundle.load("assets/fonts/OpenSans-Medium.ttf");
     final ttf = pw.Font.ttf(font);
     final fontBold = await rootBundle.load("assets/fonts/OpenSans-Bold.ttf");
@@ -80,7 +80,7 @@ class PdfService {
                 ),
                 pw.Container(
                   child: pw.Image(
-                    pw.MemoryImage(image[index]),
+                    pw.MemoryImage(data[index].unit8Image ?? Uint8List(64)),
                     width: pageTheme.pageFormat.availableWidth,
                     height: pageTheme.pageFormat.height / 4
                   )
