@@ -33,13 +33,15 @@ class CreateUpdateSurveyorRepository {
   }
 
   Future<String> createSurveyor({required String name, required String email, required String password}) async {
+    final token = await SharedPreferencesHelper.getUserToken();
     final Response response = await _networkService.post(
       path: AppUrls.adminCreateSurveyor,
       data: {
         'name': name,
         'email': email,
         'password': password
-      }
+      },
+      token: token
     );
     if(response.statusCode == 201) {
       return response.data['data']['id'];

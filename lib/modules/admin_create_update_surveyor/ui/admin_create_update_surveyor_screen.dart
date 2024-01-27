@@ -304,6 +304,7 @@ class _AdminCreateUpdateSurveyorScreenState
                               isExpanded: true,
                               decoration: InputDecoration(
                                 fillColor: Colors.white,
+                                enabled: false,
                                 filled: true,
                                 labelText: 'Team',
                                 prefixIcon: const Icon(
@@ -399,7 +400,7 @@ class _AdminCreateUpdateSurveyorScreenState
                                 if(_formKey.currentState!.validate() && (team != null && team != '')) {
                                   context.read<CreateUpdateSurveyorBloc>().add(
                                     CreateSurveyor(
-                                      teamId: widget.teamId,
+                                      teamId: team ?? '',
                                       email: emailController.text.trim(),
                                       password: passwordController.text.trim(),
                                       name: userNameController.text.trim()

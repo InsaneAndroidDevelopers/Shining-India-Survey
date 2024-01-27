@@ -31,7 +31,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
             }
           }
           if(e.otherText.isNotEmpty) {
-            answers.add(e.otherText);
+            answers.add('Others_${e.otherText}');
           }
         } else if(e.type == StringsConstants.QUES_TYPE_SINGLE) {
           if(e.selectedIndex != -1) {
@@ -133,6 +133,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
       print("Index - ${event.index}");
       print(question.selectedOptions.toString());
       print(question.selectedIndex);
+      print(question.otherText);
       if(question.type == StringsConstants.QUES_TYPE_MULTI) {
         if(question.selectedOptions.contains(1) || question.otherText.isNotEmpty) {
           if(currentIndex == quesList.length - 1) {

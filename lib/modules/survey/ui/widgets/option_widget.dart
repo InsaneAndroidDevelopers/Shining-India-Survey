@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
@@ -20,6 +22,7 @@ class _OptionWidgetState extends State<OptionWidget> {
 
   double currentValue = 0;
   final othersController = TextEditingController();
+  ValueNotifier<bool> isOthersShown = ValueNotifier(false);
 
   @override
   void initState() {
@@ -71,7 +74,7 @@ class _OptionWidgetState extends State<OptionWidget> {
                 child: Slider(
                   min: 0,
                   max: 4,
-                  divisions: widget.question.options?.length ?? 1 - 1 ,
+                  divisions: (widget.question.options?.length ?? 1) - 1 ,
                   onChanged: (value) {
                     setState(() {
                       currentValue = value;
@@ -96,8 +99,24 @@ class _OptionWidgetState extends State<OptionWidget> {
                          } else {
                            widget.question.selectedOptions[index] = 0;
                          }
+                         if(widget.question.options?[index].toLowerCase() == 'others') {
+                           if(isOthersShown.value == true) {
+                             isOthersShown.value = false;
+                             othersController.text = '';
+                           } else {
+                             isOthersShown.value = true;
+                           }
+                         }
                        } else if(widget.question.type == StringsConstants.QUES_TYPE_SINGLE) {
                          widget.question.selectedIndex = index;
+                         if(widget.question.options?[index].toLowerCase() == 'others') {
+                           if(isOthersShown.value == true) {
+                             isOthersShown.value = false;
+                             othersController.text = '';
+                           } else {
+                             isOthersShown.value = true;
+                           }
+                         }
                        }
                     });
                   },
@@ -112,38 +131,45 @@ class _OptionWidgetState extends State<OptionWidget> {
             ),
           ),
           SizedBox(height: 20,),
-          if (widget.question.other == true)
-            TextField(
-                controller: othersController,
-                onChanged: (value){
-                  if(othersController.text != value){
-                    widget.question.otherText = value;
-                  }
-                },
-                keyboardType: TextInputType.text,
-                style: const TextStyle(
-                  fontSize: 14,
-                    fontFamily: 'Poppins',
-                    color: AppColors.textBlack
-                ),
-                cursorColor: AppColors.lightBlack,
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(12),
-                  fillColor: AppColors.primary,
-                  filled: true,
-                  labelText: 'Others',
-                  labelStyle: const TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 14,
-                    color: AppColors.lightBlack
-                  ),
-                  border: outlineBorder,
-                  disabledBorder: outlineBorder,
-                  errorBorder: outlineBorder,
-                  focusedBorder: outlineBorder,
-                  focusedErrorBorder: outlineBorder,
-                  enabledBorder: outlineBorder,
-                ),
+            ValueListenableBuilder(
+              valueListenable: isOthersShown,
+              builder: (context, value, child) {
+                if(isOthersShown.value) {
+                  return TextField(
+                    controller: othersController,
+                    onChanged: (value){
+                        widget.question.otherText = othersController.text;
+                        print(widget.question.otherText);
+                    },
+                    keyboardType: TextInputType.text,
+                    style: const TextStyle(
+                        fontSize: 14,
+                        fontFamily: 'Poppins',
+                        color: AppColors.textBlack
+                    ),
+                    cursorColor: AppColors.lightBlack,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(12),
+                      fillColor: AppColors.primary,
+                      filled: true,
+                      labelText: 'Others',
+                      labelStyle: const TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 14,
+                          color: AppColors.lightBlack
+                      ),
+                      border: outlineBorder,
+                      disabledBorder: outlineBorder,
+                      errorBorder: outlineBorder,
+                      focusedBorder: outlineBorder,
+                      focusedErrorBorder: outlineBorder,
+                      enabledBorder: outlineBorder,
+                    ),
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              },
             ),
         ],
       ),
