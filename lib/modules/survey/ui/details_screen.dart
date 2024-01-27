@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
+import 'package:shining_india_survey/modules/survey/ui/widgets/show_dialog_widget.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/modules/survey/ui/survey_screen.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
@@ -112,7 +114,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 backgroundColor: Colors.red
               ).show();
             } else if (state is SurveyDataFetchedState) {
-              context.go(RouteNames.surveyScreen);
+              showAlertDialog(context);
             } else if (state is SurveyLocationFetchedState) {
               pinController.text = state.pinCode;
               districtController.text = state.district;
@@ -660,6 +662,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   ),
                                   keyboardType: TextInputType.number,
                                   cursorColor: AppColors.lightBlack,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
                                   decoration: InputDecoration(
                                     fillColor: Colors.white,
                                     filled: true,

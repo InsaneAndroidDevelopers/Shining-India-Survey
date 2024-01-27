@@ -6,6 +6,7 @@ class RouteNames {
   static const String surveyorHomeScreen = '/surveyor_home_screen';
   static const String detailsScreen = '/details_screen';
   static const String surveyScreen = '/survey_screen';
+  static const String surveyListScreen = '/survey_list_screen';
   static const String additionalDetailsScreen = '/additional_details_screen';
   static const String surveyResultScreen = '/survey_result_screen';
   static const String surveyorMapDetailsScreen = '/surveyor_map_details_screen';

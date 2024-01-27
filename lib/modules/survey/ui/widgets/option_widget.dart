@@ -99,7 +99,8 @@ class _OptionWidgetState extends State<OptionWidget> {
                          } else {
                            widget.question.selectedOptions[index] = 0;
                          }
-                         if(widget.question.options?[index].toLowerCase() == 'others') {
+                         if(widget.question.options?[index].toLowerCase() == 'others' ||
+                             widget.question.options?[index].toLowerCase() == 'other') {
                            if(isOthersShown.value == true) {
                              isOthersShown.value = false;
                              othersController.text = '';
@@ -109,7 +110,8 @@ class _OptionWidgetState extends State<OptionWidget> {
                          }
                        } else if(widget.question.type == StringsConstants.QUES_TYPE_SINGLE) {
                          widget.question.selectedIndex = index;
-                         if(widget.question.options?[index].toLowerCase() == 'others') {
+                         if(widget.question.options?[index].toLowerCase() == 'others' ||
+                             widget.question.options?[index].toLowerCase() == 'other') {
                            if(isOthersShown.value == true) {
                              isOthersShown.value = false;
                              othersController.text = '';

@@ -31,7 +31,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
             }
           }
           if(e.otherText.isNotEmpty) {
-            answers.add('Others_${e.otherText}');
+            answers.add('_${e.otherText}');
           }
         } else if(e.type == StringsConstants.QUES_TYPE_SINGLE) {
           if(e.selectedIndex != -1) {

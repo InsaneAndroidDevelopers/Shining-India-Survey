@@ -95,7 +95,9 @@ class _AdminCreateUpdateSurveyorScreenState
               context.go(RouteNames.adminHomeScreen);
             } else if(state is AllTeamsFetchedState) {
               _teamsNotifier.value = state.teams;
-              team = _teamsNotifier.value[0].id;
+              if(!widget.isUpdate) {
+                team = _teamsNotifier.value[0].id;
+              }
             }
           },
           builder: (context, state) {
