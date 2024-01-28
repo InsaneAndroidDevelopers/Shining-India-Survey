@@ -37,14 +37,14 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
           if(e.selectedIndex != -1) {
             answers.add(e.options?[e.selectedIndex] ?? '');
             if(e.otherText.isNotEmpty) {
-              answers.add(e.otherText);
+              answers.add('_${e.otherText}');
             }
           }
         } else if(e.type == StringsConstants.QUES_TYPE_SLIDER) {
           if(e.selectedIndex != -1) {
             answers.add(e.options?[e.selectedIndex] ?? '');
             if(e.otherText.isNotEmpty) {
-              answers.add(e.otherText);
+              answers.add('_${e.otherText}');
             }
           }
         }
@@ -69,7 +69,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
       } on AppExceptionDio catch(e) {
         emit(SurveyErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(SurveyErrorState(message: 'Something went wrong'));
+        emit(SurveyErrorState(message: e.response?.data['error'] ?? 'Something went wrong'));
       } catch(e) {
         emit(SurveyErrorState(message: 'Something went wrong'));
       }
@@ -104,7 +104,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
       } on AppExceptionDio catch(e) {
         emit(SurveyErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(SurveyErrorState(message: 'Something went wrong'));
+        emit(SurveyErrorState(message: e.response?.data['error'] ?? 'Something went wrong'));
       } catch(e) {
         emit(SurveyErrorState(message: 'Something went wrong'));
       }
@@ -188,7 +188,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
       } on AppExceptionDio catch(e) {
         emit(SurveyErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(SurveyErrorState(message: 'Something went wrong'));
+        emit(SurveyErrorState(message: e.response?.data['error'] ?? 'Something went wrong'));
       } catch(e) {
         emit(SurveyErrorState(message: e.toString()));
       }
@@ -203,7 +203,7 @@ class SurveyBloc extends Bloc<SurveyEvent, SurveyState> {
       } on AppExceptionDio catch(e) {
         emit(SurveyErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(SurveyErrorState(message: 'Something went wrong'));
+        emit(SurveyErrorState(message: e.response?.data['error'] ?? 'Something went wrong'));
       } catch(e) {
         emit(SurveyErrorState(message: e.toString()));
       }

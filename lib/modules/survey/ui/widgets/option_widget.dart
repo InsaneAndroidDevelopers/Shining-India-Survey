@@ -109,16 +109,20 @@ class _OptionWidgetState extends State<OptionWidget> {
                            }
                          }
                        } else if(widget.question.type == StringsConstants.QUES_TYPE_SINGLE) {
-                         widget.question.selectedIndex = index;
+                         if(index == widget.question.selectedIndex) {
+                           return;
+                         }
                          if(widget.question.options?[index].toLowerCase() == 'others' ||
                              widget.question.options?[index].toLowerCase() == 'other') {
+                           isOthersShown.value = true;
+                         } else {
                            if(isOthersShown.value == true) {
                              isOthersShown.value = false;
                              othersController.text = '';
-                           } else {
-                             isOthersShown.value = true;
                            }
                          }
+                         widget.question.selectedIndex = index;
+
                        }
                     });
                   },

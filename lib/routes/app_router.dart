@@ -151,6 +151,7 @@ class AppRouter {
             name: state.uri.queryParameters['name'] as String,
             surveyorId: state.uri.queryParameters['surveyorId'] as String,
             teamId: state.uri.queryParameters['teamId'] as String,
+            teamName: state.uri.queryParameters['teamName'] as String,
             email: state.uri.queryParameters['email'] as String
           );
         },

@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
+import 'package:shining_india_survey/helpers/hive_db_helper.dart';
 import 'package:shining_india_survey/modules/survey_analysis/core/models/analysis_response_model.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -51,7 +52,7 @@ class _AnalysisDetailState extends State<AnalysisDetail> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.analysisResponseModel.sId ?? '-',
+            HiveDbHelper.getBox().get(widget.analysisResponseModel.sId) ?? '-',
             style: const TextStyle(
               fontFamily: 'Poppins',
               fontSize: 16,

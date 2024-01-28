@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shining_india_survey/helpers/hive_db_helper.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/question_reponse_holder.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
@@ -36,7 +37,7 @@ class SurveyResponsesScreen extends StatelessWidget {
                 child: ListView.builder(
                   itemBuilder: (context, index) {
                     return QuestionResponseHolder(
-                      questionText: responses[index].questionId ?? '',
+                      questionText: HiveDbHelper.getBox().get(responses[index].questionId) ?? '',
                       answers: responses[index].answer ?? []
                     );
                   },

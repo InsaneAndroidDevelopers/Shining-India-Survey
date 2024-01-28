@@ -22,7 +22,7 @@ class UnassignedSurveyorBloc extends Bloc<UnassignedSurveyorEvent, UnassignedSur
       } on AppExceptionDio catch(e) {
         emit(UnassignedSurveyorError(message: e.message));
       } on DioException catch(e) {
-        emit(UnassignedSurveyorError(message: 'Something went wrong'));
+        emit(UnassignedSurveyorError(message: e.response?.data['error'] ?? 'Something went wrong'));
       } catch(e) {
         emit(UnassignedSurveyorError(message: 'Something went wrong'));
       }

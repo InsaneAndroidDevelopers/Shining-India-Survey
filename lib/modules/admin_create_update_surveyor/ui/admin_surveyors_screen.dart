@@ -55,10 +55,11 @@ class _AdminSurveyorScreenState extends State<AdminSurveyorScreen> {
                             RouteNames.adminCreateUpdateSurveyorScreen,
                             queryParameters: {
                               'isUpdate': 'false',
-                              'isActive': 'false',
+                              'isActive': 'true',
                               'name': '',
                               'surveyorId': '',
                               'teamId': widget.teamId,
+                              'teamName': widget.teamName,
                               'email': ''
                             },
                         );
@@ -127,6 +128,7 @@ class _AdminSurveyorScreenState extends State<AdminSurveyorScreen> {
                             'name': widget.surveyors[index].name,
                             'surveyorId': widget.surveyors[index].surveyorId,
                             'teamId': widget.teamId,
+                            'teamName': widget.teamName,
                             'email': widget.surveyors[index].email
                           },
                         );

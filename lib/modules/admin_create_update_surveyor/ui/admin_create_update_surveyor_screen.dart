@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,10 +20,11 @@ class AdminCreateUpdateSurveyorScreen extends StatefulWidget {
   final bool isActive;
   final String surveyorId;
   final String teamId;
+  final String teamName;
   final String email;
 
   const AdminCreateUpdateSurveyorScreen(
-      {super.key, required this.isUpdate, required this.name, required this.surveyorId, required this.teamId, required this.email, required this.isActive});
+      {super.key, required this.isUpdate, required this.name, required this.surveyorId, required this.teamName, required this.email, required this.isActive, required this.teamId});
 
   @override
   State<AdminCreateUpdateSurveyorScreen> createState() =>
@@ -35,12 +38,14 @@ class _AdminCreateUpdateSurveyorScreenState
   final userNameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final teamController = TextEditingController();
 
   bool isPasswordVisible = false;
   String? team;
 
   ValueNotifier<List<TeamModel>> _teamsNotifier = ValueNotifier([]);
   ValueNotifier<bool> activeNotifier = ValueNotifier(true);
+  ValueNotifier<bool> isPasswordFieldVisible = ValueNotifier(false);
 
   String? _validateEmail(String? email) {
     if (email != null) {
@@ -68,10 +73,16 @@ class _AdminCreateUpdateSurveyorScreenState
   void initState() {
     super.initState();
     team = widget.teamId;
+    teamController.text = widget.teamName;
     userNameController.text = widget.name;
     emailController.text = widget.email;
     activeNotifier.value = widget.isActive;
-    context.read<CreateUpdateSurveyorBloc>().add(GetAllTeamsData());
+    !widget.isUpdate
+      ? isPasswordFieldVisible.value = true
+      : isPasswordFieldVisible.value = false;
+    !widget.isUpdate
+        ? context.read<CreateUpdateSurveyorBloc>().add(GetAllTeamsData())
+        : null;
   }
 
   @override
@@ -258,8 +269,37 @@ class _AdminCreateUpdateSurveyorScreenState
                             SizedBox(
                               height: 10,
                             ),
-                            _teamsNotifier.value.isNotEmpty
-                            ? ValueListenableBuilder(
+                            widget.isUpdate==true
+                              ? TextFormField(
+                                enabled: !widget.isUpdate,
+                                controller: teamController,
+                                style: const TextStyle(
+                                    fontFamily: 'Poppins',
+                                    color: AppColors.textBlack),
+                                keyboardType: TextInputType.emailAddress,
+                                cursorColor: AppColors.lightBlack,
+                                decoration: InputDecoration(
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  labelText: 'Team',
+                                  prefixIcon: const Icon(
+                                    Icons.groups_2_rounded,
+                                    color: AppColors.textBlack,
+                                  ),
+                                  labelStyle: const TextStyle(
+                                      fontFamily: 'Poppins',
+                                      fontSize: 14,
+                                      color: AppColors.lightBlack),
+                                  border: outlineBorder,
+                                  disabledBorder: outlineBorder,
+                                  errorBorder: outlineBorder,
+                                  focusedBorder: outlineBorder,
+                                  focusedErrorBorder: outlineBorder,
+                                  enabledBorder: outlineBorder,
+                                ),
+                            )
+                            :_teamsNotifier.value.isNotEmpty
+                             ? ValueListenableBuilder(
                               valueListenable: _teamsNotifier,
                               builder: (context, value, child) {
                                 return DropdownButtonFormField(
@@ -305,7 +345,7 @@ class _AdminCreateUpdateSurveyorScreenState
                                 );
                               },
                             )
-                            : DropdownButtonFormField(
+                             : DropdownButtonFormField(
                               isExpanded: true,
                               decoration: InputDecoration(
                                 fillColor: Colors.white,
@@ -346,60 +386,76 @@ class _AdminCreateUpdateSurveyorScreenState
                             SizedBox(
                               height: 10,
                             ),
-                            widget.isUpdate==false
-                            ? ValueListenableBuilder(
-                              valueListenable: passwordController,
+                            ValueListenableBuilder(
+                              valueListenable: isPasswordFieldVisible,
                               builder: (context, value, child) {
-                                return TextFormField(
-                                    controller: passwordController,
-                                    keyboardType: TextInputType.text,
-                                    style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: AppColors.textBlack),
-                                    cursorColor: AppColors.lightBlack,
-                                    obscureText: !isPasswordVisible,
-                                    decoration: InputDecoration(
-                                      fillColor: Colors.white,
-                                      filled: true,
-                                      labelText: 'Password',
-                                      labelStyle: const TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 14,
-                                          color: AppColors.lightBlack),
-                                      prefixIcon: const Icon(
-                                        Icons.key_rounded,
-                                        color: AppColors.textBlack,
-                                      ),
-                                      suffixIcon: IconButton(
-                                        icon: Icon(
-                                          isPasswordVisible
-                                              ? Icons.visibility
-                                              : Icons.visibility_off,
-                                          color: AppColors.textBlack,
-                                        ),
-                                        onPressed: () {
-                                          setState(() {
-                                            isPasswordVisible =
-                                            !isPasswordVisible;
-                                          });
-                                        },
-                                      ),
-                                      border: outlineBorder,
-                                      disabledBorder: outlineBorder,
-                                      errorBorder: outlineBorder,
-                                      focusedBorder: outlineBorder,
-                                      focusedErrorBorder: outlineBorder,
-                                      enabledBorder: outlineBorder,
+                                return Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Expanded(
+                                      child: TextFormField(
+                                          controller: passwordController,
+                                          enabled: isPasswordFieldVisible.value,
+                                          keyboardType: TextInputType.text,
+                                          style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              color: AppColors.textBlack),
+                                          cursorColor: AppColors.lightBlack,
+                                          obscureText: !isPasswordVisible,
+                                          decoration: InputDecoration(
+                                            fillColor: isPasswordFieldVisible.value ? Colors.white : AppColors.dividerColor,
+                                            filled: true,
+                                            labelText: 'Password',
+                                            labelStyle: const TextStyle(
+                                                fontFamily: 'Poppins',
+                                                fontSize: 14,
+                                                color: AppColors.lightBlack),
+                                            prefixIcon: const Icon(
+                                              Icons.key_rounded,
+                                              color: AppColors.textBlack,
+                                            ),
+                                            suffixIcon: IconButton(
+                                              icon: Icon(
+                                                isPasswordVisible
+                                                    ? Icons.visibility
+                                                    : Icons.visibility_off,
+                                                color: AppColors.textBlack,
+                                              ),
+                                              onPressed: () {
+                                                setState(() {
+                                                  isPasswordVisible =
+                                                  !isPasswordVisible;
+                                                });
+                                              },
+                                            ),
+                                            border: outlineBorder,
+                                            disabledBorder: outlineBorder,
+                                            errorBorder: outlineBorder,
+                                            focusedBorder: outlineBorder,
+                                            focusedErrorBorder: outlineBorder,
+                                            enabledBorder: outlineBorder,
+                                          ),
+                                          autovalidateMode:
+                                          AutovalidateMode.onUserInteraction,
+                                          validator: isPasswordFieldVisible.value
+                                            ? _validatePassword
+                                            : null),
                                     ),
-                                    autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                    validator: _validatePassword);
+                                    widget.isUpdate==true ? IconButton(
+                                      onPressed: (){
+                                        isPasswordFieldVisible.value = !isPasswordFieldVisible.value;
+                                      },
+                                      icon: Icon(Icons.edit)
+                                    ) : SizedBox.shrink()
+                                  ],
+                                );
                               },
-                            ) : SizedBox.shrink(),
+                            ),
                             SizedBox(
                               height: 10,
                             ),
-                            Row(
+                            widget.isUpdate==true
+                            ? Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
@@ -424,7 +480,7 @@ class _AdminCreateUpdateSurveyorScreenState
                                   },
                                 ),
                               ],
-                            ),
+                            ) : SizedBox.shrink(),
                             SizedBox(height: 10,),
                             widget.isUpdate==false
                             ? CustomButton(
@@ -457,7 +513,9 @@ class _AdminCreateUpdateSurveyorScreenState
                                       UpdateSurveyor(
                                         isActive: activeNotifier.value,
                                         surveyorId: widget.surveyorId,
-                                        teamId: team ?? ''
+                                        password: isPasswordFieldVisible.value
+                                          ? passwordController.text
+                                          : null
                                       )
                                   );
                                 }

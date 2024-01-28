@@ -81,14 +81,13 @@ class CreateUpdateSurveyorRepository {
     return false;
   }
 
-  Future<bool> updateSurveyorStatus({required String surveyorId, required bool isActive, required String teamId}) async  {
+  Future<bool> updateSurveyorStatus({required String surveyorId, required bool isActive, String? password}) async  {
     final token = await SharedPreferencesHelper.getUserToken();
     final Response response = await _networkService.put(
-        path: AppUrls.adminUpdateSurveyor,
+        path: '${AppUrls.adminUpdateSurveyor}/$surveyorId',
         data: {
-          'surveyorId': surveyorId,
           'active': isActive,
-          'teamId': teamId
+          'password': password ?? ''
         },
         token: token
     );

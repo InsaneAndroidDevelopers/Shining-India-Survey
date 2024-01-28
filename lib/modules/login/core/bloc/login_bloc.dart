@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hive/hive.dart';
 import 'package:shining_india_survey/helpers/hive_db_helper.dart';
 import 'package:shining_india_survey/helpers/shared_pref_helper.dart';
 import 'package:shining_india_survey/modules/login/core/models/admin_response_model.dart';
@@ -38,7 +39,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } on AppExceptionDio catch(e) {
         emit(ErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(ErrorState(message: 'Please try again'));
+        emit(ErrorState(message: e.response?.data['error'] ?? 'Something went wrong'));
       } catch(e) {
         emit(const ErrorState(message: 'Some error occurred'));
       }
@@ -63,7 +64,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } on AppExceptionDio catch(e) {
         emit(ErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(ErrorState(message: 'Something went wrong'));
+        emit(ErrorState(message: e.response?.data['error'] ?? 'Something went wrong'));
       } catch(e) {
         emit(const ErrorState(message: 'Something went wrong'));
       }
@@ -77,10 +78,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         for(var item in list) {
           questionWithIds[item.id ?? ''] = item.question ?? '';
         }
+        await HiveDbHelper.insertData(questionWithIds);
       } on AppExceptionDio catch(e) {
         emit(ErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(ErrorState(message: 'Something went wrong'));
+        emit(ErrorState(message: e.response?.data['error'] ?? 'Something went wrong'));
       } catch(e) {
         emit(const ErrorState(message: 'Something went wrong'));
       }

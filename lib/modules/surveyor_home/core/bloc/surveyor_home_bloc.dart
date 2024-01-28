@@ -26,7 +26,7 @@ class SurveyorHomeBloc extends Bloc<SurveyorHomeEvent, SurveyorHomeState> {
       } on AppExceptionDio catch(e) {
         emit(SurveyorHomeErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(const SurveyorHomeErrorState(message: 'Something went wrong'));
+        emit(SurveyorHomeErrorState(message: e.response?.data['error'] ?? 'Something went wrong'));
       } catch(e) {
         emit(SurveyorHomeErrorState(message: e.toString()));
       }
@@ -43,7 +43,7 @@ class SurveyorHomeBloc extends Bloc<SurveyorHomeEvent, SurveyorHomeState> {
       } on AppExceptionDio catch(e) {
         emit(SurveyorLogoutErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(SurveyorLogoutErrorState(message: 'Something went wrong'));
+        emit(SurveyorLogoutErrorState(message: e.response?.data['error'] ?? 'Something went wrong'));
       } catch(e) {
         emit(SurveyorLogoutErrorState(message: e.toString()));
       }

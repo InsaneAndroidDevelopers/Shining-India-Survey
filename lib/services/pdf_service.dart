@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:open_document/open_document.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
+import 'package:shining_india_survey/helpers/hive_db_helper.dart';
 import 'package:shining_india_survey/modules/survey_analysis/core/models/analysis_response_model.dart';
 import '../modules/survey_analysis/ui/admin_survey_analysis_screen.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -76,7 +77,7 @@ class PdfService {
               crossAxisAlignment: pw.CrossAxisAlignment.center,
               children: [
                 pw.Text(
-                  data[index].sId ?? '-',
+                  HiveDbHelper.getBox().get(data[index].sId) ?? '-',
                 ),
                 pw.Container(
                   child: pw.Image(
