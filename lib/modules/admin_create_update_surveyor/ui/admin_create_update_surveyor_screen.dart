@@ -98,6 +98,8 @@ class _AdminCreateUpdateSurveyorScreenState
           listener: (context, state) {
             if(state is SurveyorAddedState) {
               context.go(RouteNames.adminHomeScreen);
+            } if(state is SurveyorUpdatedState) {
+              context.go(RouteNames.adminHomeScreen);
             } else if(state is CreateUpdateSurveyorError) {
               CustomFlushBar(
                 message: state.message,
