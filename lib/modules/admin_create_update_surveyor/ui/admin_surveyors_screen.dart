@@ -55,6 +55,7 @@ class _AdminSurveyorScreenState extends State<AdminSurveyorScreen> {
                             RouteNames.adminCreateUpdateSurveyorScreen,
                             queryParameters: {
                               'isUpdate': 'false',
+                              'isActive': 'false',
                               'name': '',
                               'surveyorId': '',
                               'teamId': widget.teamId,
@@ -90,7 +91,7 @@ class _AdminSurveyorScreenState extends State<AdminSurveyorScreen> {
                           color: AppColors.dividerColor,
                           borderRadius: BorderRadius.circular(12)
                       ),
-                      child: Column(
+                      child: const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
@@ -105,41 +106,6 @@ class _AdminSurveyorScreenState extends State<AdminSurveyorScreen> {
                                 color: AppColors.textBlack
                             ),
                           ),
-                          SizedBox(height: 6,),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical: 10),
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: AppColors.primaryBlue
-                                      ),
-                                      borderRadius: BorderRadius.circular(12)
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(Icons.add, color: AppColors.primaryBlue,),
-                                      SizedBox(width: 2,),
-                                      Text(
-                                        'Add',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontFamily: 'Poppins',
-                                            color: AppColors.primaryBlue
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -157,6 +123,7 @@ class _AdminSurveyorScreenState extends State<AdminSurveyorScreen> {
                           RouteNames.adminCreateUpdateSurveyorScreen,
                           queryParameters: {
                             'isUpdate': 'true',
+                            'isActive': widget.surveyors[index].active.toString(),
                             'name': widget.surveyors[index].name,
                             'surveyorId': widget.surveyors[index].surveyorId,
                             'teamId': widget.teamId,
@@ -166,6 +133,38 @@ class _AdminSurveyorScreenState extends State<AdminSurveyorScreen> {
                       },
                     );
                   },
+                ),
+              ),
+              SizedBox(height: 10,),
+              GestureDetector(
+                onTap: (){
+                  context.push(RouteNames.adminUnassignedSurveyorsScreen);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(14),
+                  margin: EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(14)
+                  ),
+                  child: const Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Select from unassigned',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 16,
+                            color: AppColors.textBlack,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 20,),
+                      Icon(Icons.arrow_forward_ios, color: AppColors.black)
+                    ],
+                  ),
                 ),
               )
             ],

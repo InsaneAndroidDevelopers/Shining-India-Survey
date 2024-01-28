@@ -80,4 +80,21 @@ class CreateUpdateSurveyorRepository {
     }
     return false;
   }
+
+  Future<bool> updateSurveyorStatus({required String surveyorId, required bool isActive, required String teamId}) async  {
+    final token = await SharedPreferencesHelper.getUserToken();
+    final Response response = await _networkService.put(
+        path: AppUrls.adminUpdateSurveyor,
+        data: {
+          'surveyorId': surveyorId,
+          'active': isActive,
+          'teamId': teamId
+        },
+        token: token
+    );
+    if(response.statusCode == 200) {
+      return true;
+    }
+    return false;
+  }
 }

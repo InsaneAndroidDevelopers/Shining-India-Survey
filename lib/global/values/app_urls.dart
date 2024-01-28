@@ -12,6 +12,8 @@ class AppUrls {
   static const String adminDeleteSurveyor = '/team/removeFromTeam';
   static const String adminFilterSurveys = '/survey/filter';
   static const String adminAnalyseSurveys = '/survey/analyse';
+  static const String adminUnassignedSurveyors = '/surveyor/unassigned';
+  static const String adminUpdateSurveyor = '/surveyor/update';
 
   //surveyor
   static const String surveyorLogin = '/auth/surveyor';

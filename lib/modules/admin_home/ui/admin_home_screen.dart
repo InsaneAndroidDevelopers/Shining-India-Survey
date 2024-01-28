@@ -156,6 +156,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                                   RouteNames.adminCreateUpdateSurveyorScreen,
                                   queryParameters: {
                                     'isUpdate': 'false',
+                                    'isActive': 'false',
                                     'name': '',
                                     'surveyorId': '',
                                     'teamId': '',

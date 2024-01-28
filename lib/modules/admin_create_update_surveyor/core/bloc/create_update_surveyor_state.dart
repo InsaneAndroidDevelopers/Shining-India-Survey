@@ -44,3 +44,8 @@ class SurveyorDeletedState extends CreateUpdateSurveyorState {
   @override
   List<Object> get props => [];
 }
+
+class SurveyorUpdatedState extends CreateUpdateSurveyorState {
+  @override
+  List<Object> get props => [];
+}

@@ -47,6 +47,11 @@ class AddSurveyorIntoTeam extends CreateUpdateSurveyorEvent {
 }
 
 class UpdateSurveyor extends CreateUpdateSurveyorEvent {
+  final bool isActive;
+  final String surveyorId;
+  final String teamId;
+
+  const UpdateSurveyor({required this.isActive, required this.surveyorId, required this.teamId});
   @override
   List<Object?> get props => [];
 }

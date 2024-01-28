@@ -1,9 +1,11 @@
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/admin_create_update_surveyor_screen.dart';
+import 'package:shining_india_survey/modules/admin_reassign_surveyor/ui/admin_unassigned_surveyor_screen.dart';
 import 'package:shining_india_survey/modules/admin_home/ui/admin_home_screen.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/admin_surveyors_screen.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/admin_teams_screen.dart';
+import 'package:shining_india_survey/modules/admin_reassign_surveyor/ui/reassign_surveyor_screen.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/filled_surveys.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/survey_detail_screen.dart';
@@ -122,11 +124,30 @@ class AppRouter {
         },
       ),
       GoRoute(
+        name: RouteNames.adminReassignSurveyorsScreen,
+        path: RouteNames.adminReassignSurveyorsScreen,
+        builder: (context, state) {
+          return ReassignSurveyorScreen(
+            name: state.uri.queryParameters['name'] as String,
+            surveyorId: state.uri.queryParameters['surveyorId'] as String,
+            email: state.uri.queryParameters['email'] as String
+          );
+        },
+      ),
+      GoRoute(
+        name: RouteNames.adminUnassignedSurveyorsScreen,
+        path: RouteNames.adminUnassignedSurveyorsScreen,
+        builder: (context, state) {
+          return const AdminUnassignedSurveyorsScreen();
+        },
+      ),
+      GoRoute(
         name: RouteNames.adminCreateUpdateSurveyorScreen,
         path: RouteNames.adminCreateUpdateSurveyorScreen,
         builder: (context, state) {
           return AdminCreateUpdateSurveyorScreen(
             isUpdate: bool.parse(state.uri.queryParameters['isUpdate'] ?? 'false'),
+            isActive: bool.parse(state.uri.queryParameters['isActive'] ?? 'false'),
             name: state.uri.queryParameters['name'] as String,
             surveyorId: state.uri.queryParameters['surveyorId'] as String,
             teamId: state.uri.queryParameters['teamId'] as String,

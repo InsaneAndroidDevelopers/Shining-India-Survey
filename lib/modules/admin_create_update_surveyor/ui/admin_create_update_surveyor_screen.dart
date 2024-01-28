@@ -15,12 +15,13 @@ import 'package:shining_india_survey/global/widgets/loader.dart';
 class AdminCreateUpdateSurveyorScreen extends StatefulWidget {
   final bool isUpdate;
   final String name;
+  final bool isActive;
   final String surveyorId;
   final String teamId;
   final String email;
 
   const AdminCreateUpdateSurveyorScreen(
-      {super.key, required this.isUpdate, required this.name, required this.surveyorId, required this.teamId, required this.email});
+      {super.key, required this.isUpdate, required this.name, required this.surveyorId, required this.teamId, required this.email, required this.isActive});
 
   @override
   State<AdminCreateUpdateSurveyorScreen> createState() =>
@@ -39,6 +40,7 @@ class _AdminCreateUpdateSurveyorScreenState
   String? team;
 
   ValueNotifier<List<TeamModel>> _teamsNotifier = ValueNotifier([]);
+  ValueNotifier<bool> activeNotifier = ValueNotifier(true);
 
   String? _validateEmail(String? email) {
     if (email != null) {
@@ -68,6 +70,7 @@ class _AdminCreateUpdateSurveyorScreenState
     team = widget.teamId;
     userNameController.text = widget.name;
     emailController.text = widget.email;
+    activeNotifier.value = widget.isActive;
     context.read<CreateUpdateSurveyorBloc>().add(GetAllTeamsData());
   }
 
@@ -396,6 +399,33 @@ class _AdminCreateUpdateSurveyorScreenState
                             SizedBox(
                               height: 10,
                             ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Status',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Poppins',
+                                    color: AppColors.textBlack,
+                                    fontWeight: FontWeight.w600
+                                  ),
+                                ),
+                                ValueListenableBuilder(
+                                  valueListenable: activeNotifier,
+                                  builder: (context, value, child) {
+                                    return Switch(
+                                      activeColor: AppColors.primaryBlue,
+                                      value: activeNotifier.value,
+                                      onChanged: (val){
+                                        activeNotifier.value = val;
+                                      }
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10,),
                             widget.isUpdate==false
                             ? CustomButton(
                               onTap: () {
@@ -419,7 +449,29 @@ class _AdminCreateUpdateSurveyorScreenState
                                     fontWeight: FontWeight.w600
                                 ),
                               ),
-                            ) : SizedBox.shrink()
+                            )
+                                : CustomButton(
+                              onTap: () {
+                                if(_formKey.currentState!.validate() && (team != null && team != '')) {
+                                  context.read<CreateUpdateSurveyorBloc>().add(
+                                      UpdateSurveyor(
+                                        isActive: activeNotifier.value,
+                                        surveyorId: widget.surveyorId,
+                                        teamId: team ?? ''
+                                      )
+                                  );
+                                }
+                              },
+                              child: const Text(
+                                'Update',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Poppins',
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w600
+                                ),
+                              ),
+                            )
                           ],
                         ),
                       ),

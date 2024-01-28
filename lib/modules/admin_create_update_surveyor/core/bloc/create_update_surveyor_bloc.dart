@@ -110,5 +110,22 @@ class CreateUpdateSurveyorBloc extends Bloc<CreateUpdateSurveyorEvent, CreateUpd
         emit(CreateUpdateSurveyorError(message: e.toString()));
       }
     });
+
+    on<UpdateSurveyor>((event, emit) async {
+      try {
+        final isUpdated = await createUpdateSurveyorRepository.updateSurveyorStatus(isActive: event.isActive, surveyorId: event.surveyorId, teamId: event.teamId);
+        if(isUpdated) {
+          emit(SurveyorUpdatedState());
+        } else {
+          emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
+        }
+      } on AppExceptionDio catch(e) {
+        emit(CreateUpdateSurveyorError(message: e.message));
+      } on DioException catch(e) {
+        emit(CreateUpdateSurveyorError(message: 'Something went wrong'));
+      } catch(e) {
+        emit(CreateUpdateSurveyorError(message: e.toString()));
+      }
+    });
   }
 }

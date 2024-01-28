@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:shining_india_survey/helpers/hive_db_helper.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
 import 'package:shining_india_survey/modules/admin_home/core/bloc/admin_home_bloc.dart';
+import 'package:shining_india_survey/modules/admin_reassign_surveyor/core/bloc/unassigned_surveyor_bloc.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/bloc/filled_survey_bloc.dart';
 import 'package:shining_india_survey/modules/login/core/bloc/login_bloc.dart';
 import 'package:shining_india_survey/modules/splash/core/bloc/splash_bloc.dart';
@@ -55,6 +56,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => AnalysisBloc(),
+        ),
+        BlocProvider(
+          create: (context) => UnassignedSurveyorBloc(),
         )
       ],
       child: MaterialApp.router(
