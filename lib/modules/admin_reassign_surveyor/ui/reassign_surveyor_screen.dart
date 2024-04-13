@@ -23,7 +23,7 @@ class _ReassignSurveyorScreenState extends State<ReassignSurveyorScreen> {
 
   final userNameController = TextEditingController();
   final emailController = TextEditingController();
-  ValueNotifier<List<TeamModel>> _teamsNotifier = ValueNotifier([]);
+  final ValueNotifier<List<TeamModel>> _teamsNotifier = ValueNotifier([]);
   String? team;
 
   @override
@@ -61,7 +61,7 @@ class _ReassignSurveyorScreenState extends State<ReassignSurveyorScreen> {
           },
           builder: (context, state) {
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
               child: Column(
                 children: [
                   Padding(
@@ -75,11 +75,11 @@ class _ReassignSurveyorScreenState extends State<ReassignSurveyorScreen> {
                             context.pop();
                           },
                         ),
-                        SizedBox(width: 16,),
+                        const SizedBox(width: 16,),
                         Expanded(
                           child: Text(
                             widget.name,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 28,
                                 color: AppColors.black,
@@ -130,7 +130,7 @@ class _ReassignSurveyorScreenState extends State<ReassignSurveyorScreen> {
                               return null;
                             },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           TextFormField(
@@ -161,7 +161,7 @@ class _ReassignSurveyorScreenState extends State<ReassignSurveyorScreen> {
                               enabledBorder: outlineBorder,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           ValueListenableBuilder(
@@ -232,10 +232,10 @@ class _ReassignSurveyorScreenState extends State<ReassignSurveyorScreen> {
                                   enabledBorder: outlineBorder,
                                 ),
                                 value: 'Unable to fetch teams',
-                                items: [DropdownMenuItem<String>(
+                                items: [const DropdownMenuItem<String>(
                                     child: Text(
                                       'Unable to fetch teams',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 14,
                                           color: AppColors.textBlack),
@@ -249,10 +249,10 @@ class _ReassignSurveyorScreenState extends State<ReassignSurveyorScreen> {
                               );
                             },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           CustomButton(

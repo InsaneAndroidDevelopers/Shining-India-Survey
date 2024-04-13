@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
 import 'package:shining_india_survey/modules/survey/ui/widgets/show_dialog_widget.dart';
-import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/modules/survey/ui/survey_screen.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
 import 'package:shining_india_survey/global/values/array_res.dart';
 import 'package:shining_india_survey/global/widgets/back_button.dart';
@@ -110,7 +107,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               CustomFlushBar(
                 message: state.message,
                 context: context,
-                icon: Icon(Icons.cancel_outlined, color: AppColors.primary),
+                icon: const Icon(Icons.cancel_outlined, color: AppColors.primary),
                 backgroundColor: Colors.red
               ).show();
             } else if (state is SurveyDataFetchedState) {
@@ -119,7 +116,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
               pinController.text = state.pinCode;
               districtController.text = state.district;
               villageController.text = state.village;
-              _dropDownStateValue = state.state ?? '';
+              _dropDownStateValue = state.state;
             }
           },
           builder: (context, state) {
@@ -138,8 +135,8 @@ class _DetailsScreenState extends State<DetailsScreen> {
                             context.pop();
                           },
                         ),
-                        SizedBox(width: 16,),
-                        Expanded(
+                        const SizedBox(width: 16,),
+                        const Expanded(
                           child: Text(
                             'Add details',
                             style: TextStyle(
@@ -160,7 +157,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               'Basic',
                               style: TextStyle(
                                 fontSize: 16,
@@ -168,7 +165,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 fontFamily: 'Poppins',
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 6,
                             ),
                             ValueListenableBuilder(
@@ -236,7 +233,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 )
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             Row(
@@ -264,6 +261,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   items: ArrayResources.genders
                                       .map<DropdownMenuItem<String>>((String item) {
                                     return DropdownMenuItem<String>(
+                                        value: item,
                                         child: Text(
                                           item,
                                           style: const TextStyle(
@@ -271,18 +269,16 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                               fontSize: 14,
                                               color: AppColors.textBlack
                                           ),
-                                        ),
-                                        value: item
+                                        )
                                     );
                                   }).toList(),
                                   onChanged: (value) {
                                     setState(() {
                                       _dropDownGenderValue = value ?? '';
-                                      print(value);
                                     });
                                   },
                                 )),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
@@ -322,13 +318,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                   onChanged: (value) {
                                     setState(() {
                                       _dropDownAgeValue = value ?? 0;
-                                      print(value);
                                     });
                                   },
                                 )),
                               ],
                             ),
-                            SizedBox(height: 10,),
+                            const SizedBox(height: 10,),
                             DropdownButtonFormField(
                               decoration: InputDecoration(
                                 fillColor: Colors.white,
@@ -351,6 +346,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               items: ArrayResources.placeType
                                   .map<DropdownMenuItem<String>>((String item) {
                                 return DropdownMenuItem<String>(
+                                    value: item,
                                     child: Text(
                                       item,
                                       style: const TextStyle(
@@ -358,25 +354,23 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                           fontSize: 14,
                                           color: AppColors.textBlack
                                       ),
-                                    ),
-                                    value: item
+                                    )
                                 );
                               }).toList(),
                               onChanged: (value) {
                                 setState(() {
                                   _dropDownPlaceTypeValue = value ?? '';
-                                  print(value);
                                 });
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 20,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
+                                const Text(
                                   'Address',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -393,10 +387,10 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                     }
                                   },
                                   child: Container(
-                                    padding: EdgeInsets.all(8),
+                                    padding: const EdgeInsets.all(8),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
-                                      gradient: LinearGradient(
+                                      gradient: const LinearGradient(
                                         begin: Alignment.bottomCenter,
                                         end: Alignment.topCenter,
                                         colors: [
@@ -406,14 +400,14 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                       ),
                                     ),
                                     child: state is SurveyLocationLoadingState
-                                    ? SizedBox(
+                                    ? const SizedBox(
                                       height: 18,
                                       width: 80,
                                       child: Center(
                                         child: CircularProgressIndicator(color: AppColors.white, ),
                                       ),
                                     )
-                                    : Row(
+                                    : const Row(
                                       children: [
                                         Icon(
                                           Icons.location_searching_rounded,
@@ -436,7 +430,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             ValueListenableBuilder(
@@ -478,7 +472,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 );
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             ValueListenableBuilder(
@@ -520,7 +514,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 );
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             ValueListenableBuilder(
@@ -562,7 +556,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 );
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             ValueListenableBuilder(
@@ -604,7 +598,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 );
                               }
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             DropdownButtonFormField(
@@ -630,6 +624,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                               items: ArrayResources.states
                                   .map<DropdownMenuItem<String>>((String item) {
                                 return DropdownMenuItem<String>(
+                                    value: item,
                                     child: Text(
                                       item,
                                       style: const TextStyle(
@@ -637,17 +632,15 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                         fontSize: 14,
                                         color: AppColors.textBlack
                                       ),
-                                    ),
-                                    value: item);
+                                    ));
                               }).toList(),
                               onChanged: (value) {
                                 setState(() {
                                   _dropDownStateValue = value ?? '';
-                                  print(value);
                                 });
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             ValueListenableBuilder(
@@ -692,7 +685,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 );
                               }
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             CustomButton(
@@ -728,7 +721,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(height: 10,)
+                            const SizedBox(height: 10,)
                           ],
                         ),
                       ),

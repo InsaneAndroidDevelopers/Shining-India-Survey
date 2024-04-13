@@ -1,12 +1,9 @@
-import 'dart:isolate';
-import 'dart:typed_data';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:shining_india_survey/global/methods/get_gender.dart';
 import 'package:shining_india_survey/global/methods/get_min_max_age.dart';
 import 'package:shining_india_survey/global/methods/get_timestamp_from_date.dart';
@@ -15,7 +12,6 @@ import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/b
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/date_chips.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/gender_chips.dart';
 import 'package:shining_india_survey/modules/survey_analysis/core/bloc/analysis_bloc.dart';
-import 'package:shining_india_survey/modules/survey_analysis/core/models/analysis_response_model.dart';
 import 'package:shining_india_survey/modules/survey_analysis/ui/widgets/age_chips.dart';
 import 'package:shining_india_survey/modules/survey_analysis/ui/widgets/analysis_detail.dart';
 import 'package:shining_india_survey/services/pdf_service.dart';
@@ -23,8 +19,6 @@ import 'package:shining_india_survey/global/values/app_colors.dart';
 import 'package:shining_india_survey/global/values/array_res.dart';
 import 'package:shining_india_survey/global/widgets/back_button.dart';
 import 'package:shining_india_survey/global/widgets/custom_flushbar.dart';
-import 'package:shining_india_survey/global/widgets/loader.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 
 class AdminSurveyAnalysisScreen extends StatefulWidget {
   const AdminSurveyAnalysisScreen({super.key});
@@ -39,6 +33,7 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> w
   ValueNotifier<int> genderIndex = ValueNotifier<int>(0);
   ValueNotifier<int> ageIndex = ValueNotifier<int>(0);
   String? teamId;
+  Map<String, String> teamMap = {};
   String? _dropDownStateValue;
   ValueNotifier<int> dateIndex = ValueNotifier(0);
   List<GlobalKey>? _keys;
@@ -46,7 +41,6 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> w
   @override
   void initState() {
     super.initState();
-
     BlocProvider.of<AnalysisBloc>(context).add(GetAllAnalysis());
     context.read<CreateUpdateSurveyorBloc>().add(GetAllTeamsData());
   }
@@ -169,6 +163,9 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> w
                                         BlocBuilder<CreateUpdateSurveyorBloc, CreateUpdateSurveyorState>(
                                           builder: (context, state) {
                                             if(state is AllTeamsFetchedState) {
+                                              for (var ele in state.teams) {
+                                                teamMap[ele.id ?? ''] = ele.teamName ?? '';
+                                              }
                                               return DropDownTextField(
                                                 prefixIcon: const Icon(
                                                   Icons.person_2_rounded,
@@ -357,8 +354,18 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> w
               if (state.analysisList.isNotEmpty) {
                 return FloatingActionButton(
                   onPressed: () async {
-                    final file = await PdfService().createPdf(state.analysisList);
-                    await PdfService().savePdfFile('Filename', file);
+                    final file = await PdfService().createPdf(
+                        state.analysisList,
+                      maxAge: getMinMaxAgeFromIndex(ageIndex.value).maxAge,
+                      minAge: getMinMaxAgeFromIndex(ageIndex.value).minAge,
+                      fromDate: getTimeStampFromDate(dateIndex.value),
+                      toDate: DateTime.now().toIso8601String(),
+                      gender: getGenderFromIndex(genderIndex.value),
+                      teamID: teamMap[teamId],
+                      state: _dropDownStateValue ?? ''
+                    );
+                    final name = DateFormat("dd-MMM-yyyy hh: mm aa").format(DateTime.now());
+                    await PdfService().savePdfFile('Report $name', file);
                   },
                   child: Icon(Icons.save_alt),
                 );

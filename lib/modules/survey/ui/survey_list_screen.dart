@@ -27,7 +27,7 @@ class _SurveyListScreenState extends State<SurveyListScreen>{
               CustomFlushBar(
                 message: state.message,
                 context: context,
-                icon: Icon(Icons.cancel_outlined, color: AppColors.primary),
+                icon: const Icon(Icons.cancel_outlined, color: AppColors.primary),
                 backgroundColor: Colors.red
               ).show();
             } else if(state is SurveyFinishState) {
@@ -36,7 +36,7 @@ class _SurveyListScreenState extends State<SurveyListScreen>{
           },
           builder: (context, state) {
             if(state is SurveyLoadingState){
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             } else if(state is SurveyDataLoadedState) {
@@ -46,17 +46,17 @@ class _SurveyListScreenState extends State<SurveyListScreen>{
                   context: context,
                   builder: (context) =>
                       AlertDialog(
-                        title: Text('Are you sure?'),
-                        content: Text('Do you want to exit the survey'),
+                        title: const Text('Are you sure?'),
+                        content: const Text('Do you want to exit the survey'),
                         actions: [
                           TextButton(
                             onPressed: () => context.pop(false),
-                            child: Text('No'),
+                            child: const Text('No'),
                           ),
                           TextButton(
                             onPressed: () =>
                                 context.go(RouteNames.surveyorHomeScreen),
-                            child: Text('Yes'),
+                            child: const Text('Yes'),
                           ),
                         ],
                       ),
@@ -103,7 +103,7 @@ class _SurveyListScreenState extends State<SurveyListScreen>{
               )
               );
             }
-            return SizedBox.shrink();
+            return const SizedBox.shrink();
           },
         ),
       ),

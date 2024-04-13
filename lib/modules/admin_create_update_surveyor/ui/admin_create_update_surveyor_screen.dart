@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/b
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
-import 'package:shining_india_survey/global/values/array_res.dart';
 import 'package:shining_india_survey/global/widgets/back_button.dart';
 import 'package:shining_india_survey/global/widgets/custom_button.dart';
 import 'package:shining_india_survey/global/widgets/custom_flushbar.dart';
@@ -43,7 +41,7 @@ class _AdminCreateUpdateSurveyorScreenState
   bool isPasswordVisible = false;
   String? team;
 
-  ValueNotifier<List<TeamModel>> _teamsNotifier = ValueNotifier([]);
+  final ValueNotifier<List<TeamModel>> _teamsNotifier = ValueNotifier([]);
   ValueNotifier<bool> activeNotifier = ValueNotifier(true);
   ValueNotifier<bool> isPasswordFieldVisible = ValueNotifier(false);
 
@@ -104,7 +102,7 @@ class _AdminCreateUpdateSurveyorScreenState
               CustomFlushBar(
                 message: state.message,
                 backgroundColor: Colors.red,
-                icon: Icon(Icons.cancel_outlined, color: AppColors.primary,),
+                icon: const Icon(Icons.cancel_outlined, color: AppColors.primary,),
                 context: context
               ).show();
             } else if(state is SurveyorDeletedState) {
@@ -118,10 +116,10 @@ class _AdminCreateUpdateSurveyorScreenState
           },
           builder: (context, state) {
             if(state is CreateUpdateSurveyorLoading) {
-              return Loader();
+              return const Loader();
             }
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
               child: Column(
                 children: [
                   Padding(
@@ -135,11 +133,11 @@ class _AdminCreateUpdateSurveyorScreenState
                             context.pop();
                           },
                         ),
-                        SizedBox(width: 16,),
+                        const SizedBox(width: 16,),
                         Expanded(
                           child: Text(
                             widget.isUpdate ? widget.name : 'Create Surveyor',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontFamily: 'Poppins',
                                 fontSize: 28,
                                 color: AppColors.black,
@@ -152,8 +150,8 @@ class _AdminCreateUpdateSurveyorScreenState
                   widget.isUpdate ? Align(
                     alignment: Alignment.centerRight,
                     child: Container(
-                      margin: EdgeInsets.only(bottom: 10),
-                      padding: EdgeInsets.all(4),
+                      margin: const EdgeInsets.only(bottom: 10),
+                      padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                           border: Border.all(
                               color: AppColors.primaryBlue
@@ -164,7 +162,7 @@ class _AdminCreateUpdateSurveyorScreenState
                         onTap: (){
                           context.read<CreateUpdateSurveyorBloc>().add(RemoveSurveyor(teamId: widget.teamId, surveyorId: widget.surveyorId));
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(Icons.cancel, color: AppColors.primaryBlue,),
@@ -181,7 +179,7 @@ class _AdminCreateUpdateSurveyorScreenState
                         ),
                       ),
                     ),
-                  ) : SizedBox.shrink(),
+                  ) : const SizedBox.shrink(),
                   Expanded(
                     child: SingleChildScrollView(
                       child: Form(
@@ -230,7 +228,7 @@ class _AdminCreateUpdateSurveyorScreenState
                                 );
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             ValueListenableBuilder(
@@ -268,7 +266,7 @@ class _AdminCreateUpdateSurveyorScreenState
                                     validator: _validateEmail);
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             widget.isUpdate==true
@@ -329,19 +327,18 @@ class _AdminCreateUpdateSurveyorScreenState
                                   items: _teamsNotifier.value
                                       .map<DropdownMenuItem<String>>((e) {
                                     return DropdownMenuItem<String>(
+                                        value: e.id,
                                         child: Text(
                                           e.teamName ?? 'Unable to fetch team name',
                                           style: const TextStyle(
                                               fontFamily: 'Poppins',
                                               fontSize: 14,
                                               color: AppColors.textBlack),
-                                        ),
-                                        value: e.id);
+                                        ));
                                   }).toList(),
                                   onChanged: (value) {
                                     setState(() {
                                       team = value;
-                                      print(value);
                                     });
                                   },
                                 );
@@ -370,22 +367,21 @@ class _AdminCreateUpdateSurveyorScreenState
                                 enabledBorder: outlineBorder,
                               ),
                               value: 'Unable to fetch teams',
-                              items: [DropdownMenuItem<String>(
+                              items: const [DropdownMenuItem<String>(
+                                    value: 'Unable to fetch teams',
                                     child: Text(
                                      'Unable to fetch teams',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontFamily: 'Poppins',
                                           fontSize: 14,
                                           color: AppColors.textBlack),
-                                    ),
-                                    value: 'Unable to fetch teams')],
+                                    ))],
                               onChanged: (value) {
                                 setState(() {
-                                  print(value);
                                 });
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             ValueListenableBuilder(
@@ -447,20 +443,20 @@ class _AdminCreateUpdateSurveyorScreenState
                                       onPressed: (){
                                         isPasswordFieldVisible.value = !isPasswordFieldVisible.value;
                                       },
-                                      icon: Icon(Icons.edit)
-                                    ) : SizedBox.shrink()
+                                      icon: const Icon(Icons.edit)
+                                    ) : const SizedBox.shrink()
                                   ],
                                 );
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             widget.isUpdate==true
                             ? Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
+                                const Text(
                                   'Status',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -482,8 +478,8 @@ class _AdminCreateUpdateSurveyorScreenState
                                   },
                                 ),
                               ],
-                            ) : SizedBox.shrink(),
-                            SizedBox(height: 10,),
+                            ) : const SizedBox.shrink(),
+                            const SizedBox(height: 10,),
                             widget.isUpdate==false
                             ? CustomButton(
                               onTap: () {

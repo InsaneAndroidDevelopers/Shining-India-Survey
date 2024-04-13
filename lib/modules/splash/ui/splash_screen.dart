@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/splash/core/bloc/splash_bloc.dart';
 import 'package:shining_india_survey/routes/routes.dart';
-import 'package:shining_india_survey/modules/surveyor_home/ui/surveyor_home_screen.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
 
 class SplashScreen extends StatefulWidget {

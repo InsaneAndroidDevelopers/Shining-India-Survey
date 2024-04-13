@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shining_india_survey/modules/login/core/bloc/login_bloc.dart';
-import 'package:shining_india_survey/modules/login/ui/admin_login_screen.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
 import 'package:shining_india_survey/global/widgets/back_button.dart';
@@ -77,7 +76,7 @@ class _SurveyorLoginScreenState extends State<SurveyorLoginScreen> {
                 context: context,
                 message: state.message,
                 backgroundColor: Colors.red,
-                icon: Icon(Icons.cancel_outlined, color: Colors.white)
+                icon: const Icon(Icons.cancel_outlined, color: Colors.white)
               ).show();
             } else if (state is SurveyorLoginSuccessState) {
               context.go(RouteNames.surveyorHomeScreen);

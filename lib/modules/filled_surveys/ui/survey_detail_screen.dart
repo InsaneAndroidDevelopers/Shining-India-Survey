@@ -32,7 +32,7 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
       child: Scaffold(
         backgroundColor: AppColors.primary,
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Column(
             children: [
               Padding(
@@ -46,13 +46,13 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
                         context.pop();
                       },
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 16,
                     ),
                     Expanded(
                       child: Text(
                         widget.surveyResponseModel.personName ?? '',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontFamily: 'Poppins',
                             fontSize: 28,
                             color: AppColors.black,
@@ -67,7 +67,7 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
                   child: Column(
                     children: [
                       Container(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: AppColors.primaryBlueBackground,
                           borderRadius: BorderRadius.circular(12)
@@ -78,27 +78,27 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
                               name: 'Name',
                               val: widget.surveyResponseModel.personName ?? '-',
                             ),
-                            Divider(color: AppColors.dividerColor,),
+                            const Divider(color: AppColors.dividerColor,),
                             SurveyDetailHolder(
                               name: 'Gender',
                               val: widget.surveyResponseModel.gender ?? '-',
                             ),
-                            Divider(color: AppColors.dividerColor,),
+                            const Divider(color: AppColors.dividerColor,),
                             SurveyDetailHolder(
                               name: 'Age',
-                              val: widget.surveyResponseModel.age.toString() ?? '-',
+                              val: widget.surveyResponseModel.age.toString(),
                             ),
-                            Divider(color: AppColors.dividerColor,),
+                            const Divider(color: AppColors.dividerColor,),
                             SurveyDetailHolder(
                               name: 'Assembly Name',
                               val: widget.surveyResponseModel.assemblyName ?? '-',
                             ),
-                            Divider(color: AppColors.dividerColor,),
+                            const Divider(color: AppColors.dividerColor,),
                             SurveyDetailHolder(
                               name: 'Location',
                               val: '${widget.surveyResponseModel.ward}, ${widget.surveyResponseModel.district}, ${widget.surveyResponseModel.state}, ${widget.surveyResponseModel.pincode}',
                             ),
-                            Divider(color: AppColors.dividerColor,),
+                            const Divider(color: AppColors.dividerColor,),
                             SurveyDetailHolder(
                               name: 'Date & Time',
                               val: convertDateTime(widget.surveyResponseModel.surveyDateTime ?? ''),
@@ -106,45 +106,45 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
                             widget.surveyResponseModel.mobileNum != null
                                 ? Column(
                               children: [
-                                Divider(color: AppColors.dividerColor,),
+                                const Divider(color: AppColors.dividerColor,),
                                 SurveyDetailHolder(
                                   name: 'Mobile',
                                   val: widget.surveyResponseModel.mobileNum ?? '-',
                                 ),
                               ],
-                            ) : SizedBox.shrink(),
+                            ) : const SizedBox.shrink(),
                             widget.surveyResponseModel.address != null
                                 ? Column(
                               children: [
-                                Divider(color: AppColors.dividerColor,),
+                                const Divider(color: AppColors.dividerColor,),
                                 SurveyDetailHolder(
                                   name: 'Address',
                                   val: widget.surveyResponseModel.address ?? '-',
                                 ),
                               ],
-                            ) : SizedBox.shrink(),
+                            ) : const SizedBox.shrink(),
                             widget.surveyResponseModel.caste != null
                                 ? Column(
                               children: [
-                                Divider(color: AppColors.dividerColor,),
+                                const Divider(color: AppColors.dividerColor,),
                                 SurveyDetailHolder(
                                   name: 'Caste',
                                   val: widget.surveyResponseModel.caste ?? '-',
                                 ),
                               ],
-                            ) : SizedBox.shrink(),
+                            ) : const SizedBox.shrink(),
                             widget.surveyResponseModel.religion != null
                               ? Column(
                               children: [
-                                Divider(color: AppColors.dividerColor,),
+                                const Divider(color: AppColors.dividerColor,),
                                 SurveyDetailHolder(
                                   name: 'Religion',
                                   val: widget.surveyResponseModel.religion ?? '-',
                                 ),
                               ],
-                            ) : SizedBox.shrink(),
-                            Divider(color: AppColors.dividerColor,),
-                            SizedBox(height: 10,),
+                            ) : const SizedBox.shrink(),
+                            const Divider(color: AppColors.dividerColor,),
+                            const SizedBox(height: 10,),
                             Container(
                               clipBehavior: Clip.hardEdge,
                               height: 300,
@@ -165,13 +165,13 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
                                       zoom: 14
                                   ),
                                   markers: {
-                                    Marker(markerId: MarkerId('001'), position: LatLng(
+                                    Marker(markerId: const MarkerId('001'), position: LatLng(
                                         double.parse(widget.surveyResponseModel.latitude ?? '0.00'),
                                         double.parse(widget.surveyResponseModel.longitude ?? '0.00')
                                     )),
                                   },
                               )
-                              : Center(
+                              : const Center(
                                 child: Text(
                                   'Location not provided',
                                   style: TextStyle(
@@ -186,7 +186,7 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 10,),
+                      const SizedBox(height: 10,),
                       CustomButton(
                         onTap: (){
                           context.push(

@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
@@ -42,14 +43,15 @@ class _AnalysisDetailState extends State<AnalysisDetail> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 12),
-      margin: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 6),
       decoration: BoxDecoration(
           color: Colors.grey.shade300,
           borderRadius: BorderRadius.circular(12)
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             HiveDbHelper.getBox().get(widget.analysisResponseModel.sId) ?? '-',
@@ -59,32 +61,117 @@ class _AnalysisDetailState extends State<AnalysisDetail> {
               color: AppColors.textBlack
             ),
           ),
+          const SizedBox(height: 10,),
           RepaintBoundary(
            key: globalKey,
-            child: SfCircularChart(
-              series: <CircularSeries>[
-                PieSeries(
-                  dataSource: widget.analysisResponseModel.answers,
-                  xValueMapper: (data, _) => data.answer,
-                  yValueMapper: (data, _) => data.count,
-                  dataLabelSettings: const DataLabelSettings(isVisible: true, overflowMode: OverflowMode.shift),
-                  legendIconType: LegendIconType.seriesType,
-                  animationDuration: 0,
-                  radius: '100%',
-                  explode: true
-                )
-              ],
-              legend: const Legend(
-                toggleSeriesVisibility: false,
-                isVisible: true,
-                itemPadding: 1,
-                overflowMode: LegendItemOverflowMode.wrap,
-                shouldAlwaysShowScrollbar: true,
+            child: Container(
+              child: SfCircularChart(
+                palette: randomColorHexCodes.map((e) => Color(int.parse('0xFF$e'))).toList(),
+                series: <CircularSeries>[
+                  PieSeries(
+                    dataSource: widget.analysisResponseModel.answers,
+                    xValueMapper: (data, _) => data.answer,
+                    yValueMapper: (data, _) => data.count,
+                    dataLabelSettings: const DataLabelSettings(
+                      isVisible: true,
+                      overflowMode: OverflowMode.shift ,
+                      labelPosition: ChartDataLabelPosition.inside
+                    ),
+                    animationDuration: 0,
+                    radius: '90%',
+                    explode: true
+                  )
+                ],
               ),
-            ),
-          ),
-        ],
-      ),
+            ),),
+              const SizedBox(height: 10,),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Wrap(
+                  direction: Axis.horizontal,
+                  spacing: 10,
+                  runSpacing: 4,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  alignment: WrapAlignment.start,
+                  runAlignment: WrapAlignment.start,
+                  children: List.generate(
+                    widget.analysisResponseModel.answers?.length ?? 0,
+                    (index) => Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.pie_chart, size: 12, color: Color(int.parse('0xFF${randomColorHexCodes[index%30]}')),),
+                        const SizedBox(width: 2,),
+                        Text(
+                          widget.analysisResponseModel.answers?[index].answer?.toString() ?? '',
+                          style: const TextStyle(
+                            fontFamily: 'Poppins',
+                          ),
+                        )
+                      ],
+                    )
+                  )
+                ),
+              )
+            ],
+          )
     );
   }
 }
+
+
+// class PieChartWidget extends StatefulWidget {
+//   final AnalysisResponseModel analysisResponseModel;
+//   const PieChartWidget({super.key, required this.analysisResponseModel});
+//
+//   @override
+//   State<PieChartWidget> createState() => _PieChartState();
+// }
+//
+// class _PieChartState extends State<PieChartWidget> {
+//
+//   int total = 0;
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     widget.analysisResponseModel.answers?.forEach((element) {
+//       total += element.count ?? 0;
+//     });
+//   }
+//   @override
+//   Widget build(BuildContext context) {
+//     return AspectRatio(
+//       aspectRatio: 1.3,
+//       child: PieChart(
+//         PieChartData(
+//           borderData: FlBorderData(
+//             show: false,
+//           ),
+//           sectionsSpace: 0,
+//           centerSpaceRadius: 40,
+//           sections: List.generate(
+//             widget.analysisResponseModel.answers?.length ?? 0,
+//             (index) {
+//               final str = (((widget.analysisResponseModel.answers?[index].count?.toDouble()) ?? 0.0) / (total==0 ? 1 : total)) * 100;
+//               return PieChartSectionData(
+//                 color: Color(int.parse('0xFF${randomColorHexCodes[index%30]}')),
+//                 value: str,
+//                 title: '${str.toStringAsPrecision(2)}%',
+//                 radius: 100,
+//               );
+//             },
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
+
+List<String> randomColorHexCodes = [
+  'F44336', 'E91E63', '9C27B0', '673AB7', '3F51B5',
+  '2196F3', '03A9F4', '00BCD4', '009688', '4CAF50',
+  '8BC34A', 'CDDC39', 'FFEB3B', 'FFC107', 'FF9800',
+  'FF5722', '795548', '9E9E9E', '607D8B', '333333',
+  '607D8B', '455A64', '607D8B', '00ACC1', '607D8B',
+  '607D8B', '607D8B', '607D8B', '607D8B', '607D8B'
+];

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:shining_india_survey/modules/survey/core/bloc/survey_bloc.dart';
-import 'package:shining_india_survey/modules/survey/ui/survey_result_screen.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
 import 'package:shining_india_survey/global/values/array_res.dart';
@@ -54,7 +52,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
             context: context,
             message: state.message,
             backgroundColor: Colors.red,
-            icon: Icon(Icons.cancel_outlined, color: Colors.white)
+            icon: const Icon(Icons.cancel_outlined, color: Colors.white)
           ).show();
         }
       },
@@ -64,17 +62,17 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
             return await showDialog(
               context: context,
               builder: (context) => AlertDialog(
-                title: Text('Are you sure?'),
-                content: Text('Do you want to exit the survey'),
+                title: const Text('Are you sure?'),
+                content: const Text('Do you want to exit the survey'),
                 actions: [
                   TextButton(
                     onPressed: () => context.pop(false),
-                    child: Text('No'),
+                    child: const Text('No'),
                   ),
                   TextButton(
                     onPressed: () =>
                         context.go(RouteNames.surveyorHomeScreen),
-                    child: Text('Yes'),
+                    child: const Text('Yes'),
                   ),
                 ],
               ),
@@ -98,25 +96,25 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                               await showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
-                                  title: Text('Are you sure?'),
-                                  content: Text('Do you want to exit the survey'),
+                                  title: const Text('Are you sure?'),
+                                  content: const Text('Do you want to exit the survey'),
                                   actions: [
                                     TextButton(
                                       onPressed: () => context.pop(false),
-                                      child: Text('No'),
+                                      child: const Text('No'),
                                     ),
                                     TextButton(
                                       onPressed: () =>
                                           context.go(RouteNames.surveyorHomeScreen),
-                                      child: Text('Yes'),
+                                      child: const Text('Yes'),
                                     ),
                                   ],
                                 ),
                               );
                             },
                           ),
-                          SizedBox(width: 16,),
-                          Expanded(
+                          const SizedBox(width: 16,),
+                          const Expanded(
                             child: Text(
                               'Additional details',
                               style: TextStyle(
@@ -175,7 +173,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                       return null;
                                     },
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   DropdownButtonFormField(
@@ -200,6 +198,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                     items: ArrayResources.religions
                                         .map<DropdownMenuItem<String>>((String item) {
                                       return DropdownMenuItem<String>(
+                                          value: item,
                                           child: Text(
                                             item,
                                             style: const TextStyle(
@@ -207,18 +206,16 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                                 fontSize: 14,
                                                 color: AppColors.textBlack
                                             ),
-                                          ),
-                                          value: item
+                                          )
                                       );
                                     }).toList(),
                                     onChanged: (value) {
                                       setState(() {
                                         _dropDownReligionValue = value ?? '';
-                                        print(value);
                                       });
                                     },
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   DropdownButtonFormField(
@@ -243,6 +240,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                     items: ArrayResources.castes
                                         .map<DropdownMenuItem<String>>((String item) {
                                       return DropdownMenuItem<String>(
+                                          value: item,
                                           child: Text(
                                             item,
                                             style: const TextStyle(
@@ -250,18 +248,16 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                                 fontSize: 14,
                                                 color: AppColors.textBlack
                                             ),
-                                          ),
-                                          value: item
+                                          )
                                       );
                                     }).toList(),
                                     onChanged: (value) {
                                       setState(() {
                                         _dropDownCasteValue = value ?? '';
-                                        print(value);
                                       });
                                     },
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   TextFormField(
@@ -295,7 +291,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                 ],
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 16,
                             ),
                             Row(
@@ -307,7 +303,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                     },
                                     child: Container(
                                       height: 50,
-                                      padding: EdgeInsets.all(8),
+                                      padding: const EdgeInsets.all(8),
                                       alignment: Alignment.center,
                                       decoration: BoxDecoration(
                                           border: Border.all(
@@ -316,8 +312,8 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                           borderRadius: BorderRadius.circular(12)
                                       ),
                                       child: state is SurveyLoadingState
-                                      ? Loader()
-                                      : Text(
+                                      ? const Loader()
+                                      : const Text(
                                         'Skip',
                                         style: TextStyle(
                                             fontSize: 16,
@@ -328,7 +324,7 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Expanded(
@@ -345,8 +341,8 @@ class _AdditionalDetailsScreenState extends State<AdditionalDetailsScreen> {
                                       ));
                                     },
                                     child: state is SurveyLoadingState
-                                    ? Loader()
-                                    : Text(
+                                    ? const Loader()
+                                    : const Text(
                                       'Submit',
                                       style: TextStyle(
                                           fontSize: 16,

@@ -34,13 +34,13 @@ class _SurveyScreenState extends State<SurveyScreen> {
           CustomFlushBar(
             message: state.message,
             context: context,
-            icon: Icon(Icons.cancel_outlined, color: AppColors.primary),
+            icon: const Icon(Icons.cancel_outlined, color: AppColors.primary),
             backgroundColor: Colors.red
           ).show();
         } else if(state is SurveyFinishState) {
           context.go(RouteNames.additionalDetailsScreen);
         } else if(state is SurveyMoveNextQuestionState) {
-          _pageController.nextPage(duration: Duration(milliseconds: 400), curve: Curves.easeInOut);
+          _pageController.nextPage(duration: const Duration(milliseconds: 400), curve: Curves.easeInOut);
           pageNotifier.value++;
         }
       },
@@ -54,7 +54,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
       },
       builder: (context, state) {
         if(state is SurveyLoadingState){
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         } else if(state is SurveyDataLoadedState){
@@ -64,17 +64,17 @@ class _SurveyScreenState extends State<SurveyScreen> {
                 context: context,
                 builder: (context) =>
                     AlertDialog(
-                      title: Text('Are you sure?'),
-                      content: Text('Do you want to exit the survey'),
+                      title: const Text('Are you sure?'),
+                      content: const Text('Do you want to exit the survey'),
                       actions: [
                         TextButton(
                           onPressed: () => context.pop(false),
-                          child: Text('No'),
+                          child: const Text('No'),
                         ),
                         TextButton(
                           onPressed: () =>
                               context.go(RouteNames.surveyorHomeScreen),
-                          child: Text('Yes'),
+                          child: const Text('Yes'),
                         ),
                       ],
                     ),
@@ -86,7 +86,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                 body: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
                       child: Row(
                         children: [
                           GestureDetector(
@@ -95,28 +95,28 @@ class _SurveyScreenState extends State<SurveyScreen> {
                               context: context,
                               builder: (context) =>
                                   AlertDialog(
-                                    title: Text('Are you sure?'),
-                                    content: Text('Do you want to exit the survey'),
+                                    title: const Text('Are you sure?'),
+                                    content: const Text('Do you want to exit the survey'),
                                     actions: [
                                       TextButton(
                                         onPressed: () => context.pop(false),
-                                        child: Text('No'),
+                                        child: const Text('No'),
                                       ),
                                       TextButton(
                                         onPressed: () =>
                                             context.go(RouteNames.surveyorHomeScreen),
-                                        child: Text('Yes'),
+                                        child: const Text('Yes'),
                                       ),
                                     ],
                                   ),
                               );
                             },
-                            child: Icon(Icons.cancel_outlined,)
+                            child: const Icon(Icons.cancel_outlined,)
                           ),
                           Expanded(
                             child: Container(
-                              margin: EdgeInsets.only(left: 10),
-                              padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              margin: const EdgeInsets.only(left: 10),
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                               decoration: BoxDecoration(
                                 border: Border.all(
                                   color: AppColors.dividerColor,
@@ -135,7 +135,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                                             height: 8,
                                             child: LinearProgressIndicator(
                                               value: (pageNotifier.value + 1) / (state.questions.length),
-                                              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryBlue),
+                                              valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primaryBlue),
                                               backgroundColor: AppColors.primaryBlueBackground,
                                             ),
                                           ),
@@ -143,13 +143,13 @@ class _SurveyScreenState extends State<SurveyScreen> {
                                       },
                                     ), //
                                   ),
-                                  SizedBox(width: 8,),
+                                  const SizedBox(width: 8,),
                                   ValueListenableBuilder(
                                     valueListenable: pageNotifier,
                                     builder: (context, value, child) {
                                       return Text(
                                         '${((pageNotifier.value + 1) / (state.questions.length) * 100).toInt().toString()}%',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontFamily: 'Poppins',
                                             fontSize: 14,
                                             color: AppColors.primaryBlue,
@@ -167,7 +167,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                     ),
                     Expanded(
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           color: Color(0xff03738c),
                           borderRadius: BorderRadius.only(topLeft: Radius.circular(22), topRight: Radius.circular(22))
                         ),
@@ -176,7 +176,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                             Expanded(
                               child: PageView.builder(
                                 controller: _pageController,
-                                physics: NeverScrollableScrollPhysics(),
+                                physics: const NeverScrollableScrollPhysics(),
                                 itemCount: state.questions.length,
                                 itemBuilder: (context, index) {
                                   return QuestionWidget(
@@ -212,7 +212,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                                           ),
                                         ),
                                       ),
-                                      SizedBox(width: 10,),
+                                      const SizedBox(width: 10,),
                                       GestureDetector(
                                         onTap: (){
                                           context.read<SurveyBloc>().add(SkipQuestionEvent(
@@ -223,7 +223,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                                         },
                                         child: Container(
                                           height: 50,
-                                          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
                                               border: Border.all(
@@ -231,7 +231,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                                               ),
                                               borderRadius: BorderRadius.circular(12)
                                           ),
-                                          child: Text(
+                                          child: const Text(
                                             'Skip',
                                             style: TextStyle(
                                                 fontSize: 16,
@@ -246,7 +246,7 @@ class _SurveyScreenState extends State<SurveyScreen> {
                                 );
                               },
                             ),
-                            SizedBox(height: 10,)
+                            const SizedBox(height: 10,)
                           ],
                         ),
                       ),

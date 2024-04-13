@@ -73,7 +73,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
                 context: context,
                 message: state.message,
                 backgroundColor: Colors.red,
-                icon: Icon(Icons.cancel_outlined, color: Colors.white)
+                icon: const Icon(Icons.cancel_outlined, color: Colors.white)
               ).show();
             } else if (state is AdminLoginSuccessState) {
               context.go(RouteNames.adminHomeScreen);

@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lottie/lottie.dart';
-import 'package:shining_india_survey/modules/login/core/bloc/login_bloc.dart';
-import 'package:shining_india_survey/modules/login/ui/admin_login_screen.dart';
 import 'package:shining_india_survey/modules/login/ui/widgets/login_type.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
-import 'package:shining_india_survey/global/widgets/custom_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

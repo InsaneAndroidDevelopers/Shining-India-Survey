@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive/hive.dart';
-import 'package:shining_india_survey/global/values/string_constants.dart';
-import 'package:shining_india_survey/helpers/hive_db_helper.dart';
-import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
 import 'package:shining_india_survey/modules/admin_home/core/bloc/admin_home_bloc.dart';
-import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
-import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
-import 'package:shining_india_survey/global/widgets/custom_button.dart';
 import 'package:shining_india_survey/global/widgets/custom_card.dart';
 import 'package:shining_india_survey/global/widgets/custom_flushbar.dart';
-import 'package:shining_india_survey/modules/surveyor_home/ui/widgets/recent_survey_holder.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({super.key});
@@ -34,7 +26,6 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(HiveDbHelper.getBox().get('659054dfcf111b03a0d182ed'));
     return SafeArea(
       child: Scaffold(
           backgroundColor: AppColors.primaryBlue,
@@ -48,7 +39,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                 CustomFlushBar(
                   context: context,
                   message: state.message,
-                  icon: Icon(Icons.cancel_outlined, color: AppColors.primary,),
+                  icon: const Icon(Icons.cancel_outlined, color: AppColors.primary,),
                   backgroundColor: Colors.red
                 ).show();
               }
@@ -57,7 +48,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
               children: [
                 Container(
                   alignment: Alignment.centerLeft,
-                  padding: EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -69,7 +60,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                             return Text(
                               'Hi, ${username.value}',
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 24,
                                   fontFamily: 'Poppins',
                                   fontWeight: FontWeight.w700,
@@ -84,12 +75,12 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                           context.read<AdminHomeBloc>().add(AdminLogout());
                         },
                         child: Container(
-                          padding: EdgeInsets.all(6),
+                          padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
                               color: AppColors.primary,
                               borderRadius: BorderRadius.circular(12)
                           ),
-                          child: Row(
+                          child: const Row(
                             children: [
                               Icon(Icons.logout_rounded,
                                 color: AppColors.primaryBlue,),
@@ -114,13 +105,13 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                   child: Container(
                     padding: const EdgeInsets.only(
                         top: 18, left: 14, right: 14),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                         color: AppColors.primary,
                         borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(24))
                     ),
                     child: SingleChildScrollView(
-                      physics: ScrollPhysics(),
+                      physics: const ScrollPhysics(),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -131,7 +122,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                               context.push(RouteNames.adminFilledSurveysScreen);
                             },
                           ),
-                          SizedBox(height: 12,),
+                          const SizedBox(height: 12,),
                           CustomCard(
                             text: 'Analysis',
                             image: 'assets/analysis.png',
@@ -139,7 +130,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                               context.push(RouteNames.adminSurveyAnalysisScreen);
                             },
                           ),
-                          SizedBox(height: 12,),
+                          const SizedBox(height: 12,),
                           CustomCard(
                             text: 'Create a team',
                             image: 'assets/teams.png',
@@ -147,7 +138,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                               context.push(RouteNames.adminTeamsScreen);
                             },
                           ),
-                          SizedBox(height: 12,),
+                          const SizedBox(height: 12,),
                           CustomCard(
                             text: 'Create a surveyor',
                             image: 'assets/teams.png',
@@ -166,7 +157,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
                               );
                             },
                           ),
-                          SizedBox(height: 20,),
+                          const SizedBox(height: 20,),
                         ],
                       ),
                     ),

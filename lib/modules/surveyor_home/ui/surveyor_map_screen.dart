@@ -34,10 +34,10 @@ class _SurveyorMapScreenState extends State<SurveyorMapScreen> {
               zoom: 14
           ),
           markers: {
-            Marker(markerId: MarkerId('001'), position: LatLng(widget.latitude, widget.longitude)),
+            Marker(markerId: const MarkerId('001'), position: LatLng(widget.latitude, widget.longitude)),
           },
         )
-        : Center(
+        : const Center(
           child: Text(
             'Location not provided',
             style: TextStyle(

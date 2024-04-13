@@ -14,9 +14,6 @@ import 'package:shining_india_survey/modules/survey_analysis/core/bloc/analysis_
 import 'package:shining_india_survey/modules/surveyor_home/core/bloc/surveyor_home_bloc.dart';
 import 'package:shining_india_survey/routes/app_router.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
-import 'package:shining_india_survey/modules/splash/ui/splash_screen.dart';
-import 'package:shining_india_survey/modules/survey/ui/survey_screen.dart';
-import 'package:shining_india_survey/modules/surveyor_home/ui/surveyor_home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

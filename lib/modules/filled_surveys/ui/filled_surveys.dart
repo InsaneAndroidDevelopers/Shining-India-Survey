@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -9,20 +7,15 @@ import 'package:shining_india_survey/global/methods/get_min_max_age.dart';
 import 'package:shining_india_survey/global/methods/get_timestamp_from_date.dart';
 import 'package:shining_india_survey/global/widgets/drop_down_text_form_field.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
-import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/bloc/filled_survey_bloc.dart';
 import 'package:shining_india_survey/modules/filled_surveys/core/models/survey_response_model.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/date_chips.dart';
-import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/filled_survey_holder.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/gender_chips.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/survey_list_widget.dart';
 import 'package:shining_india_survey/modules/survey_analysis/ui/widgets/age_chips.dart';
-import 'package:shining_india_survey/modules/surveyor_home/core/models/recent_survey_model.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
 import 'package:shining_india_survey/global/values/array_res.dart';
 import 'package:shining_india_survey/global/widgets/back_button.dart';
-import 'package:shining_india_survey/global/widgets/custom_button.dart';
-import 'package:shining_india_survey/modules/surveyor_home/ui/widgets/recent_survey_holder.dart';
 
 class AdminFilledSurveys extends StatefulWidget {
   const AdminFilledSurveys({super.key});

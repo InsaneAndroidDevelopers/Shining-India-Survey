@@ -4,8 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
 import 'package:shining_india_survey/global/widgets/back_button.dart';
-import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
-import 'package:shining_india_survey/modules/admin_create_update_surveyor/ui/widgets/admin_surveyor_widget.dart';
 import 'package:shining_india_survey/modules/admin_reassign_surveyor/core/bloc/unassigned_surveyor_bloc.dart';
 import 'package:shining_india_survey/routes/routes.dart';
 
@@ -64,7 +62,7 @@ class _AdminUnassignedSurveyorsScreenState extends State<AdminUnassignedSurveyor
                         children: [
                           Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                                 color: AppColors.dividerColor,
                                 borderRadius: BorderRadius.circular(12)),
@@ -78,7 +76,7 @@ class _AdminUnassignedSurveyorsScreenState extends State<AdminUnassignedSurveyor
                                   color: AppColors.primaryBlue,
                                   size: 60,
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Text(
@@ -113,8 +111,8 @@ class _AdminUnassignedSurveyorsScreenState extends State<AdminUnassignedSurveyor
                           itemCount: state.list.length,
                           itemBuilder: (context, index) {
                             return Container(
-                              padding: EdgeInsets.all(10),
-                              margin: EdgeInsets.only(bottom: 10),
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.only(bottom: 10),
                               decoration: BoxDecoration(
                                   color: AppColors.primaryBlueLight,
                                   borderRadius: BorderRadius.circular(14)
@@ -127,7 +125,7 @@ class _AdminUnassignedSurveyorsScreenState extends State<AdminUnassignedSurveyor
                                       Icons.person_2_rounded,
                                       color: AppColors.primaryBlue
                                   ),
-                                  SizedBox(width: 20),
+                                  const SizedBox(width: 20),
                                   Expanded(
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,7 +139,7 @@ class _AdminUnassignedSurveyorsScreenState extends State<AdminUnassignedSurveyor
                                               color: AppColors.textBlack,
                                             ),
                                           ),
-                                          SizedBox(height: 2,),
+                                          const SizedBox(height: 2,),
                                           Text(
                                             state.list[index].email ?? '-',
                                             style: const TextStyle(
@@ -153,7 +151,7 @@ class _AdminUnassignedSurveyorsScreenState extends State<AdminUnassignedSurveyor
                                         ],
                                       )
                                   ),
-                                  SizedBox(width: 20,),
+                                  const SizedBox(width: 20,),
                                   InkWell(
                                     onTap: (){
                                       context.pushNamed(
@@ -181,7 +179,7 @@ class _AdminUnassignedSurveyorsScreenState extends State<AdminUnassignedSurveyor
                         );
                       }
                     }
-                    return SizedBox.shrink();
+                    return const SizedBox.shrink();
                   },
                 ),
               )
