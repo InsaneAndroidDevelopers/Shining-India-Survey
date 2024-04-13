@@ -1,6 +1,5 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
@@ -27,7 +26,7 @@ class _AnalysisDetailState extends State<AnalysisDetail> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {_capturePng(); });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {await Future.delayed(Duration(milliseconds: 200,), () async => _capturePng()); });
   }
 
   Future<void> _capturePng() async {
