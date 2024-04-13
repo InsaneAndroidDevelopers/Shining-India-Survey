@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:shining_india_survey/global/values/app_colors.dart';
@@ -36,7 +35,6 @@ class _AnalysisDetailState extends State<AnalysisDetail> {
     final ui.Image image = await boundary.toImage();
     final ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     final Uint8List pngBytes = byteData!.buffer.asUint8List();
-    print(pngBytes);
     widget.analysisResponseModel.unit8Image = pngBytes;
   }
 
@@ -64,25 +62,23 @@ class _AnalysisDetailState extends State<AnalysisDetail> {
           const SizedBox(height: 10,),
           RepaintBoundary(
            key: globalKey,
-            child: Container(
-              child: SfCircularChart(
-                palette: randomColorHexCodes.map((e) => Color(int.parse('0xFF$e'))).toList(),
-                series: <CircularSeries>[
-                  PieSeries(
-                    dataSource: widget.analysisResponseModel.answers,
-                    xValueMapper: (data, _) => data.answer,
-                    yValueMapper: (data, _) => data.count,
-                    dataLabelSettings: const DataLabelSettings(
-                      isVisible: true,
-                      overflowMode: OverflowMode.shift ,
-                      labelPosition: ChartDataLabelPosition.inside
-                    ),
-                    animationDuration: 0,
-                    radius: '90%',
-                    explode: true
-                  )
-                ],
-              ),
+            child: SfCircularChart(
+              palette: randomColorHexCodes.map((e) => Color(int.parse('0xFF$e'))).toList(),
+              series: <CircularSeries>[
+                PieSeries(
+                  dataSource: widget.analysisResponseModel.answers,
+                  xValueMapper: (data, _) => data.answer,
+                  yValueMapper: (data, _) => data.count,
+                  dataLabelSettings: const DataLabelSettings(
+                    isVisible: true,
+                    overflowMode: OverflowMode.shift ,
+                    labelPosition: ChartDataLabelPosition.inside
+                  ),
+                  animationDuration: 0,
+                  radius: '90%',
+                  explode: true
+                )
+              ],
             ),),
               const SizedBox(height: 10,),
               Align(

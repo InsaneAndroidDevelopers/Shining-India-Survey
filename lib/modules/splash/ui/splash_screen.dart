@@ -37,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
 
     controller2 = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(milliseconds: 500),
     )..addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         BlocProvider.of<SplashBloc>(context).add(FetchUserInfoEvent());
