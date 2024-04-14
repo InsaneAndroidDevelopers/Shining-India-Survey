@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -11,6 +14,7 @@ import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/b
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/date_chips.dart';
 import 'package:shining_india_survey/modules/filled_surveys/ui/widgets/gender_chips.dart';
 import 'package:shining_india_survey/modules/survey_analysis/core/bloc/analysis_bloc.dart';
+import 'package:shining_india_survey/modules/survey_analysis/core/models/analysis_response_model.dart';
 import 'package:shining_india_survey/modules/survey_analysis/ui/widgets/age_chips.dart';
 import 'package:shining_india_survey/modules/survey_analysis/ui/widgets/analysis_detail.dart';
 import 'package:shining_india_survey/services/pdf_service.dart';
@@ -35,6 +39,7 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> w
   Map<String, String> teamMap = {};
   String? _dropDownStateValue;
   ValueNotifier<int> dateIndex = ValueNotifier(0);
+  List<GlobalKey> globalKeys = [];
 
   @override
   void initState() {
@@ -325,6 +330,9 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> w
                           )
                         );
                       } else {
+                        for(int i=0; i<state.analysisList.length; i++) {
+                          globalKeys.add(GlobalKey());
+                        }
                         return SingleChildScrollView(
                           child: ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
@@ -333,6 +341,7 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> w
                             itemBuilder: (context, index) {
                               return AnalysisDetail(
                                 analysisResponseModel: state.analysisList[index],
+                                globalKey: globalKeys[index],
                               );
                             },
                           ),
@@ -352,15 +361,16 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> w
               if (state.analysisList.isNotEmpty) {
                 return FloatingActionButton(
                   onPressed: () async {
+                    await _capturePng(state.analysisList);
                     final file = await PdfService().createPdf(
                         state.analysisList,
-                      maxAge: getMinMaxAgeFromIndex(ageIndex.value).maxAge,
-                      minAge: getMinMaxAgeFromIndex(ageIndex.value).minAge,
-                      fromDate: getTimeStampFromDate(dateIndex.value),
-                      toDate: DateTime.now().toIso8601String(),
-                      gender: getGenderFromIndex(genderIndex.value),
-                      teamID: teamMap[teamId],
-                      state: _dropDownStateValue ?? ''
+                        maxAge: getMinMaxAgeFromIndex(ageIndex.value).maxAge,
+                        minAge: getMinMaxAgeFromIndex(ageIndex.value).minAge,
+                        fromDate: getTimeStampFromDate(dateIndex.value),
+                        toDate: DateTime.now().toIso8601String(),
+                        gender: getGenderFromIndex(genderIndex.value),
+                        teamID: teamMap[teamId],
+                        state: _dropDownStateValue ?? ''
                     );
                     final name = DateFormat("dd-MMM-yyyy hh: mm aa").format(DateTime.now());
                     await PdfService().savePdfFile('Report $name', file);
@@ -374,5 +384,18 @@ class _AdminSurveyAnalysisScreenState extends State<AdminSurveyAnalysisScreen> w
         ),
       ),
     );
+  }
+
+  Future<void> _capturePng(List<AnalysisResponseModel> list) async {
+    for(int i=0; i<list.length; i++) {
+      if(mounted) {
+        final RenderRepaintBoundary boundary = globalKeys[i].currentContext?.findRenderObject() as RenderRepaintBoundary;
+        final ui.Image image = await boundary.toImage();
+        final ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+        final Uint8List pngBytes = byteData!.buffer.asUint8List();
+        list[i].unit8Image = pngBytes;
+      }
+    }
+
   }
 }

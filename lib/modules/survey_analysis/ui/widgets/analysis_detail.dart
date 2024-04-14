@@ -9,10 +9,12 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 class AnalysisDetail extends StatefulWidget {
   final AnalysisResponseModel analysisResponseModel;
+  final GlobalKey globalKey;
 
   const AnalysisDetail({
     super.key,
-    required this.analysisResponseModel
+    required this.analysisResponseModel,
+    required this.globalKey
   });
 
   @override
@@ -20,22 +22,6 @@ class AnalysisDetail extends StatefulWidget {
 }
 
 class _AnalysisDetailState extends State<AnalysisDetail> {
-
-  final GlobalKey globalKey = GlobalKey();
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {await Future.delayed(Duration(milliseconds: 200,), () async => _capturePng()); });
-  }
-
-  Future<void> _capturePng() async {
-    final RenderRepaintBoundary boundary = globalKey.currentContext!.findRenderObject()! as RenderRepaintBoundary;
-    final ui.Image image = await boundary.toImage();
-    final ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-    final Uint8List pngBytes = byteData!.buffer.asUint8List();
-    widget.analysisResponseModel.unit8Image = pngBytes;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +46,7 @@ class _AnalysisDetailState extends State<AnalysisDetail> {
           ),
           const SizedBox(height: 10,),
           RepaintBoundary(
-           key: globalKey,
+            key: widget.globalKey,
             child: SfCircularChart(
               palette: randomColorHexCodes.map((e) => Color(int.parse('0xFF$e'))).toList(),
               series: <CircularSeries>[
