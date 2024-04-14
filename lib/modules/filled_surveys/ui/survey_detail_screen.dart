@@ -109,7 +109,9 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
                                 const Divider(color: AppColors.dividerColor,),
                                 SurveyDetailHolder(
                                   name: 'Mobile',
-                                  val: widget.surveyResponseModel.mobileNum ?? '-',
+                                  val: (widget.surveyResponseModel.mobileNum ?? '').isEmpty
+                                      ? '-'
+                                      :  widget.surveyResponseModel.mobileNum ?? '-',
                                 ),
                               ],
                             ) : const SizedBox.shrink(),
@@ -119,7 +121,9 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
                                 const Divider(color: AppColors.dividerColor,),
                                 SurveyDetailHolder(
                                   name: 'Address',
-                                  val: widget.surveyResponseModel.address ?? '-',
+                                  val: (widget.surveyResponseModel.address ?? '').isEmpty
+                                      ? '-'
+                                      :  widget.surveyResponseModel.address ?? '-',
                                 ),
                               ],
                             ) : const SizedBox.shrink(),
@@ -129,7 +133,9 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
                                 const Divider(color: AppColors.dividerColor,),
                                 SurveyDetailHolder(
                                   name: 'Caste',
-                                  val: widget.surveyResponseModel.caste ?? '-',
+                                  val: (widget.surveyResponseModel.caste ?? '').isEmpty
+                                      ? '-'
+                                      :  widget.surveyResponseModel.caste ?? '-',
                                 ),
                               ],
                             ) : const SizedBox.shrink(),
@@ -139,7 +145,9 @@ class _SurveyDetailScreenState extends State<SurveyDetailScreen> {
                                 const Divider(color: AppColors.dividerColor,),
                                 SurveyDetailHolder(
                                   name: 'Religion',
-                                  val: widget.surveyResponseModel.religion ?? '-',
+                                  val: (widget.surveyResponseModel.religion ?? '').isEmpty
+                                      ? '-'
+                                      :  widget.surveyResponseModel.religion ?? '-',
                                 ),
                               ],
                             ) : const SizedBox.shrink(),

@@ -171,6 +171,8 @@ class NetworkService {
         return response;
       case 400:
         throw BadRequestExceptionDio(response.data['error'] ?? 'Bad response');
+      case 401:
+        throw UnauthorisedExceptionDio(response.data['error'] ?? 'Unauthorised error');
       case 403:
         throw UnauthorisedExceptionDio(response.data['error'] ?? 'Unauthorised error');
       case 409:

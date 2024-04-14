@@ -136,10 +136,10 @@ class _SurveyorHomeScreenState extends State<SurveyorHomeScreen> {
                         SizedBox(height: 20,),
                         BlocBuilder<SurveyorHomeBloc, SurveyorHomeState>(
                           buildWhen: (previous, current) {
-                            switch(current.runtimeType){
-                              case SurveyorHomeFetchedState:
-                              case SurveyorHomeErrorState:
-                              case SurveyorHomeLoadingState:
+                            switch(current){
+                              case SurveyorHomeFetchedState _:
+                              case SurveyorHomeErrorState _:
+                              case SurveyorHomeLoadingState _:
                                 return true;
                             }
                             return false;

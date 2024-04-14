@@ -380,7 +380,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: (){
-                                    if(state is SurveyLoadingState) {
+                                    if(state is SurveyLocationLoadingState) {
                                       null;
                                     } else {
                                       _getCurrentPosition();
