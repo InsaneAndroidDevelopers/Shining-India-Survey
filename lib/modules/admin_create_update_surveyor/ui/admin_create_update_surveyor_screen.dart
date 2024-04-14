@@ -3,6 +3,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/bloc/create_update_surveyor_bloc.dart';
 import 'package:shining_india_survey/modules/admin_create_update_surveyor/core/models/team_model.dart';
 import 'package:shining_india_survey/routes/routes.dart';
@@ -116,7 +117,13 @@ class _AdminCreateUpdateSurveyorScreenState
           },
           builder: (context, state) {
             if(state is CreateUpdateSurveyorLoading) {
-              return const Loader();
+              return Center(
+                child: Lottie.asset(
+                  'assets/loading.json',
+                  width: 150,
+                  height: 150,
+                ),
+              );
             }
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 14),
