@@ -24,7 +24,7 @@ class AnalysisBloc extends Bloc<AnalysisEvent, AnalysisState> {
       } on AppExceptionDio catch(e) {
         emit(AnalysisError(message: e.message));
       } on DioException catch(e) {
-        emit(AnalysisError(message: e.response?.data != null ?  'Something went wrong' : e.response?.data['error']));
+        emit(AnalysisError(message: e.response?.data == null ?  'Something went wrong' : e.response?.data['error']));
       } catch(e) {
         emit(AnalysisError(message: e.toString()));
       }
@@ -46,7 +46,7 @@ class AnalysisBloc extends Bloc<AnalysisEvent, AnalysisState> {
       } on AppExceptionDio catch(e) {
         emit(AnalysisError(message: e.message));
       } on DioException catch(e) {
-        emit(AnalysisError(message: e.response?.data != null ?  'Something went wrong' : e.response?.data['error']));
+        emit(AnalysisError(message: e.response?.data == null ?  'Something went wrong' : e.response?.data['error']));
       } catch(e) {
         emit(AnalysisError(message: e.toString()));
       }

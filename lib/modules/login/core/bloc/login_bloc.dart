@@ -39,7 +39,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } on AppExceptionDio catch(e) {
         emit(ErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(ErrorState(message: e.response?.data != null ?  'Something went wrong' : e.response?.data['error']));
+        emit(ErrorState(message: e.response?.data == null ?  'Something went wrong' : e.response?.data['error']));
       } catch(e) {
         emit(const ErrorState(message: 'Some error occurred'));
       }
@@ -64,7 +64,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } on AppExceptionDio catch(e) {
         emit(ErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(ErrorState(message: e.response?.data != null ?  'Something went wrong' : e.response?.data['error']));
+        emit(ErrorState(message: e.response?.data == null ?  'Something went wrong' : e.response?.data['error']));
       } catch(e) {
         emit(const ErrorState(message: 'Something went wrong'));
       }
@@ -82,7 +82,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       } on AppExceptionDio catch(e) {
         emit(ErrorState(message: e.message));
       } on DioException catch(e) {
-        emit(ErrorState(message: e.response?.data != null ?  'Something went wrong' : e.response?.data['error']));
+        emit(ErrorState(message: e.response?.data == null ?  'Something went wrong' : e.response?.data['error']));
       } catch(e) {
         emit(const ErrorState(message: 'Something went wrong'));
       }

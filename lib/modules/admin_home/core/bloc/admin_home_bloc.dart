@@ -27,7 +27,7 @@ class AdminHomeBloc extends Bloc<AdminHomeEvent, AdminHomeState> {
       } on AppExceptionDio catch(e) {
         emit(AdminHomeLogoutError(message: e.message));
       } on DioException catch(e) {
-        emit(AdminHomeLogoutError(message: e.response?.data != null ?  'Something went wrong' : e.response?.data['error']));
+        emit(AdminHomeLogoutError(message: e.response?.data == null ?  'Something went wrong' : e.response?.data['error']));
       } catch(e) {
         emit(AdminHomeLogoutError(message: e.toString()));
       }

@@ -42,7 +42,7 @@ class FilledSurveyBloc extends Bloc<FilledSurveyEvent, FilledSurveyState> {
       } on AppExceptionDio catch(e) {
         emit(FilledSurveyError(message: e.message));
       } on DioException catch(e) {
-        emit(FilledSurveyError(message: e.response?.data != null ?  'Something went wrong' : e.response?.data['error']));
+        emit(FilledSurveyError(message: e.response?.data == null ?  'Something went wrong' : e.response?.data['error']));
       } catch(e) {
         emit(FilledSurveyError(message: 'Something went wrong'));
       }
@@ -80,7 +80,7 @@ class FilledSurveyBloc extends Bloc<FilledSurveyEvent, FilledSurveyState> {
       } on AppExceptionDio catch(e) {
         emit(FilledSurveyError(message: e.message));
       } on DioException catch(e) {
-        emit(FilledSurveyError(message: e.response?.data['error'] ?? 'Something went wrong'));
+        emit(FilledSurveyError(message: e.response?.data == null ?  'Something went wrong' : e.response?.data['error']));
       } catch(e) {
         emit(const FilledSurveyError(message: 'Something went wrong'));
       }
