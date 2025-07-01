@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:open_document/open_document.dart';
+// import 'package:open_document/open_document.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:shining_india_survey/helpers/hive_db_helper.dart';
@@ -277,7 +277,7 @@ class PdfService {
     var filePath = "${output.path}/$fileName.pdf";
     final file = File(filePath);
     await file.writeAsBytes(byteList);
-    await OpenDocument.openDocument(filePath: filePath);
+    //await OpenDocument.openDocument(filePath: filePath);
     //Share.shareXFiles([XFile('${output.path}/$fileName.pdf')], text: 'Pdf');
   }
 }
